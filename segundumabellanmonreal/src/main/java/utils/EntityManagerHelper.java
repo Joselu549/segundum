@@ -9,7 +9,7 @@ public class EntityManagerHelper {
   private static final ThreadLocal<EntityManager> entityManagerHolder;
 
   static {
-    entityManagerFactory = Persistence.createEntityManagerFactory("encuestas");
+    entityManagerFactory = Persistence.createEntityManagerFactory("productos");
     entityManagerHolder = new ThreadLocal<EntityManager>();
   }
 
