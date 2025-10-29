@@ -28,13 +28,13 @@ public class Producto implements Identificable {
   @Enumerated(EnumType.STRING)
   private Estado estado;
   private LocalDateTime fechaPublicacion;
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne
   private Categoria categoria;
   private int visualizaciones;
   private boolean envioDisponible;
   @OneToOne(cascade = CascadeType.ALL)
   private LugarRecogida lugarRecogida;
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne
   private Usuario vendedor;
 
   public Producto() {
