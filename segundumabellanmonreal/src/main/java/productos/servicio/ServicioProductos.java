@@ -13,19 +13,20 @@ import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
 import productos.modelo.Usuario;
 import productos.repositorio.RepositorioCategoriasJPA;
+import productos.repositorio.RepositorioProductosAdHocJPA;
 import productos.repositorio.RepositorioProductosJPA;
-import productos.repositorio.RepositiorioUsuariosJPA;
+import productos.repositorio.RepositorioUsuariosJPA;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioProductos implements IServicioProductos {
 
-  private RepositorioProductosJPA repositorioProductos = FactoriaRepositorios
+  private RepositorioProductosAdHocJPA repositorioProductos = FactoriaRepositorios
       .getRepositorio(Producto.class);
   private RepositorioCategoriasJPA repositorioCategorias = FactoriaRepositorios
       .getRepositorio(Categoria.class);
-  private RepositiorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios
+  private RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios
       .getRepositorio(Usuario.class);
 
   @Override

@@ -10,11 +10,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 import repositorio.Identificable;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Producto.getProductosPorCategoria", query = "SELECT p FROM Producto p WHERE p.categoria.id = :idCategoria"),
+    @NamedQuery(name = "Producto.getProductosEnVenta", query = "SELECT p FROM Producto p WHERE p.vendedor IS NOT NULL ORDER BY p.fechaPublicacion DESC"),
+    @NamedQuery(name = "Producto.getProductosDestacados", query = "SELECT p FROM Producto p ORDER BY p.visualizaciones DESC")
+})
 public class Producto implements Identificable {
 
   @Id
