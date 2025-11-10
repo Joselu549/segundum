@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,6 +28,7 @@ public class Categoria implements Identificable {
   @Id
   private String id;
   private String nombre;
+  @Lob
   private String descripcion;
   private String ruta;
   @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)

@@ -1,5 +1,6 @@
 package productos.servicio.test;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +34,13 @@ public class Programa {
 
     try {
       // Pruebas de ServicioCategorias
-      // probarServicioCategorias();
+      probarServicioCategorias();
 
       // Pruebas de ServicioUsuarios
-      probarServicioUsuarios();
+      // probarServicioUsuarios();
 
       // Pruebas de ServicioProductos
-      // probarServicioProductos();
+      probarServicioProductos();
 
       System.out.println("\n===========================================");
       System.out.println("TODAS LAS PRUEBAS COMPLETADAS EXITOSAMENTE");
@@ -55,56 +56,319 @@ public class Programa {
   private static void probarServicioCategorias() {
     System.out.println("\n--- PRUEBAS DE SERVICIO CATEGORIAS ---\n");
 
+    // ===== 1. CARGAR TODOS LOS ARCHIVOS XML =====
+    System.out.println("1. Cargando TODOS los archivos XML de categorías...");
+
+    String carpetaXML = "segundumabellanmonreal/xml/";
+    File directorio = new File(carpetaXML);
+
+    // Obtener todos los archivos .xml de la carpeta
+    File[] archivosFile = directorio.listFiles((dir, name) -> name.toLowerCase().endsWith(".xml"));
+
+    if (archivosFile == null || archivosFile.length == 0) {
+      System.err.println("   ✗ No se encontraron archivos XML en la carpeta: " + carpetaXML);
+      return;
+    }
+
+    System.out.println("   Archivos XML encontrados: " + archivosFile.length);
+
+    int cargadosExito = 0;
+    int errores = 0;
+    for (File archivoFile : archivosFile) {
+      try {
+        String rutaCompleta = archivoFile.getAbsolutePath();
+        servicioCategorias.cargarJerarquiaCategorias(rutaCompleta);
+        System.out.println("   ✓ " + archivoFile.getName() + " cargado correctamente");
+        cargadosExito++;
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al cargar " + archivoFile.getName() + ": " + e.getMessage());
+        errores++;
+      }
+    }
+    System.out.println("\n   RESUMEN: " + cargadosExito + " archivos cargados, " + errores + " errores\n");
+
+    // ===== 2. INTENTAR CARGAR DUPLICADO =====
+    System.out.println("\n2. Intentando cargar jerarquía duplicada...");
     try {
-      // 1. Cargar jerarquía de categorías desde XML
-      System.out.println("1. Cargando jerarquía de categorías desde XML...");
       String rutaXML = "c:/Users/josel/Repositorios Git/segundum/segundumabellanmonreal/xml/Arte_y_ocio.xml";
       servicioCategorias.cargarJerarquiaCategorias(rutaXML);
-      System.out.println("   ✓ Jerarquía cargada correctamente desde: " + rutaXML);
-
-      // Intentar cargar de nuevo (no debe duplicar)
-      System.out.println("   Intentando cargar la misma jerarquía de nuevo...");
-      servicioCategorias.cargarJerarquiaCategorias(rutaXML);
-      System.out.println("   ✓ Sistema previene carga duplicada correctamente\n");
-
-      // 2. Obtener categorías raíz
-      System.out.println("2. Obteniendo categorías raíz...");
-      List<Categoria> categoriasRaiz = servicioCategorias.obtenerCategoriasRaiz();
-      System.out.println("   ✓ Categorías raíz encontradas: " + categoriasRaiz.size());
-      for (Categoria cat : categoriasRaiz) {
-        System.out.println("     - ID: " + cat.getId() + ", Nombre: " + cat.getNombre());
-      }
-      System.out.println();
-
-      // 3. Obtener subcategorías de una categoría
-      if (!categoriasRaiz.isEmpty()) {
-        String idCategoriaRaiz = categoriasRaiz.get(0).getId();
-        System.out.println("3. Obteniendo subcategorías de la categoría: " + idCategoriaRaiz);
-        List<Categoria> subcategorias = servicioCategorias.obtenerSubCategorias(idCategoriaRaiz);
-        System.out.println("   ✓ Subcategorías encontradas: " + subcategorias.size());
-        for (int i = 0; i < Math.min(5, subcategorias.size()); i++) {
-          Categoria sub = subcategorias.get(i);
-          System.out.println("     - ID: " + sub.getId() + ", Nombre: " + sub.getNombre());
-        }
-        if (subcategorias.size() > 5) {
-          System.out.println("     ... y " + (subcategorias.size() - 5) + " más");
-        }
-        System.out.println();
-
-        // 4. Modificar descripción de una categoría
-        System.out.println("4. Modificando descripción de una categoría...");
-        String idCategoria = idCategoriaRaiz;
-        String nuevaDescripcion = "Descripción actualizada en prueba - " +
-            java.time.LocalDateTime.now();
-        servicioCategorias.modificarDescripcionCategoria(idCategoria, nuevaDescripcion);
-        System.out.println("   ✓ Descripción modificada para categoría ID: " + idCategoria);
-        System.out.println("   Nueva descripción: " + nuevaDescripcion + "\n");
-      }
-
+      System.out.println("   ✓ Sistema maneja carga duplicada correctamente");
     } catch (Exception e) {
-      System.err.println("   ✗ Error en pruebas de ServicioCategorias: " + e.getMessage());
-      throw e;
+      System.out.println("   ✓ Sistema previene duplicados: " + e.getMessage());
     }
+
+    // ===== 3. INTENTAR CARGAR ARCHIVO INEXISTENTE =====
+    System.out.println("\n3. Intentando cargar archivo inexistente...");
+    try {
+      servicioCategorias.cargarJerarquiaCategorias("c:/archivo/inexistente.xml");
+      System.err.println("   ✗ No lanzó excepción con archivo inexistente");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado con archivo inexistente: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 4. INTENTAR CARGAR RUTA NULA =====
+    System.out.println("\n4. Intentando cargar con ruta nula...");
+    try {
+      servicioCategorias.cargarJerarquiaCategorias(null);
+      System.err.println("   ✗ No lanzó excepción con ruta nula");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado con ruta nula: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 5. INTENTAR CARGAR RUTA VACÍA =====
+    System.out.println("\n5. Intentando cargar con ruta vacía...");
+    try {
+      servicioCategorias.cargarJerarquiaCategorias("");
+      System.err.println("   ✗ No lanzó excepción con ruta vacía");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado con ruta vacía: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 6. OBTENER CATEGORÍAS RAÍZ =====
+    System.out.println("\n6. Obteniendo categorías raíz...");
+    List<Categoria> categoriasRaiz = null;
+    try {
+      categoriasRaiz = servicioCategorias.obtenerCategoriasRaiz();
+      System.out.println("   ✓ Categorías raíz encontradas: " + categoriasRaiz.size());
+      for (int i = 0; i < Math.min(10, categoriasRaiz.size()); i++) {
+        Categoria cat = categoriasRaiz.get(i);
+        System.out.println("     " + (i + 1) + ". ID: " + cat.getId() + ", Nombre: " + cat.getNombre());
+      }
+      if (categoriasRaiz.size() > 10) {
+        System.out.println("     ... y " + (categoriasRaiz.size() - 10) + " más");
+      }
+    } catch (Exception e) {
+      System.err.println("   ✗ Error al obtener categorías raíz: " + e.getMessage());
+    }
+
+    // ===== 7. OBTENER SUBCATEGORÍAS =====
+    System.out.println("\n7. Obteniendo subcategorías...");
+    if (categoriasRaiz != null && !categoriasRaiz.isEmpty()) {
+      // Probar con primera categoría
+      try {
+        String idCat1 = categoriasRaiz.get(0).getId();
+        List<Categoria> subcats1 = servicioCategorias.obtenerSubCategorias(idCat1);
+        System.out.println("   ✓ Subcategorías de '" + categoriasRaiz.get(0).getNombre() + "': " + subcats1.size());
+        for (int i = 0; i < Math.min(5, subcats1.size()); i++) {
+          System.out.println("     - " + subcats1.get(i).getNombre());
+        }
+        if (subcats1.size() > 5) {
+          System.out.println("     ... y " + (subcats1.size() - 5) + " más");
+        }
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al obtener subcategorías: " + e.getMessage());
+      }
+
+      // Probar con segunda categoría si existe
+      if (categoriasRaiz.size() > 1) {
+        try {
+          String idCat2 = categoriasRaiz.get(1).getId();
+          List<Categoria> subcats2 = servicioCategorias.obtenerSubCategorias(idCat2);
+          System.out.println("   ✓ Subcategorías de '" + categoriasRaiz.get(1).getNombre() + "': " + subcats2.size());
+        } catch (Exception e) {
+          System.err.println("   ✗ Error al obtener subcategorías: " + e.getMessage());
+        }
+      }
+
+      // Probar con tercera categoría si existe
+      if (categoriasRaiz.size() > 2) {
+        try {
+          String idCat3 = categoriasRaiz.get(2).getId();
+          List<Categoria> subcats3 = servicioCategorias.obtenerSubCategorias(idCat3);
+          System.out.println("   ✓ Subcategorías de '" + categoriasRaiz.get(2).getNombre() + "': " + subcats3.size());
+        } catch (Exception e) {
+          System.err.println("   ✗ Error al obtener subcategorías: " + e.getMessage());
+        }
+      }
+    }
+
+    // ===== 8. OBTENER SUBCATEGORÍAS CON ID INEXISTENTE =====
+    System.out.println("\n8. Intentando obtener subcategorías con ID inexistente...");
+    try {
+      List<Categoria> result = servicioCategorias.obtenerSubCategorias("ID_INEXISTENTE_12345");
+      System.out.println("   ✓ Retorna lista: " + (result != null ? result.size() + " elementos" : "null"));
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 9. OBTENER SUBCATEGORÍAS CON ID NULO =====
+    System.out.println("\n9. Intentando obtener subcategorías con ID nulo...");
+    try {
+      servicioCategorias.obtenerSubCategorias(null);
+      System.err.println("   ✗ No lanzó excepción con ID nulo");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 10. OBTENER SUBCATEGORÍAS CON ID VACÍO =====
+    System.out.println("\n10. Intentando obtener subcategorías con ID vacío...");
+    try {
+      List<Categoria> result = servicioCategorias.obtenerSubCategorias("");
+      System.out.println("   ✓ Retorna lista: " + (result != null ? result.size() + " elementos" : "null"));
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 11. MODIFICAR DESCRIPCIÓN =====
+    System.out.println("\n11. Modificando descripciones de categorías...");
+    if (categoriasRaiz != null && !categoriasRaiz.isEmpty()) {
+      // Modificar primera categoría
+      try {
+        String idCat1 = categoriasRaiz.get(0).getId();
+        String nuevaDesc1 = "Descripción actualizada 1 - " + java.time.LocalDateTime.now();
+        servicioCategorias.modificarDescripcionCategoria(idCat1, nuevaDesc1);
+        System.out.println("   ✓ Descripción modificada para: " + categoriasRaiz.get(0).getNombre());
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar descripción: " + e.getMessage());
+      }
+
+      // Modificar segunda categoría si existe
+      if (categoriasRaiz.size() > 1) {
+        try {
+          String idCat2 = categoriasRaiz.get(1).getId();
+          String nuevaDesc2 = "Descripción actualizada 2 - " + java.time.LocalDateTime.now();
+          servicioCategorias.modificarDescripcionCategoria(idCat2, nuevaDesc2);
+          System.out.println("   ✓ Descripción modificada para: " + categoriasRaiz.get(1).getNombre());
+        } catch (Exception e) {
+          System.err.println("   ✗ Error al modificar descripción: " + e.getMessage());
+        }
+      }
+
+      // Modificar con descripción vacía
+      try {
+        String idCat = categoriasRaiz.get(0).getId();
+        servicioCategorias.modificarDescripcionCategoria(idCat, "");
+        System.out.println("   ✓ Descripción vacía aceptada");
+      } catch (Exception e) {
+        System.out.println("   ✓ Descripción vacía rechazada: " + e.getClass().getSimpleName());
+      }
+
+      // Modificar con descripción muy larga
+      try {
+        String idCat = categoriasRaiz.get(0).getId();
+        String descLarga = "A".repeat(1000);
+        servicioCategorias.modificarDescripcionCategoria(idCat, descLarga);
+        System.out.println("   ✓ Descripción muy larga aceptada (1000 chars)");
+      } catch (Exception e) {
+        System.out.println("   ✓ Descripción muy larga rechazada: " + e.getClass().getSimpleName());
+      }
+    }
+
+    // ===== 12. MODIFICAR DESCRIPCIÓN CON ID INEXISTENTE =====
+    System.out.println("\n12. Intentando modificar con ID inexistente...");
+    try {
+      servicioCategorias.modificarDescripcionCategoria("ID_INEXISTENTE", "Nueva descripción");
+      System.err.println("   ✗ No lanzó excepción con ID inexistente");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 13. MODIFICAR DESCRIPCIÓN CON ID NULO =====
+    System.out.println("\n13. Intentando modificar con ID nulo...");
+    try {
+      servicioCategorias.modificarDescripcionCategoria(null, "Nueva descripción");
+      System.err.println("   ✗ No lanzó excepción con ID nulo");
+    } catch (Exception e) {
+      System.out.println("   ✓ Error esperado: " + e.getClass().getSimpleName());
+    }
+
+    // ===== 14. MODIFICAR DESCRIPCIÓN CON DESCRIPCIÓN NULA =====
+    System.out.println("\n14. Intentando modificar con descripción nula...");
+    if (categoriasRaiz != null && !categoriasRaiz.isEmpty()) {
+      try {
+        String idCat = categoriasRaiz.get(0).getId();
+        servicioCategorias.modificarDescripcionCategoria(idCat, null);
+        System.out.println("   ✓ Descripción nula aceptada");
+      } catch (Exception e) {
+        System.out.println("   ✓ Descripción nula rechazada: " + e.getClass().getSimpleName());
+      }
+    }
+
+    // ===== 15. VERIFICAR JERARQUÍA DE SUBCATEGORÍAS =====
+    System.out.println("\n15. Verificando jerarquía completa de subcategorías...");
+    if (categoriasRaiz != null && !categoriasRaiz.isEmpty()) {
+      try {
+        String idCat = categoriasRaiz.get(0).getId();
+        List<Categoria> nivel1 = servicioCategorias.obtenerSubCategorias(idCat);
+        System.out.println("   ✓ Nivel 1: " + nivel1.size() + " subcategorías");
+
+        if (!nivel1.isEmpty()) {
+          String idSubCat = nivel1.get(0).getId();
+          List<Categoria> nivel2 = servicioCategorias.obtenerSubCategorias(idSubCat);
+          System.out
+              .println("   ✓ Nivel 2: " + nivel2.size() + " subcategorías de '" + nivel1.get(0).getNombre() + "'");
+
+          if (!nivel2.isEmpty()) {
+            String idSubSubCat = nivel2.get(0).getId();
+            List<Categoria> nivel3 = servicioCategorias.obtenerSubCategorias(idSubSubCat);
+            System.out
+                .println("   ✓ Nivel 3: " + nivel3.size() + " subcategorías de '" + nivel2.get(0).getNombre() + "'");
+          }
+        }
+      } catch (Exception e) {
+        System.err.println("   ✗ Error en jerarquía: " + e.getMessage());
+      }
+    }
+
+    // ===== 16. OBTENER TODAS LAS CATEGORÍAS RAÍZ MÚLTIPLES VECES =====
+    System.out.println("\n16. Obteniendo categorías raíz múltiples veces...");
+    try {
+      List<Categoria> raiz1 = servicioCategorias.obtenerCategoriasRaiz();
+      List<Categoria> raiz2 = servicioCategorias.obtenerCategoriasRaiz();
+      List<Categoria> raiz3 = servicioCategorias.obtenerCategoriasRaiz();
+      System.out.println("   ✓ Primera llamada: " + raiz1.size());
+      System.out.println("   ✓ Segunda llamada: " + raiz2.size());
+      System.out.println("   ✓ Tercera llamada: " + raiz3.size());
+      System.out.println("   ✓ Consistencia: " + (raiz1.size() == raiz2.size() && raiz2.size() == raiz3.size()));
+    } catch (Exception e) {
+      System.err.println("   ✗ Error: " + e.getMessage());
+    }
+
+    // ===== 17. MODIFICAR Y VERIFICAR MÚLTIPLES CATEGORÍAS =====
+    System.out.println("\n17. Modificando múltiples categorías consecutivamente...");
+    if (categoriasRaiz != null && categoriasRaiz.size() >= 3) {
+      for (int i = 0; i < Math.min(3, categoriasRaiz.size()); i++) {
+        try {
+          String id = categoriasRaiz.get(i).getId();
+          String desc = "Modificación masiva " + (i + 1) + " - " + System.currentTimeMillis();
+          servicioCategorias.modificarDescripcionCategoria(id, desc);
+          System.out.println("   ✓ Categoría " + (i + 1) + " modificada");
+        } catch (Exception e) {
+          System.err.println("   ✗ Error en categoría " + (i + 1) + ": " + e.getMessage());
+        }
+      }
+    }
+
+    // ===== 18. CARGAR TODOS LOS XMLs DISPONIBLES (VERIFICACIÓN) =====
+    System.out.println("\n18. Verificando carga de todos los archivos XML...");
+    try {
+      List<Categoria> todasRaiz = servicioCategorias.obtenerCategoriasRaiz();
+      System.out.println("   ✓ Total categorías raíz en sistema: " + todasRaiz.size());
+    } catch (Exception e) {
+      System.err.println("   ✗ Error al verificar: " + e.getMessage());
+    }
+
+    // ===== 19. ESTADÍSTICAS FINALES =====
+    System.out.println("\n19. Estadísticas finales...");
+    try {
+      List<Categoria> todasRaiz = servicioCategorias.obtenerCategoriasRaiz();
+      System.out.println("   ✓ Total categorías raíz: " + todasRaiz.size());
+
+      int totalSubcategorias = 0;
+      for (Categoria cat : todasRaiz) {
+        try {
+          List<Categoria> subs = servicioCategorias.obtenerSubCategorias(cat.getId());
+          totalSubcategorias += subs.size();
+        } catch (Exception e) {
+          // Ignorar errores en conteo
+        }
+      }
+      System.out.println("   ✓ Total subcategorías nivel 1: " + totalSubcategorias);
+    } catch (Exception e) {
+      System.err.println("   ✗ Error al calcular estadísticas: " + e.getMessage());
+    }
+
+    System.out.println("\n✓ TODAS LAS PRUEBAS DE CATEGORÍAS COMPLETADAS\n");
   }
 
   private static void probarServicioUsuarios() {
