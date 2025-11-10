@@ -1,12 +1,18 @@
 package productos.servicio;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 public interface IServicioUsuarios {
   String registrarUsuario(String email, String nombre, String apellidos, String telefono,
-      String direccion, LocalDate fechaNacimiento, String password);
+      String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException;
 
-  void modificarUsuario(String id, Optional<String> nombre, Optional<String> apellidos,
-      Optional<String> password, Optional<LocalDate> fechaNacimiento, Optional<String> telefono);
+  void modificarNombre(String id, String nombre);
+
+  void modificarApellidos(String id, String apellidos);
+
+  void modificarPassword(String id, String password);
+
+  void modificarFechaNacimiento(String id, LocalDate fechaNacimiento);
+
+  void modificarTelefono(String id, String telefono);
 }

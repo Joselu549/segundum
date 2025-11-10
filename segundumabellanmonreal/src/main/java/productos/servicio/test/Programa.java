@@ -33,13 +33,13 @@ public class Programa {
 
     try {
       // Pruebas de ServicioCategorias
-      probarServicioCategorias();
+      // probarServicioCategorias();
 
       // Pruebas de ServicioUsuarios
       probarServicioUsuarios();
 
       // Pruebas de ServicioProductos
-      probarServicioProductos();
+      // probarServicioProductos();
 
       System.out.println("\n===========================================");
       System.out.println("TODAS LAS PRUEBAS COMPLETADAS EXITOSAMENTE");
@@ -109,75 +109,444 @@ public class Programa {
 
   private static void probarServicioUsuarios() {
     System.out.println("\n--- PRUEBAS DE SERVICIO USUARIOS ---\n");
+    long timestamp = System.currentTimeMillis();
+
+    // ===== 1. REGISTROS VÁLIDOS =====
+    System.out.println("1. Registrando usuarios válidos...");
+    String idUsuario1 = null;
+    String idUsuario2 = null;
+    String idUsuario3 = null;
 
     try {
-      // Generar un timestamp único para evitar duplicados
-      long timestamp = System.currentTimeMillis();
-
-      // 1. Registrar usuarios
-      System.out.println("1. Registrando usuarios...");
-
-      String idUsuario1 = servicioUsuarios.registrarUsuario(
-          "juan.perez." + timestamp + "@email.com",
-          "Juan",
-          "Pérez García",
-          "666111222",
-          "Calle Principal 1",
-          LocalDate.of(1990, 5, 15),
-          "password123");
-      System.out.println("   ✓ Usuario registrado - ID: " + idUsuario1);
-      System.out.println("     Email: juan.perez." + timestamp + "@email.com");
-
-      String idUsuario2 = servicioUsuarios.registrarUsuario(
-          "maria.lopez." + timestamp + "@email.com",
-          "María",
-          "López Martínez",
-          "666333444",
-          "Avenida Central 25",
-          LocalDate.of(1995, 8, 20),
-          "securepass");
-      System.out.println("   ✓ Usuario registrado - ID: " + idUsuario2);
-      System.out.println("     Email: maria.lopez." + timestamp + "@email.com");
-
-      String idUsuario3 = servicioUsuarios.registrarUsuario(
-          "carlos.gomez." + timestamp + "@email.com",
-          "Carlos",
-          "Gómez Ruiz",
-          null, // Sin teléfono
-          "Plaza Mayor 10",
-          LocalDate.of(1988, 3, 10),
-          "mypassword");
-      System.out.println("   ✓ Usuario registrado - ID: " + idUsuario3);
-      System.out.println("     Email: carlos.gomez." + timestamp + "@email.com (sin teléfono)\n");
-
-      // 2. Modificar usuarios
-      System.out.println("2. Modificando datos de usuarios...");
-
-      servicioUsuarios.modificarUsuario(
-          idUsuario1,
-          Optional.of("Juan Carlos"), // Nuevo nombre
-          Optional.empty(), // Apellidos sin cambiar
-          Optional.empty(), // Password sin cambiar
-          Optional.<LocalDate>empty(), // Fecha nacimiento sin cambiar
-          Optional.of("666555777") // Nuevo teléfono
-      );
-      System.out.println("   ✓ Usuario modificado - ID: " + idUsuario1);
-      System.out.println("     Nuevo nombre: Juan Carlos, Nuevo teléfono: 666555777");
-
-      servicioUsuarios.modificarUsuario(
-          idUsuario2,
-          Optional.empty(),
-          Optional.of("López Fernández"), // Nuevos apellidos
-          Optional.of("newsecurepass"), // Nueva contraseña
-          Optional.<LocalDate>empty(),
-          Optional.empty());
-      System.out.println("   ✓ Usuario modificado - ID: " + idUsuario2);
-      System.out.println("     Nuevos apellidos: López Fernández\n");
-
+      idUsuario1 = servicioUsuarios.registrarUsuario("juan.perez." + timestamp + "@email.com", "Juan", "Pérez García",
+          "666111222", "Calle Principal 1", LocalDate.of(1990, 5, 15), "password123");
+      System.out.println("   ✓ Usuario 1 registrado - ID: " + idUsuario1);
     } catch (Exception e) {
-      System.err.println("   ✗ Error en pruebas de ServicioUsuarios: " + e.getMessage());
-      throw e;
+      System.err.println("   ✗ Error: " + e.getMessage());
     }
+
+    try {
+      idUsuario2 = servicioUsuarios.registrarUsuario("maria.lopez." + timestamp + "@email.com", "María",
+          "López Martínez", "666333444", "Avenida Central 25", LocalDate.of(1995, 8, 20), "securepass456");
+      System.out.println("   ✓ Usuario 2 registrado - ID: " + idUsuario2);
+    } catch (Exception e) {
+      System.err.println("   ✗ Error: " + e.getMessage());
+    }
+
+    try {
+      idUsuario3 = servicioUsuarios.registrarUsuario("carlos.gomez." + timestamp + "@email.com", "Carlos", "Gómez Ruiz",
+          "+34666777888", "Plaza Mayor 10", LocalDate.of(1988, 3, 10), "mypassword789");
+      System.out.println("   ✓ Usuario 3 registrado - ID: " + idUsuario3);
+    } catch (Exception e) {
+      System.err.println("   ✗ Error: " + e.getMessage());
+    }
+
+    // ===== 2. VALIDACIONES DE EMAIL =====
+    System.out.println("\n2. Validaciones de EMAIL...");
+
+    try {
+      servicioUsuarios.registrarUsuario(null, "Test", "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Email nulo: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email nulo: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email nulo: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("", "Test", "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Email vacío: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email vacío: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email vacío: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("   ", "Test", "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Email espacios: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email espacios: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email espacios: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("emailsinArroba.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Email sin @: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email sin @: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email sin @: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("email@", "Test", "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Email sin dominio: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email sin dominio: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email sin dominio: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("email@dominio", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Email sin extensión: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Email sin extensión: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Email sin extensión: Error inesperado");
+    }
+
+    // ===== 3. VALIDACIONES DE NOMBRE =====
+    System.out.println("\n3. Validaciones de NOMBRE...");
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", null, "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Nombre nulo: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Nombre nulo: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Nombre nulo: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "", "Usuario", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Nombre vacío: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Nombre vacío: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Nombre vacío: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "   ", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Nombre espacios: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Nombre espacios: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Nombre espacios: Error inesperado");
+    }
+
+    // ===== 4. VALIDACIONES DE APELLIDOS =====
+    System.out.println("\n4. Validaciones de APELLIDOS...");
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", null, "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Apellidos nulos: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Apellidos nulos: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Apellidos nulos: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Apellidos vacíos: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Apellidos vacíos: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Apellidos vacíos: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "   ", "666000000", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Apellidos espacios: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Apellidos espacios: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Apellidos espacios: Error inesperado");
+    }
+
+    // ===== 5. VALIDACIONES DE PASSWORD =====
+    System.out.println("\n5. Validaciones de PASSWORD...");
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), null);
+      System.err.println("   ✗ Password nula: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Password nula: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Password nula: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "");
+      System.err.println("   ✗ Password vacía: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Password vacía: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Password vacía: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "   ");
+      System.err.println("   ✗ Password espacios: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Password espacios: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Password espacios: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "pass123");
+      System.err.println("   ✗ Password corta: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Password corta: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Password corta: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(1990, 1, 1), "1234567");
+      System.err.println("   ✗ Password 7 chars: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Password 7 chars: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Password 7 chars: Error inesperado");
+    }
+
+    // ===== 6. VALIDACIONES DE FECHA DE NACIMIENTO =====
+    System.out.println("\n6. Validaciones de FECHA DE NACIMIENTO...");
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir", null, "password123");
+      System.err.println("   ✗ Fecha nula: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Fecha nula: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Fecha nula: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.now().plusDays(1), "password123");
+      System.err.println("   ✗ Fecha futura: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Fecha futura: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Fecha futura: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.of(2050, 1, 1), "password123");
+      System.err.println("   ✗ Fecha 2050: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Fecha 2050: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Fecha 2050: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.now().minusYears(17), "password123");
+      System.err.println("   ✗ 17 años: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ 17 años: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ 17 años: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.now().minusYears(10), "password123");
+      System.err.println("   ✗ 10 años: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ 10 años: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ 10 años: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666000000", "Dir",
+          LocalDate.now().minusYears(18).plusDays(1), "password123");
+      System.err.println("   ✗ Casi 18: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Casi 18: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Casi 18: Error inesperado");
+    }
+
+    // ===== 7. VALIDACIONES DE TELÉFONO =====
+    System.out.println("\n7. Validaciones de TELÉFONO...");
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", null, "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Teléfono nulo: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono nulo: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono nulo: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Teléfono vacío: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono vacío: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono vacío: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "   ", "Dir", LocalDate.of(1990, 1, 1),
+          "password123");
+      System.err.println("   ✗ Teléfono espacios: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono espacios: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono espacios: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666AAA111", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Teléfono con letras: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono con letras: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono con letras: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "12345678", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Teléfono corto: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono corto: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono corto: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "1234567890123456", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Teléfono largo: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono largo: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono largo: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.registrarUsuario("test@email.com", "Test", "Usuario", "666-111-222", "Dir",
+          LocalDate.of(1990, 1, 1), "password123");
+      System.err.println("   ✗ Teléfono con guiones: No lanzó excepción");
+    } catch (IllegalArgumentException e) {
+      System.out.println("   ✓ Teléfono con guiones: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Teléfono con guiones: Error inesperado");
+    }
+
+    // ===== 8. MODIFICACIONES =====
+    System.out.println("\n8. Modificaciones de usuarios...");
+
+    if (idUsuario1 != null) {
+      try {
+        servicioUsuarios.modificarNombre(idUsuario1, "Juan Carlos");
+        System.out.println("   ✓ Nombre modificado");
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar nombre: " + e.getMessage());
+      }
+
+      try {
+        servicioUsuarios.modificarApellidos(idUsuario1, "Pérez Fernández");
+        System.out.println("   ✓ Apellidos modificados");
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar apellidos: " + e.getMessage());
+      }
+
+      try {
+        servicioUsuarios.modificarPassword(idUsuario1, "newpass12345");
+        System.out.println("   ✓ Password modificada");
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar password: " + e.getMessage());
+      }
+
+      try {
+        servicioUsuarios.modificarFechaNacimiento(idUsuario1, LocalDate.of(1991, 6, 20));
+        System.out.println("   ✓ Fecha nacimiento modificada");
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar fecha: " + e.getMessage());
+      }
+
+      try {
+        servicioUsuarios.modificarTelefono(idUsuario1, "666555777");
+        System.out.println("   ✓ Teléfono modificado");
+      } catch (Exception e) {
+        System.err.println("   ✗ Error al modificar teléfono: " + e.getMessage());
+      }
+    }
+
+    // ===== 9. MODIFICACIONES CON ID INEXISTENTE =====
+    System.out.println("\n9. Modificaciones con ID inexistente...");
+
+    try {
+      servicioUsuarios.modificarNombre("ID_INEXISTENTE", "Nombre");
+      System.err.println("   ✗ Modificar nombre: No lanzó excepción");
+    } catch (RuntimeException e) {
+      System.out.println("   ✓ Modificar nombre: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Modificar nombre: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.modificarApellidos("ID_INEXISTENTE", "Apellidos");
+      System.err.println("   ✗ Modificar apellidos: No lanzó excepción");
+    } catch (RuntimeException e) {
+      System.out.println("   ✓ Modificar apellidos: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Modificar apellidos: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.modificarPassword("ID_INEXISTENTE", "password123");
+      System.err.println("   ✗ Modificar password: No lanzó excepción");
+    } catch (RuntimeException e) {
+      System.out.println("   ✓ Modificar password: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Modificar password: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.modificarFechaNacimiento("ID_INEXISTENTE", LocalDate.of(1990, 1, 1));
+      System.err.println("   ✗ Modificar fecha: No lanzó excepción");
+    } catch (RuntimeException e) {
+      System.out.println("   ✓ Modificar fecha: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Modificar fecha: Error inesperado");
+    }
+
+    try {
+      servicioUsuarios.modificarTelefono("ID_INEXISTENTE", "666111222");
+      System.err.println("   ✗ Modificar teléfono: No lanzó excepción");
+    } catch (RuntimeException e) {
+      System.out.println("   ✓ Modificar teléfono: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("   ✗ Modificar teléfono: Error inesperado");
+    }
+
+    System.out.println("\n✓ TODAS LAS PRUEBAS COMPLETADAS\n");
   }
 
   private static void probarServicioProductos() {

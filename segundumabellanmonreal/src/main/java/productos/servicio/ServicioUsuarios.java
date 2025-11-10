@@ -1,7 +1,6 @@
 package productos.servicio;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import productos.modelo.Usuario;
 import productos.repositorio.RepositorioUsuariosJPA;
@@ -15,7 +14,46 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
   @Override
   public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
-      String direccion, LocalDate fechaNacimiento, String password) {
+      String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException {
+    if (email == null || email.trim().isEmpty()) {
+      throw new IllegalArgumentException("El email no puede ser nulo o vacío");
+    }
+    if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+      throw new IllegalArgumentException("El formato del email no es válido");
+    }
+
+    if (nombre == null || nombre.trim().isEmpty()) {
+      throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
+    }
+
+    if (apellidos == null || apellidos.trim().isEmpty()) {
+      throw new IllegalArgumentException("Los apellidos no pueden ser nulos o vacíos");
+    }
+
+    if (password == null || password.trim().isEmpty()) {
+      throw new IllegalArgumentException("La contraseña no puede ser nula o vacía");
+    }
+    if (password.length() < 8) {
+      throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres");
+    }
+
+    if (fechaNacimiento == null) {
+      throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula");
+    }
+    if (fechaNacimiento.isAfter(LocalDate.now())) {
+      throw new IllegalArgumentException("La fecha de nacimiento no puede ser en el futuro");
+    }
+    if (fechaNacimiento.isAfter(LocalDate.now().minusYears(18))) {
+      throw new IllegalArgumentException("El usuario debe ser mayor de 18 años");
+    }
+
+    if (telefono == null || telefono.trim().isEmpty()) {
+      throw new IllegalArgumentException("El teléfono no puede ser nulo o vacío");
+    }
+    if (!telefono.matches("^[+]?[0-9]{9,15}$")) {
+      throw new IllegalArgumentException("El formato del teléfono no es válido");
+    }
+
     try {
       Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
       String id = repositorioUsuarios.add(usuario);
@@ -26,31 +64,67 @@ public class ServicioUsuarios implements IServicioUsuarios {
   }
 
   @Override
-  public void modificarUsuario(String id, Optional<String> nombre, Optional<String> apellidos,
-      Optional<String> password, Optional<LocalDate> fechaNacimiento, Optional<String> telefono) {
+  public void modificarNombre(String id, String nombre) {
     try {
       Usuario usuario = repositorioUsuarios.getById(id);
-      if (nombre.isPresent()) {
-        usuario.setNombre(nombre.get());
-      }
-      if (apellidos.isPresent()) {
-        usuario.setApellidos(apellidos.get());
-      }
-      if (password.isPresent()) {
-        usuario.setPassword(password.get());
-      }
-      if (fechaNacimiento.isPresent()) {
-        usuario.setFechaNacimiento(fechaNacimiento.get());
-      }
-      if (telefono.isPresent()) {
-        usuario.setTelefono(telefono.get());
-      }
+      usuario.setNombre(nombre);
       repositorioUsuarios.update(usuario);
-
     } catch (EntidadNoEncontrada e) {
       throw new RuntimeException("Usuario no encontrado con id: " + id, e);
     } catch (RepositorioException e) {
-      throw new RuntimeException("Error al modificar el usuario: " + e.getMessage(), e);
+      throw new RuntimeException("Error al modificar el nombre del usuario: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void modificarApellidos(String id, String apellidos) {
+    try {
+      Usuario usuario = repositorioUsuarios.getById(id);
+      usuario.setApellidos(apellidos);
+      repositorioUsuarios.update(usuario);
+    } catch (EntidadNoEncontrada e) {
+      throw new RuntimeException("Usuario no encontrado con id: " + id, e);
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al modificar los apellidos del usuario: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void modificarPassword(String id, String password) {
+    try {
+      Usuario usuario = repositorioUsuarios.getById(id);
+      usuario.setPassword(password);
+      repositorioUsuarios.update(usuario);
+    } catch (EntidadNoEncontrada e) {
+      throw new RuntimeException("Usuario no encontrado con id: " + id, e);
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al modificar la contraseña del usuario: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void modificarFechaNacimiento(String id, LocalDate fechaNacimiento) {
+    try {
+      Usuario usuario = repositorioUsuarios.getById(id);
+      usuario.setFechaNacimiento(fechaNacimiento);
+      repositorioUsuarios.update(usuario);
+    } catch (EntidadNoEncontrada e) {
+      throw new RuntimeException("Usuario no encontrado con id: " + id, e);
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al modificar la fecha de nacimiento del usuario: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void modificarTelefono(String id, String telefono) {
+    try {
+      Usuario usuario = repositorioUsuarios.getById(id);
+      usuario.setTelefono(telefono);
+      repositorioUsuarios.update(usuario);
+    } catch (EntidadNoEncontrada e) {
+      throw new RuntimeException("Usuario no encontrado con id: " + id, e);
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al modificar el teléfono del usuario: " + e.getMessage(), e);
     }
   }
 }
