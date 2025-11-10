@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,6 +18,10 @@ import repositorio.Identificable;
 
 @Entity
 @XmlRootElement(name = "categoria")
+@NamedQueries({
+    @NamedQuery(name = "Categoria.getCategoriasRaiz", query = "SELECT c FROM Categoria c WHERE c.categoria IS NULL"),
+    @NamedQuery(name = "Categoria.getSubcategorias", query = "SELECT c FROM Categoria c WHERE c.categoria.id = :idCategoriaPadre")
+})
 public class Categoria implements Identificable {
 
   @Id

@@ -1,23 +1,21 @@
 package productos.servicio;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import productos.modelo.Categoria;
-import productos.repositorio.RepositorioCategoriasJPA;
+import productos.repositorio.RepositorioCategoriasAdHocJPA;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioCategorias implements IServicioCategorias {
 
-  private RepositorioCategoriasJPA repositorioCategorias = FactoriaRepositorios
+  private RepositorioCategoriasAdHocJPA repositorioCategorias = FactoriaRepositorios
       .getRepositorio(Categoria.class);
 
   @Override
@@ -73,10 +71,7 @@ public class ServicioCategorias implements IServicioCategorias {
   @Override
   public List<Categoria> obtenerCategoriasRaiz() {
     try {
-      List<Categoria> todasCategorias = repositorioCategorias.getAll();
-      return todasCategorias.stream()
-          .filter(c -> c.getCategoria() == null)
-          .collect(Collectors.toList());
+      return repositorioCategorias.getCategoriasRaiz();
 
     } catch (RepositorioException e) {
       throw new RuntimeException("Error al obtener categorías raíz: " + e.getMessage(), e);
@@ -86,14 +81,8 @@ public class ServicioCategorias implements IServicioCategorias {
   @Override
   public List<Categoria> obtenerSubCategorias(String id) {
     try {
-      Categoria categoria = repositorioCategorias.getById(id);
-      if (categoria.getSubCategorias() != null) {
-        return new ArrayList<>(categoria.getSubCategorias());
-      }
-      return new ArrayList<>();
+      return repositorioCategorias.getSubcategorias(id);
 
-    } catch (EntidadNoEncontrada e) {
-      throw new RuntimeException("Categoría no encontrada con id: " + id, e);
     } catch (RepositorioException e) {
       throw new RuntimeException("Error al obtener subcategorías: " + e.getMessage(), e);
     }

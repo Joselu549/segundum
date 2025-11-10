@@ -20,7 +20,8 @@ import repositorio.Identificable;
 @NamedQueries({
     @NamedQuery(name = "Producto.getProductosPorCategoria", query = "SELECT p FROM Producto p WHERE p.categoria.id = :idCategoria"),
     @NamedQuery(name = "Producto.getProductosEnVenta", query = "SELECT p FROM Producto p WHERE p.vendedor IS NOT NULL ORDER BY p.fechaPublicacion DESC"),
-    @NamedQuery(name = "Producto.getProductosDestacados", query = "SELECT p FROM Producto p ORDER BY p.visualizaciones DESC")
+    @NamedQuery(name = "Producto.getProductosDestacados", query = "SELECT p FROM Producto p ORDER BY p.visualizaciones DESC"),
+    @NamedQuery(name = "Producto.getProductosPorMesAnio", query = "SELECT p FROM Producto p WHERE FUNCTION('MONTH', p.fechaPublicacion) = :mes AND FUNCTION('YEAR', p.fechaPublicacion) = :anio ORDER BY p.visualizaciones DESC")
 })
 public class Producto implements Identificable {
 

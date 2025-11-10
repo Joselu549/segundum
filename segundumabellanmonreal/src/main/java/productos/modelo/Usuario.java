@@ -6,10 +6,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import repositorio.Identificable;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Usuario.getUsuariosPorNombre", query = "SELECT u FROM Usuario u WHERE u.nombre LIKE :nombre"),
+    @NamedQuery(name = "Usuario.getUsuariosPorEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.getUsuariosPorTelefono", query = "SELECT u FROM Usuario u WHERE u.telefono = :telefono"),
+    @NamedQuery(name = "Usuario.getUsuariosAdmin", query = "SELECT u FROM Usuario u WHERE u.esAdmin = :esAdmin")
+})
 public class Usuario implements Identificable {
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)

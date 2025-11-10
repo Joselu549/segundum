@@ -157,10 +157,9 @@ public class Programa {
           idUsuario1,
           Optional.of("Juan Carlos"), // Nuevo nombre
           Optional.empty(), // Apellidos sin cambiar
-          Optional.of("666555777"), // Nuevo teléfono
-          Optional.empty(), // Dirección sin cambiar
-          Optional.empty(), // Fecha nacimiento sin cambiar
-          Optional.empty() // Password sin cambiar
+          Optional.empty(), // Password sin cambiar
+          Optional.<LocalDate>empty(), // Fecha nacimiento sin cambiar
+          Optional.of("666555777") // Nuevo teléfono
       );
       System.out.println("   ✓ Usuario modificado - ID: " + idUsuario1);
       System.out.println("     Nuevo nombre: Juan Carlos, Nuevo teléfono: 666555777");
@@ -169,11 +168,9 @@ public class Programa {
           idUsuario2,
           Optional.empty(),
           Optional.of("López Fernández"), // Nuevos apellidos
-          Optional.empty(),
-          Optional.empty(),
-          Optional.of(LocalDate.of(1995, 8, 21)), // Nueva fecha
-          Optional.of("newsecurepass") // Nueva contraseña
-      );
+          Optional.of("newsecurepass"), // Nueva contraseña
+          Optional.<LocalDate>empty(),
+          Optional.empty());
       System.out.println("   ✓ Usuario modificado - ID: " + idUsuario2);
       System.out.println("     Nuevos apellidos: López Fernández\n");
 

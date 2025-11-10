@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import productos.modelo.Usuario;
-import productos.repositorio.RepositorioUsuariosJPA;
+import productos.repositorio.RepositorioUsuariosAdHocJPA;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
-  RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
+  private RepositorioUsuariosAdHocJPA repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
 
   @Override
   public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
@@ -27,8 +27,7 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
   @Override
   public void modificarUsuario(String id, Optional<String> nombre, Optional<String> apellidos,
-      Optional<String> telefono, Optional<String> direccion,
-      Optional<LocalDate> fechaNacimiento, Optional<String> password) {
+      Optional<String> password, Optional<LocalDate> fechaNacimiento, Optional<String> telefono) {
     try {
       Usuario usuario = repositorioUsuarios.getById(id);
       if (nombre.isPresent()) {
@@ -37,14 +36,14 @@ public class ServicioUsuarios implements IServicioUsuarios {
       if (apellidos.isPresent()) {
         usuario.setApellidos(apellidos.get());
       }
-      if (telefono.isPresent()) {
-        usuario.setTelefono(telefono.get());
+      if (password.isPresent()) {
+        usuario.setPassword(password.get());
       }
       if (fechaNacimiento.isPresent()) {
         usuario.setFechaNacimiento(fechaNacimiento.get());
       }
-      if (password.isPresent()) {
-        usuario.setPassword(password.get());
+      if (telefono.isPresent()) {
+        usuario.setTelefono(telefono.get());
       }
       repositorioUsuarios.update(usuario);
 

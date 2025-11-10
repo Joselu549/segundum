@@ -8,6 +8,5 @@ public interface IServicioUsuarios {
       String direccion, LocalDate fechaNacimiento, String password);
 
   void modificarUsuario(String id, Optional<String> nombre, Optional<String> apellidos,
-      Optional<String> telefono, Optional<String> direccion, Optional<LocalDate> fechaNacimiento,
-      Optional<String> password);
+      Optional<String> password, Optional<LocalDate> fechaNacimiento, Optional<String> telefono);
 }
