@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import productos.modelo.Usuario;
-import productos.repositorio.RepositorioUsuariosAdHocJPA;
+import productos.repositorio.RepositorioUsuariosJPA;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
-  private RepositorioUsuariosAdHocJPA repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
+  private RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
 
   @Override
   public String registrarUsuario(String email, String nombre, String apellidos, String telefono,

@@ -13,7 +13,7 @@ import productos.modelo.Producto;
 import productos.modelo.Usuario;
 import productos.repositorio.RepositorioCategoriasAdHocJPA;
 import productos.repositorio.RepositorioProductosAdHocJPA;
-import productos.repositorio.RepositorioUsuariosAdHocJPA;
+import productos.repositorio.RepositorioUsuariosJPA;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
@@ -24,7 +24,7 @@ public class ServicioProductos implements IServicioProductos {
       .getRepositorio(Producto.class);
   private RepositorioCategoriasAdHocJPA repositorioCategorias = FactoriaRepositorios
       .getRepositorio(Categoria.class);
-  private RepositorioUsuariosAdHocJPA repositorioUsuarios = FactoriaRepositorios
+  private RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios
       .getRepositorio(Usuario.class);
 
   @Override
