@@ -3,8 +3,12 @@
     xmlns="http://xmlns.jcp.org/xml/ns/persistence"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <persistence-unit name="encuestas">
+    <persistence-unit name="productos">
         <!-- añadir las entidades anotadas con el elemento class-->
+        <class>productos.modelo.Categoria</class>
+        <class>productos.modelo.Producto</class>
+        <class>productos.modelo.LugarRecogida</class>
+        <class>productos.modelo.Usuario</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"
                 value="com.mysql.cj.jdbc.Driver" />
@@ -12,9 +16,11 @@
             <property name="javax.persistence.jdbc.password"
                 value="root" />
             <property name="javax.persistence.jdbc.url"
-                value="jdbc:mysql://localhost:3306/encuestas?serverTimezone=CET" />
+                value="jdbc:mysql://localhost:3306/productos?serverTimezone=CET" />
             <property name="eclipselink.ddl-generation"
-                value="create-or-extend-tables" />
+                value="drop-and-create-tables" />
+            <property name="eclipselink.ddl-generation.output-mode"
+                value="database" />
             <property name="eclipselink.query-results-cache"
                 value="false" />
             <property name="eclipselink.cache.shared.default"
