@@ -20,6 +20,6 @@ public interface IServicioProductos {
 
   List<ResumenProducto> getHistorialMes(int mes, int anio);
 
-  List<Producto> buscarProductos(Optional<String> idCategoria, Optional<String> textoDescripcion,
-      Optional<Estado> estado, Optional<Double> precioMaximo);
+  List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
+      Estado estado, Double precioMaximo);
 }

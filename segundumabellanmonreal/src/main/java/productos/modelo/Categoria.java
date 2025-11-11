@@ -20,8 +20,8 @@ import repositorio.Identificable;
 @Entity
 @XmlRootElement(name = "categoria")
 @NamedQueries({
-    @NamedQuery(name = "Categoria.getCategoriasRaiz", query = "SELECT c FROM Categoria c WHERE c.categoria IS NULL"),
-    @NamedQuery(name = "Categoria.getSubcategorias", query = "SELECT c FROM Categoria c WHERE c.categoria.id = :idCategoriaPadre")
+    @NamedQuery(name = "Categoria.getCategoriasRaiz", query = "SELECT c FROM Categoria c WHERE c.categoriaPadre IS NULL"),
+    @NamedQuery(name = "Categoria.getSubcategorias", query = "SELECT c FROM Categoria c WHERE c.categoriaPadre.id = :idCategoriaPadre")
 })
 public class Categoria implements Identificable {
 
@@ -31,10 +31,10 @@ public class Categoria implements Identificable {
   @Lob
   private String descripcion;
   private String ruta;
-  @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
   private List<Categoria> subCategorias;
   @ManyToOne
-  private Categoria categoria;
+  private Categoria categoriaPadre;
 
   public Categoria() {
   }
@@ -73,8 +73,8 @@ public class Categoria implements Identificable {
   }
 
   @XmlTransient
-  public Categoria getCategoria() {
-    return categoria;
+  public Categoria getCategoriaPadre() {
+    return categoriaPadre;
   }
 
   public void setId(String id) {
@@ -97,7 +97,7 @@ public class Categoria implements Identificable {
     this.subCategorias = subCategorias;
   }
 
-  public void setCategoria(Categoria categoria) {
-    this.categoria = categoria;
+  public void setCategoriaPadre(Categoria categoriaPadre) {
+    this.categoriaPadre = categoriaPadre;
   }
 }

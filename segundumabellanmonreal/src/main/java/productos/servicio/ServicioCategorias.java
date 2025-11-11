@@ -45,7 +45,7 @@ public class ServicioCategorias implements IServicioCategorias {
   }
 
   private void configurarRelacionesPadreHijo(Categoria categoria, Categoria padre) {
-    categoria.setCategoria(padre);
+    categoria.setCategoriaPadre(padre);
 
     if (categoria.getSubCategorias() != null) {
       for (Categoria subcategoria : categoria.getSubCategorias()) {

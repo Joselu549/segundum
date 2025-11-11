@@ -2,6 +2,7 @@ package productos.repositorio;
 
 import java.util.List;
 
+import productos.modelo.Estado;
 import productos.modelo.Producto;
 import repositorio.RepositorioException;
 import repositorio.RepositorioString;
@@ -17,6 +18,6 @@ public interface RepositorioProductosAdHoc extends RepositorioString<Producto> {
   public List<Producto> getProductosPorMesAnio(int mes, int anio) throws RepositorioException;
 
   public List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
-      String estado, Double precioMaximo) throws RepositorioException;
+      Estado estado, Double precioMaximo) throws RepositorioException;
 
 }

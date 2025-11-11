@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import productos.modelo.Estado;
 import productos.modelo.Producto;
 import repositorio.RepositorioException;
 import utils.EntityManagerHelper;
@@ -78,7 +79,7 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
 
   @Override
   public List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
-      String estado, Double precioMaximo) throws RepositorioException {
+      Estado estado, Double precioMaximo) throws RepositorioException {
     try {
       EntityManager em = EntityManagerHelper.getEntityManager();
 
@@ -91,7 +92,7 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
       if (textoDescripcion != null && !textoDescripcion.isEmpty()) {
         jpql.append(" AND LOWER(p.descripcion) LIKE :textoDescripcion");
       }
-      if (estado != null && !estado.isEmpty()) {
+      if (estado != null) {
         jpql.append(" AND p.estado = :estado");
       }
       if (precioMaximo != null) {
@@ -108,8 +109,8 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
       if (textoDescripcion != null && !textoDescripcion.isEmpty()) {
         query.setParameter("textoDescripcion", "%" + textoDescripcion.toLowerCase() + "%");
       }
-      if (estado != null && !estado.isEmpty()) {
-        query.setParameter("estado", productos.modelo.Estado.valueOf(estado));
+      if (estado != null) {
+        query.setParameter("estado", estado);
       }
       if (precioMaximo != null) {
         query.setParameter("precioMaximo", precioMaximo);
