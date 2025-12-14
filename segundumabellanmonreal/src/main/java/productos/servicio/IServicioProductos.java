@@ -3,6 +3,7 @@ package productos.servicio;
 import java.util.List;
 import java.util.Optional;
 
+import productos.dto.ProductoDTO;
 import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
@@ -22,4 +23,6 @@ public interface IServicioProductos {
 
   List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
       Estado estado, Double precioMaximo);
+
+  ProductoDTO getProducto(String idProducto) throws IllegalArgumentException;
 }

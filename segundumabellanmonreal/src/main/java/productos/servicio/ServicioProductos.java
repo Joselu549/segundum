@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import productos.dto.ProductoDTO;
 import productos.modelo.Categoria;
 import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
@@ -248,4 +249,29 @@ public class ServicioProductos implements IServicioProductos {
     }
   }
 
+  public ProductoDTO getProducto(String idProducto) {
+
+    // Validar idProducto
+    if (idProducto == null || idProducto.trim().isEmpty()) {
+      throw new IllegalArgumentException("El ID de producto no puede ser nulo o vacío");
+    }
+
+    try {
+      Producto producto = repositorioProductos.getById(idProducto);
+      return transformToDTO(producto);
+
+    } catch (EntidadNoEncontrada e) {
+      throw new RuntimeException("Producto no encontrado con id: " + idProducto, e);
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al obtener el producto: " + e.getMessage(), e);
+    }
+  }
+
+  private ProductoDTO transformToDTO(Producto producto) {
+    return new ProductoDTO(
+        producto.getId(),
+        producto.getTitulo(),
+        producto.getDescripcion(),
+        producto.getPrecio());
+  }
 }
