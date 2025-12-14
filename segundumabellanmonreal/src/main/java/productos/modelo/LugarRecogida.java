@@ -4,20 +4,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class LugarRecogida {
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
   private String id;
+  @Lob
   private String descripcion;
-  private int longitud;
-  private int latitud;
+  private double longitud;
+  private double latitud;
 
   public LugarRecogida() {
   }
 
-  public LugarRecogida(String descripcion, int longitud, int latitud) {
+  public LugarRecogida(String descripcion, double longitud, double latitud) {
     this.descripcion = descripcion;
     this.longitud = longitud;
     this.latitud = latitud;
@@ -35,11 +37,11 @@ public class LugarRecogida {
     return descripcion;
   }
 
-  public int getLongitud() {
+  public double getLongitud() {
     return longitud;
   }
 
-  public int getLatitud() {
+  public double getLatitud() {
     return latitud;
   }
 

@@ -8,14 +8,14 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import productos.modelo.Categoria;
-import productos.repositorio.RepositorioCategoriasAdHocJPA;
+import productos.repositorio.RepositorioCategoriasAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioCategorias implements IServicioCategorias {
 
-  private RepositorioCategoriasAdHocJPA repositorioCategorias = FactoriaRepositorios
+  private RepositorioCategoriasAdHoc repositorioCategorias = FactoriaRepositorios
       .getRepositorio(Categoria.class);
 
   @Override

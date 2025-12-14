@@ -30,6 +30,7 @@ public class Categoria implements Identificable {
   private String nombre;
   @Lob
   private String descripcion;
+  @Lob
   private String ruta;
   @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
   private List<Categoria> subCategorias;

@@ -1,16 +1,17 @@
 package productos.servicio;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import productos.modelo.Usuario;
-import productos.repositorio.RepositorioUsuariosJPA;
+import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
-  private RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
+  private RepositorioUsuariosAdHoc repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
 
   @Override
   public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
@@ -55,6 +56,12 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     try {
+      // Comprobar que el email no existe previamente
+      List<Usuario> existentes = repositorioUsuarios.getUsuariosPorEmail(email);
+      if (existentes != null && !existentes.isEmpty()) {
+        throw new IllegalArgumentException("El email ya está registrado");
+      }
+
       Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
       String id = repositorioUsuarios.add(usuario);
       return id;

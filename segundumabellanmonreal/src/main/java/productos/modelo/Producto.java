@@ -6,12 +6,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -38,13 +37,13 @@ public class Producto implements Identificable {
   @Enumerated(EnumType.STRING)
   private Estado estado;
   private LocalDateTime fechaPublicacion;
-  @OneToOne
+  @ManyToOne
   private Categoria categoria;
   private int visualizaciones;
   private boolean envioDisponible;
   @OneToOne(cascade = CascadeType.ALL)
   private LugarRecogida lugarRecogida;
-  @OneToOne
+  @ManyToOne
   private Usuario vendedor;
 
   public Producto() {
@@ -149,6 +148,12 @@ public class Producto implements Identificable {
 
   public void setLugarRecogida(LugarRecogida lugarRecogida) {
     this.lugarRecogida = lugarRecogida;
+  }
+
+  public LugarRecogida setLugarRecogida(String descripcion, int longitud, int latitud) {
+    LugarRecogida lugar = new LugarRecogida(descripcion, longitud, latitud);
+    this.lugarRecogida = lugar;
+    return lugar;
   }
 
   public void setVendedor(Usuario vendedor) {

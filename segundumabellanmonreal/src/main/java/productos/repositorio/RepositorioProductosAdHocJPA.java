@@ -1,6 +1,7 @@
 package productos.repositorio;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -8,6 +9,7 @@ import javax.persistence.TypedQuery;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import productos.modelo.Categoria;
 import productos.modelo.Estado;
 import productos.modelo.Producto;
 import repositorio.RepositorioException;
@@ -35,15 +37,33 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
 
   @Override
   public List<Producto> getProductosPorCategoria(String idCategoria) throws RepositorioException {
+    EntityManager em = null;
     try {
-      EntityManager em = EntityManagerHelper.getEntityManager();
-      TypedQuery<Producto> query = em.createNamedQuery("Producto.getProductosPorCategoria", Producto.class);
+      em = EntityManagerHelper.getEntityManager();
+      Categoria categoria = em.find(Categoria.class, idCategoria);
+      if (categoria == null) {
+        throw new RepositorioException("Categoría no encontrada: " + idCategoria);
+      }
+
+      String ruta = categoria.getRuta();
+      String jpql = "SELECT p FROM Producto p WHERE p.categoria.id = :idCategoria";
+      if (ruta != null && !ruta.isEmpty()) {
+        jpql += " OR p.categoria.ruta LIKE :rutaCategoria";
+      }
+
+      TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
       query.setHint(QueryHints.REFRESH, HintValues.TRUE);
       query.setParameter("idCategoria", idCategoria);
+      if (ruta != null && !ruta.isEmpty()) {
+        query.setParameter("rutaCategoria", ruta + "%");
+      }
+
       return query.getResultList();
     } catch (RuntimeException e) {
       e.printStackTrace();
       throw new RepositorioException("Error al obtener productos por categoría", e);
+    } finally {
+      EntityManagerHelper.closeEntityManager();
     }
   }
 
@@ -86,14 +106,23 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
       // Construir consulta JPQL dinámica
       StringBuilder jpql = new StringBuilder("SELECT p FROM Producto p WHERE 1=1");
 
+      String rutaCategoria = null;
       if (idCategoria != null && !idCategoria.isEmpty()) {
-        jpql.append(" AND p.categoria.id = :idCategoria");
+        Categoria categoria = em.find(Categoria.class, idCategoria);
+        if (categoria != null && categoria.getRuta() != null && !categoria.getRuta().isEmpty()) {
+          rutaCategoria = categoria.getRuta() + "%";
+        }
+        jpql.append(" AND (p.categoria.id = :idCategoria");
+        if (rutaCategoria != null) {
+          jpql.append(" OR p.categoria.ruta LIKE :rutaCategoria");
+        }
+        jpql.append(")");
       }
       if (textoDescripcion != null && !textoDescripcion.isEmpty()) {
         jpql.append(" AND LOWER(p.descripcion) LIKE :textoDescripcion");
       }
       if (estado != null) {
-        jpql.append(" AND p.estado = :estado");
+        jpql.append(" AND p.estado IN :estadosPermitidos");
       }
       if (precioMaximo != null) {
         jpql.append(" AND p.precio <= :precioMaximo");
@@ -105,12 +134,15 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
       // Establecer parámetros
       if (idCategoria != null && !idCategoria.isEmpty()) {
         query.setParameter("idCategoria", idCategoria);
+        if (rutaCategoria != null) {
+          query.setParameter("rutaCategoria", rutaCategoria);
+        }
       }
       if (textoDescripcion != null && !textoDescripcion.isEmpty()) {
         query.setParameter("textoDescripcion", "%" + textoDescripcion.toLowerCase() + "%");
       }
       if (estado != null) {
-        query.setParameter("estado", estado);
+        query.setParameter("estadosPermitidos", obtenerEstadosMejoresOIguales(estado));
       }
       if (precioMaximo != null) {
         query.setParameter("precioMaximo", precioMaximo);
@@ -123,6 +155,20 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
     } finally {
       EntityManagerHelper.closeEntityManager();
     }
+  }
+
+  private List<Estado> obtenerEstadosMejoresOIguales(Estado estadoBase) {
+    List<Estado> estados = new ArrayList<>();
+    if (estadoBase == null) {
+      return estados;
+    }
+
+    Estado[] orden = Estado.values();
+    int idx = estadoBase.ordinal();
+    for (int i = 0; i <= idx && i < orden.length; i++) {
+      estados.add(orden[i]);
+    }
+    return estados;
   }
 
 }

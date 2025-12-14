@@ -11,20 +11,20 @@ import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
 import productos.modelo.Usuario;
-import productos.repositorio.RepositorioCategoriasAdHocJPA;
-import productos.repositorio.RepositorioProductosAdHocJPA;
-import productos.repositorio.RepositorioUsuariosJPA;
+import productos.repositorio.RepositorioCategoriasAdHoc;
+import productos.repositorio.RepositorioProductosAdHoc;
+import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 
 public class ServicioProductos implements IServicioProductos {
 
-  private RepositorioProductosAdHocJPA repositorioProductos = FactoriaRepositorios
+  private RepositorioProductosAdHoc repositorioProductos = FactoriaRepositorios
       .getRepositorio(Producto.class);
-  private RepositorioCategoriasAdHocJPA repositorioCategorias = FactoriaRepositorios
+  private RepositorioCategoriasAdHoc repositorioCategorias = FactoriaRepositorios
       .getRepositorio(Categoria.class);
-  private RepositorioUsuariosJPA repositorioUsuarios = FactoriaRepositorios
+  private RepositorioUsuariosAdHoc repositorioUsuarios = FactoriaRepositorios
       .getRepositorio(Usuario.class);
 
   @Override
@@ -114,8 +114,7 @@ public class ServicioProductos implements IServicioProductos {
 
     try {
       Producto producto = repositorioProductos.getById(idProducto);
-      LugarRecogida lugar = new LugarRecogida(descripcion, longitud, latitud);
-      producto.setLugarRecogida(lugar);
+      LugarRecogida lugar = producto.setLugarRecogida(descripcion, longitud, latitud);
       repositorioProductos.update(producto);
       return lugar;
 
