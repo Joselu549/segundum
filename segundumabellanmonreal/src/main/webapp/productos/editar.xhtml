@@ -1,0 +1,58 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+  <ui:define name="title">Editar producto</ui:define>
+  <ui:param name="estilo3" value="current" />
+
+  <ui:define name="metadata">
+    <f:metadata>
+      <f:viewParam name="id" value="#{editarProductoWeb.idProducto}" />
+      <f:event type="preRenderView" listener="#{editarProductoWeb.cargarProducto}" />
+    </f:metadata>
+  </ui:define>
+
+  <ui:define name="content">
+    <div class="row">
+      <div class="col-12">
+        <div class="content">
+          <h2>Editar Producto</h2>
+          <p>Modifica los datos de tu producto.</p>
+
+          <h:form id="formEditar">
+            <p:growl id="growl" showDetail="true" />
+
+            <h:panelGrid columns="2" cellpadding="5">
+              <p:outputLabel for="titulo" value="Título" />
+              <p:inputText id="titulo" value="#{editarProductoWeb.titulo}" 
+                disabled="true" style="width: 300px;" />
+
+              <p:outputLabel for="descripcion" value="Descripción" />
+              <p:inputTextarea id="descripcion" value="#{editarProductoWeb.descripcion}" 
+                rows="5" cols="50" required="true" 
+                requiredMessage="La descripción es obligatoria"
+                maxlength="2000" />
+
+              <p:outputLabel for="precio" value="Precio (€)" />
+              <p:inputText id="precio" value="#{editarProductoWeb.precio}" 
+                required="true" requiredMessage="El precio es obligatorio"
+                style="width: 150px;">
+                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+              </p:inputText>
+            </h:panelGrid>
+
+            <p:commandButton value="Guardar cambios" icon="pi pi-save"
+              action="#{editarProductoWeb.actualizarProducto}" 
+              update="growl" style="margin-top: 10px; margin-right: 10px;" />
+
+            <p:button value="Cancelar" icon="pi pi-times"
+              outcome="mis-productos" style="margin-top: 10px;" />
+          </h:form>
+        </div>
+      </div>
+    </div>
+  </ui:define>
+</ui:composition>
