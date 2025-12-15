@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+  <ui:define name="title">Buscar productos</ui:define>
+  <ui:param name="estilo4" value="current" />
+
+  <ui:define name="content">
+    <div class="row">
+      <div class="col-12">
+        <section class="content">
+          <h2>Buscar productos</h2>
+          <p>Filtra los productos disponibles según tus criterios de búsqueda.</p>
+
+          <h:form id="formBuscar">
+            <p:growl id="growl" showDetail="true" />
+
+            <p:panel header="Criterios de búsqueda" style="margin-bottom: 20px;">
+              <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="categoria" value="Categoría" />
+                <p:selectOneMenu id="categoria" value="#{buscarProductosWeb.idCategoria}" style="width: 250px;">
+                  <f:selectItem itemLabel="Todas las categorías" itemValue="#{null}" />
+                  <f:selectItems value="#{buscarProductosWeb.categoriasRaiz}" var="cat" 
+                    itemLabel="#{cat.nombre}" itemValue="#{cat.id}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="descripcion" value="Texto en descripción" />
+                <p:inputText id="descripcion" value="#{buscarProductosWeb.textoDescripcion}" 
+                  style="width: 250px;" placeholder="Buscar en descripción..." />
+
+                <p:outputLabel for="estado" value="Estado" />
+                <p:selectOneMenu id="estado" value="#{buscarProductosWeb.estado}" style="width: 250px;">
+                  <f:selectItem itemLabel="Cualquier estado" itemValue="#{null}" />
+                  <f:selectItems value="#{buscarProductosWeb.estadosDisponibles}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="precioMax" value="Precio máximo (€)" />
+                <p:inputText id="precioMax" value="#{buscarProductosWeb.precioMaximo}" 
+                  style="width: 150px;">
+                  <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                </p:inputText>
+              </h:panelGrid>
+
+              <div style="margin-top: 15px;">
+                <p:commandButton value="Buscar" icon="pi pi-search"
+                  action="#{buscarProductosWeb.buscar}" update="growl tablaResultados"
+                  style="margin-right: 10px;" />
+                <p:commandButton value="Limpiar filtros" icon="pi pi-times"
+                  action="#{buscarProductosWeb.limpiar}" update="@form"
+                  process="@this" />
+              </div>
+            </p:panel>
+
+            <p:dataTable id="tablaResultados" value="#{buscarProductosWeb.resultados}" 
+              var="p" emptyMessage="No hay productos que mostrar. Utiliza los filtros para buscar.">
+              <p:column headerText="Título" style="width: 25%;">
+                <h:outputText value="#{p.titulo}" />
+              </p:column>
+              <p:column headerText="Precio (€)" style="width: 15%;">
+                <h:outputText value="#{p.precio}">
+                  <f:convertNumber type="currency" currencySymbol="€" />
+                </h:outputText>
+              </p:column>
+              <p:column headerText="Estado" style="width: 15%;">
+                <h:outputText value="#{p.estado}" />
+              </p:column>
+              <p:column headerText="Categoría" style="width: 20%;">
+                <h:outputText value="#{p.categoria.nombre}" />
+              </p:column>
+              <p:column headerText="Descripción" style="width: 25%;">
+                <h:outputText value="#{p.descripcion.length() > 100 ? p.descripcion.substring(0, 97).concat('...') : p.descripcion}" />
+              </p:column>
+              <p:column headerText="Acciones" style="width: 10%;">
+                <p:button value="Ver" icon="pi pi-search" outcome="detail" includeViewParams="true">
+                  <f:param name="id" value="#{p.id}" />
+                </p:button>
+              </p:column>
+            </p:dataTable>
+          </h:form>
+        </section>
+      </div>
+    </div>
+  </ui:define>
+</ui:composition>

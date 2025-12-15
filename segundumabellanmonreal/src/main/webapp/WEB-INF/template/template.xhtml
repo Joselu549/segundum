@@ -25,6 +25,9 @@
                             href="#{request.contextPath}/index.xhtml">Inicio</a>
                         </li>
                         
+                        <li class="#{estilo4}"><a href="#{request.contextPath}/productos/buscar.xhtml">Buscar productos</a>
+                        </li>
+                        
                         <ui:fragment rendered="#{sesionUsuarioWeb.autenticado}">
                           <li class="#{estilo2}"><a href="#{request.contextPath}/productos/alta.xhtml">Dar de alta producto</a>
                           </li>
