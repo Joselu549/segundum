@@ -1,7 +1,8 @@
-package productos.web;
+package productos.web.producto;
 
 import java.io.IOException;
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -12,6 +13,7 @@ import javax.inject.Named;
 import productos.modelo.Estado;
 import productos.servicio.IServicioProductos;
 import servicio.FactoriaServicios;
+import productos.web.usuario.SesionUsuarioWeb;
 
 @SuppressWarnings("serial")
 @Named
@@ -26,6 +28,9 @@ public class AltaProductosWeb implements Serializable {
   private String idVendedor;
 
   @Inject
+  private SesionUsuarioWeb sesionUsuarioWeb;
+
+  @Inject
   private FacesContext facesContext;
 
   private IServicioProductos servicioProductos;
@@ -36,8 +41,20 @@ public class AltaProductosWeb implements Serializable {
     envioDisponible = false;
   }
 
+  @PostConstruct
+  public void init() {
+    if (sesionUsuarioWeb != null && sesionUsuarioWeb.getUsuarioActual() != null) {
+      idVendedor = sesionUsuarioWeb.getUsuarioActual().getId();
+    }
+  }
+
   public void altaProducto() {
     try {
+      if (sesionUsuarioWeb == null || sesionUsuarioWeb.getUsuarioActual() == null) {
+        throw new IllegalArgumentException("Debes iniciar sesión para dar de alta un producto");
+      }
+      idVendedor = sesionUsuarioWeb.getUsuarioActual().getId();
+
       double precioValue = (precio != null) ? precio : 0.0;
       String idProducto = servicioProductos.darDeAltaProducto(
           titulo, descripcion, precioValue, estado, idCategoria, envioDisponible, idVendedor);

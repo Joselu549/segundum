@@ -1,4 +1,4 @@
-package productos.web;
+package productos.web.producto;
 
 import java.io.Serializable;
 
