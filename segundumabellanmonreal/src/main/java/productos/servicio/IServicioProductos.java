@@ -25,4 +25,6 @@ public interface IServicioProductos {
       Estado estado, Double precioMaximo);
 
   ProductoDTO getProducto(String idProducto) throws IllegalArgumentException;
+
+  List<ProductoDTO> getProductosVendedor(String idVendedor) throws IllegalArgumentException;
 }

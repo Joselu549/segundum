@@ -134,4 +134,21 @@ public class ServicioUsuarios implements IServicioUsuarios {
       throw new RuntimeException("Error al modificar el teléfono del usuario: " + e.getMessage(), e);
     }
   }
+
+  @Override
+  public Usuario login(String email, String password) {
+    try {
+      List<Usuario> usuarios = repositorioUsuarios.getUsuariosPorEmail(email);
+      if (usuarios == null || usuarios.isEmpty()) {
+        throw new IllegalArgumentException("Email o contraseña incorrectos");
+      }
+      Usuario usuario = usuarios.get(0);
+      if (!usuario.getPassword().equals(password)) {
+        throw new IllegalArgumentException("Email o contraseña incorrectos");
+      }
+      return usuario;
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al realizar el login: " + e.getMessage(), e);
+    }
+  }
 }

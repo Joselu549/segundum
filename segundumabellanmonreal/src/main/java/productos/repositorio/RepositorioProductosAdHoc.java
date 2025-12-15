@@ -20,4 +20,5 @@ public interface RepositorioProductosAdHoc extends RepositorioString<Producto> {
   public List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
       Estado estado, Double precioMaximo) throws RepositorioException;
 
+  public List<Producto> getProductosVendedor(String idVendedor) throws RepositorioException;
 }

@@ -2,6 +2,8 @@ package productos.servicio;
 
 import java.time.LocalDate;
 
+import productos.modelo.Usuario;
+
 public interface IServicioUsuarios {
   String registrarUsuario(String email, String nombre, String apellidos, String telefono,
       String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException;
@@ -15,4 +17,6 @@ public interface IServicioUsuarios {
   void modificarFechaNacimiento(String id, LocalDate fechaNacimiento);
 
   void modificarTelefono(String id, String telefono);
+
+  Usuario login(String email, String password);
 }

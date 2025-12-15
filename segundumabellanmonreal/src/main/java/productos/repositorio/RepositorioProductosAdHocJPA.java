@@ -171,4 +171,17 @@ public class RepositorioProductosAdHocJPA extends RepositorioProductosJPA implem
     return estados;
   }
 
+  @Override
+  public List<Producto> getProductosVendedor(String idVendedor) throws RepositorioException {
+    try {
+      EntityManager em = EntityManagerHelper.getEntityManager();
+      TypedQuery<Producto> query = em.createNamedQuery("Producto.getProductosVendedor", Producto.class);
+      query.setHint(QueryHints.REFRESH, HintValues.TRUE);
+      query.setParameter("idVendedor", idVendedor);
+      return query.getResultList();
+    } catch (RuntimeException e) {
+      e.printStackTrace();
+      throw new RepositorioException("Error al obtener productos del vendedor", e);
+    }
+  }
 }

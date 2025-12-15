@@ -249,6 +249,29 @@ public class ServicioProductos implements IServicioProductos {
     }
   }
 
+  @Override
+  public List<ProductoDTO> getProductosVendedor(String idVendedor) {
+
+    // Validar idVendedor
+    if (idVendedor == null || idVendedor.trim().isEmpty()) {
+      throw new IllegalArgumentException("El ID de vendedor no puede ser nulo o vacío");
+    }
+
+    try {
+      List<Producto> productos = repositorioProductos.getProductosVendedor(idVendedor);
+      List<ProductoDTO> productosDTO = new ArrayList<>();
+
+      for (Producto producto : productos) {
+        productosDTO.add(transformToDTO(producto));
+      }
+
+      return productosDTO;
+
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al obtener productos del vendedor: " + e.getMessage(), e);
+    }
+  }
+
   public ProductoDTO getProducto(String idProducto) {
 
     // Validar idProducto
