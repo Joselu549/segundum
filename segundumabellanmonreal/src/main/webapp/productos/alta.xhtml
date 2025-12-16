@@ -43,10 +43,13 @@
                     <f:selectItems value="#{altaProductosWeb.estadosDisponibles}" />
                 </p:selectOneMenu>
                 
-                <p:outputLabel for="idCategoria" value="ID Categoría" />
-                <p:inputText id="idCategoria" value="#{altaProductosWeb.idCategoria}" 
-                    required="true" requiredMessage="El ID de categoría es obligatorio"
-                    style="width: 300px;" />
+                <p:outputLabel for="idCategoria" value="Categoría" />
+                <p:selectOneMenu id="idCategoria" value="#{altaProductosWeb.idCategoria}" 
+                    required="true" requiredMessage="La categoría es obligatoria" style="width: 300px;">
+                    <f:selectItem itemLabel="Seleccione una categoría" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{altaProductosWeb.categoriasRaiz}" var="cat" 
+                        itemLabel="#{cat.nombre}" itemValue="#{cat.id}" />
+                </p:selectOneMenu>
                 
                 <p:outputLabel for="envioDisponible" value="Envío disponible" />
                 <p:selectBooleanCheckbox id="envioDisponible" 

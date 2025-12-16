@@ -2,6 +2,9 @@ package productos.web.producto;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import javax.faces.application.FacesMessage;
@@ -10,7 +13,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import productos.modelo.Categoria;
 import productos.modelo.Estado;
+import productos.servicio.IServicioCategorias;
 import productos.servicio.IServicioProductos;
 import servicio.FactoriaServicios;
 import productos.web.usuario.SesionUsuarioWeb;
@@ -26,6 +31,7 @@ public class AltaProductosWeb implements Serializable {
   private String idCategoria;
   private boolean envioDisponible;
   private String idVendedor;
+  private List<Categoria> categoriasRaiz;
 
   @Inject
   private SesionUsuarioWeb sesionUsuarioWeb;
@@ -34,17 +40,28 @@ public class AltaProductosWeb implements Serializable {
   private FacesContext facesContext;
 
   private IServicioProductos servicioProductos;
+  private IServicioCategorias servicioCategorias;
 
   public AltaProductosWeb() {
     servicioProductos = FactoriaServicios.getServicio(IServicioProductos.class);
+    servicioCategorias = FactoriaServicios.getServicio(IServicioCategorias.class);
     precio = null;
     envioDisponible = false;
+    categoriasRaiz = new ArrayList<>();
   }
 
   @PostConstruct
   public void init() {
     if (sesionUsuarioWeb != null && sesionUsuarioWeb.getUsuarioActual() != null) {
       idVendedor = sesionUsuarioWeb.getUsuarioActual().getId();
+    }
+    try {
+      categoriasRaiz = servicioCategorias.obtenerCategoriasRaiz();
+    } catch (Exception e) {
+      categoriasRaiz = new ArrayList<>();
+      facesContext.addMessage(null,
+          new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
+              "No se pudieron cargar las categorías"));
     }
   }
 
@@ -83,6 +100,10 @@ public class AltaProductosWeb implements Serializable {
 
   public Estado[] getEstadosDisponibles() {
     return Estado.values();
+  }
+
+  public List<Categoria> getCategoriasRaiz() {
+    return categoriasRaiz;
   }
 
   public String getTitulo() {
