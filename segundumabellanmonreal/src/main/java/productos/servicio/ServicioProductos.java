@@ -295,6 +295,7 @@ public class ServicioProductos implements IServicioProductos {
         producto.getId(),
         producto.getTitulo(),
         producto.getDescripcion(),
-        producto.getPrecio());
+        producto.getPrecio(),
+        producto.getEstado());
   }
 }

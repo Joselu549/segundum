@@ -50,6 +50,20 @@ public class SesionUsuarioWeb implements Serializable {
     return usuarioActual != null;
   }
 
+  public String logout() {
+    usuarioActual = null;
+    email = null;
+    password = null;
+    try {
+      facesContext.getExternalContext().invalidateSession();
+      facesContext.getExternalContext()
+          .redirect(facesContext.getExternalContext().getRequestContextPath() + "/index.xhtml");
+    } catch (Exception e) {
+      System.out.println("Error al redirigir tras el logout: " + e.getMessage());
+    }
+    return null;
+  }
+
   public UsuarioDTO getUsuarioActual() {
     return usuarioActual;
   }

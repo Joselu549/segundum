@@ -1,27 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Detalle Producto</title>
-</h:head>
-<h:body>
-    <f:metadata>
-        <f:viewParam name="id" value="#{productoDetailWeb.idProducto}" />
-        <f:viewAction action="#{productoDetailWeb.load()}" />
-    </f:metadata>
-    <div>
-    <p:messages id="messages" showDetail="true" closable="true">
-            <p:autoUpdate/>
-        </p:messages>
-    
-    <h3>#{productoDetailWeb.producto.titulo}</h3>
-    <p>#{productoDetailWeb.producto.descripcion}</p>
-    <p>Precio: #{productoDetailWeb.producto.precio}€</p>
-        
-    </div>
-</h:body>
-</html>
+
+    <ui:define name="title">Detalle del producto</ui:define>
+    <ui:param name="estilo4" value="current" />
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="id" value="#{productoDetailWeb.idProducto}" />
+            <f:viewAction action="#{productoDetailWeb.load()}" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="row">
+            <div class="col-12">
+                <section class="content">
+                    <h2>#{productoDetailWeb.producto.titulo}</h2>
+                    <p:messages id="messages" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+
+                    <p:panel header="Información del producto" style="margin-top: 20px;">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <h:outputText value="Descripción:" style="font-weight: bold;" />
+                            <h:outputText value="#{productoDetailWeb.producto.descripcion}" />
+
+                            <h:outputText value="Precio:" style="font-weight: bold;" />
+                            <h:outputText value="#{productoDetailWeb.producto.precio}">
+                                <f:convertNumber type="currency" currencySymbol="€" />
+                            </h:outputText>
+
+                            <h:outputText value="Estado:" style="font-weight: bold;" />
+                            <h:outputText value="#{productoDetailWeb.producto.estado}" />
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <div style="margin-top: 20px;">
+                        <p:button value="Volver a buscar" icon="pi pi-arrow-left" outcome="buscar" />
+                    </div>
+                </section>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
