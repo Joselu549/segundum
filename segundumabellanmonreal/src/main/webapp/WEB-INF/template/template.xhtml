@@ -16,7 +16,12 @@
         <div id="page-wrapper">
             <section id="header">
             <h1>
-                <a href="#{request.contextPath}/index.xhtml">SegundUM</a>
+                <ui:fragment rendered="#{sesionUsuarioWeb.autenticado}">
+                    <a href="#{request.contextPath}/index.xhtml">Hola, #{sesionUsuarioWeb.usuarioActual.nombre}</a>
+                </ui:fragment>
+                <ui:fragment rendered="#{not sesionUsuarioWeb.autenticado}">
+                    <a href="#{request.contextPath}/index.xhtml">SegundUM</a>
+                </ui:fragment>
             </h1>
             <nav>
                 <h:form id="nav">

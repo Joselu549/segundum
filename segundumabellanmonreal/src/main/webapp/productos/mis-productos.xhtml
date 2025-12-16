@@ -15,9 +15,10 @@
           <h2>Mis productos publicados</h2>
           <p>Consulta los productos que has dado de alta.</p>
 
-          <p:growl id="growl" showDetail="true" />
+          <h:form id="formMisProductos">
+            <p:growl id="growl" showDetail="true" />
 
-          <p:dataTable id="tablaProductos" value="#{misProductosWeb.productos}" var="p" emptyMessage="No tienes productos publicados">
+            <p:dataTable id="tablaProductos" value="#{misProductosWeb.productos}" var="p" emptyMessage="No tienes productos publicados">
             <p:column headerText="Título">
               <h:outputText value="#{p.titulo}" />
             </p:column>
@@ -36,6 +37,7 @@
               </p:button>
             </p:column>
           </p:dataTable>
+          </h:form>
         </section>
       </div>
     </div>

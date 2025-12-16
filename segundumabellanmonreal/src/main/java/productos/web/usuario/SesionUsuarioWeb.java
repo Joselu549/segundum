@@ -29,20 +29,23 @@ public class SesionUsuarioWeb implements Serializable {
     servicioUsuarios = FactoriaServicios.getServicio(IServicioUsuarios.class);
   }
 
-  public void login() {
+  public String login() {
     try {
       usuarioActual = servicioUsuarios.login(email, password);
       password = null;
       facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Inicio de sesión correcto",
           "Bienvenido " + usuarioActual.getNombre()));
       facesContext.getExternalContext().getFlash().setKeepMessages(true);
+      return "/index.xhtml?faces-redirect=true";
 
     } catch (IllegalArgumentException e) {
       facesContext.addMessage(null,
           new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credenciales inválidas", e.getMessage()));
+      return null;
     } catch (Exception e) {
       facesContext.addMessage(null,
           new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo iniciar sesión", e.getMessage()));
+      return null;
     }
   }
 

@@ -58,10 +58,10 @@ public class BuscarProductosWeb implements Serializable {
   public void buscar() {
     try {
       resultados = servicioProductos.buscarProductos(idCategoria, textoDescripcion, estado, precioMaximo);
-      
+
       if (resultados.isEmpty()) {
         facesContext.addMessage(null,
-            new FacesMessage(FacesMessage.SEVERITY_INFO, "Sin resultados",
+            new FacesMessage(FacesMessage.SEVERITY_WARN, "Sin resultados",
                 "No se encontraron productos con los criterios especificados"));
       }
     } catch (IllegalArgumentException e) {
