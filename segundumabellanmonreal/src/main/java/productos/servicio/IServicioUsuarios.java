@@ -1,8 +1,8 @@
 package productos.servicio;
 
-import java.time.LocalDate;
+import productos.modelo.Usuario;
 
-import productos.dto.UsuarioDTO;
+import java.time.LocalDate;
 
 public interface IServicioUsuarios {
   String registrarUsuario(String email, String nombre, String apellidos, String telefono,
@@ -18,5 +18,5 @@ public interface IServicioUsuarios {
 
   void modificarTelefono(String id, String telefono);
 
-  UsuarioDTO login(String email, String password);
+  Usuario login(String email, String password);
 }

@@ -3,7 +3,6 @@ package productos.servicio;
 import java.time.LocalDate;
 import java.util.List;
 
-import productos.dto.UsuarioDTO;
 import productos.modelo.Usuario;
 import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
@@ -137,7 +136,7 @@ public class ServicioUsuarios implements IServicioUsuarios {
   }
 
   @Override
-  public UsuarioDTO login(String email, String password) {
+  public Usuario login(String email, String password) {
     try {
       List<Usuario> usuarios = repositorioUsuarios.getUsuariosPorEmail(email);
       if (usuarios == null || usuarios.isEmpty()) {
@@ -147,13 +146,13 @@ public class ServicioUsuarios implements IServicioUsuarios {
       if (!usuario.getPassword().equals(password)) {
         throw new IllegalArgumentException("Email o contraseña incorrectos");
       }
-      return transformToDTO(usuario);
+      return usuario;
     } catch (RepositorioException e) {
       throw new RuntimeException("Error al realizar el login: " + e.getMessage(), e);
     }
   }
 
-  private UsuarioDTO transformToDTO(Usuario usuario) {
-    return new UsuarioDTO(usuario.getId(), usuario.getNombre(), usuario.getEmail());
-  }
+//  private UsuarioDTO transformToDTO(Usuario usuario) {
+//    return new UsuarioDTO(usuario.getId(), usuario.getNombre(), usuario.getEmail());
+//  }
 }
