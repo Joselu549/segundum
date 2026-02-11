@@ -1,19 +1,19 @@
 package productos.servicio.test;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import productos.modelo.Categoria;
 import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
 import productos.servicio.IServicioCategorias;
 import productos.servicio.IServicioProductos;
-import productos.servicio.ResumenProducto;
 import productos.servicio.IServicioUsuarios;
+import productos.servicio.ResumenProducto;
 import servicio.FactoriaServicios;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public class Programa {
 
@@ -90,7 +90,7 @@ public class Programa {
     // ===== 2. INTENTAR CARGAR DUPLICADO =====
     System.out.println("\n2. Intentando cargar jerarquía duplicada...");
     try {
-      String rutaXML = "c:/Users/josel/Repositorios Git/segundum/segundumabellanmonreal/xml/Arte_y_ocio.xml";
+      String rutaXML = archivosFile[0].getAbsolutePath();
       servicioCategorias.cargarJerarquiaCategorias(rutaXML);
       System.out.println("   ✓ Sistema maneja carga duplicada correctamente");
     } catch (Exception e) {
