@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 import repositorio.Identificable;
+import usuarios.modelo.Usuario;
 
 @Entity
 @NamedQueries({

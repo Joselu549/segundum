@@ -8,17 +8,17 @@
         <class>productos.modelo.Categoria</class>
         <class>productos.modelo.Producto</class>
         <class>productos.modelo.LugarRecogida</class>
-        <class>productos.modelo.Usuario</class>
+        <class>usuarios.modelo.Usuario</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"
                 value="com.mysql.cj.jdbc.Driver" />
             <property name="javax.persistence.jdbc.user" value="root" />
             <property name="javax.persistence.jdbc.password"
-                value="rootpass" />
+                value="root" />
             <property name="javax.persistence.jdbc.url"
                 value="jdbc:mysql://localhost:3306/productos?serverTimezone=CET" />
             <property name="eclipselink.ddl-generation"
-                value="create-or-extend-tables" />
+                value="drop-and-create-tables" />
             <property name="eclipselink.ddl-generation.output-mode"
                 value="database" />
             <property name="eclipselink.query-results-cache"

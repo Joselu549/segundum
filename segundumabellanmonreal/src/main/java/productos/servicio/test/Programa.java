@@ -6,9 +6,9 @@ import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
 import productos.servicio.IServicioCategorias;
 import productos.servicio.IServicioProductos;
-import productos.servicio.IServicioUsuarios;
 import productos.servicio.ResumenProducto;
 import servicio.FactoriaServicios;
+import usuarios.servicio.IServicioUsuarios;
 
 import java.io.File;
 import java.time.LocalDate;

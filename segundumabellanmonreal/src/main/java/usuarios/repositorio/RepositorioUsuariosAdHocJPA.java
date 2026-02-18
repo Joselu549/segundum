@@ -1,4 +1,4 @@
-package productos.repositorio;
+package usuarios.repositorio;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import javax.persistence.TypedQuery;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
-import productos.modelo.Usuario;
 import repositorio.RepositorioException;
+import usuarios.modelo.Usuario;
 import utils.EntityManagerHelper;
 
 public class RepositorioUsuariosAdHocJPA extends RepositorioUsuariosJPA implements RepositorioUsuariosAdHoc {

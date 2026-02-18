@@ -1,4 +1,4 @@
-package productos.modelo;
+package usuarios.modelo;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
-package productos.repositorio;
+package usuarios.repositorio;
 
-import productos.modelo.Usuario;
 import repositorio.RepositorioJPA;
+import usuarios.modelo.Usuario;
 
 public class RepositorioUsuariosJPA extends RepositorioJPA<Usuario> {
 

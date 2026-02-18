@@ -1,13 +1,13 @@
-package productos.servicio;
+package usuarios.servicio;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import productos.modelo.Usuario;
-import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
+import usuarios.modelo.Usuario;
+import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
@@ -152,7 +152,17 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
   }
 
-//  private UsuarioDTO transformToDTO(Usuario usuario) {
-//    return new UsuarioDTO(usuario.getId(), usuario.getNombre(), usuario.getEmail());
-//  }
+  @Override
+  public List<Usuario> obtenerTodosLosUsuarios() {
+    try {
+      return repositorioUsuarios.getAll();
+    } catch (RepositorioException e) {
+      throw new RuntimeException("Error al obtener todos los usuarios: " + e.getMessage(), e);
+    }
+  }
+
+  // private UsuarioDTO transformToDTO(Usuario usuario) {
+  // return new UsuarioDTO(usuario.getId(), usuario.getNombre(),
+  // usuario.getEmail());
+  // }
 }
