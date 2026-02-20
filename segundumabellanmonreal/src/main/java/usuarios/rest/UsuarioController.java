@@ -54,6 +54,20 @@ public class UsuarioController {
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response modificarUsuario(@PathParam("id") String id, UsuarioDTO usuario) {
         try {
+            if (usuario.getEmail() != null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Error: el campo 'email' no se puede modificar")
+                        .build();
+            }
+
+            if (usuario.getNombre() == null && usuario.getApellidos() == null &&
+                    usuario.getPassword() == null && usuario.getFechaNacimiento() == null &&
+                    usuario.getTelefono() == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Error: debe proporcionar al menos un campo para modificar (nombre, apellidos, password, fechaNacimiento, telefono)")
+                        .build();
+            }
+
             if (usuario.getNombre() != null) {
                 servicioUsuarios.modificarNombre(id, usuario.getNombre());
             }
