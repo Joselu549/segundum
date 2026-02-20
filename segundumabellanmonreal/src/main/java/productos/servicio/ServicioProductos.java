@@ -10,13 +10,13 @@ import productos.modelo.Categoria;
 import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
-import productos.modelo.Usuario;
 import productos.repositorio.RepositorioCategoriasAdHoc;
 import productos.repositorio.RepositorioProductosAdHoc;
-import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
+import usuarios.modelo.Usuario;
+import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
 public class ServicioProductos implements IServicioProductos {
 
@@ -281,12 +281,12 @@ public class ServicioProductos implements IServicioProductos {
     }
   }
 
-//  private ProductoDTO transformToDTO(Producto producto) {
-//    return new ProductoDTO(
-//        producto.getId(),
-//        producto.getTitulo(),
-//        producto.getDescripcion(),
-//        producto.getPrecio(),
-//        producto.getEstado());
-//  }
+  // private ProductoDTO transformToDTO(Producto producto) {
+  // return new ProductoDTO(
+  // producto.getId(),
+  // producto.getTitulo(),
+  // producto.getDescripcion(),
+  // producto.getPrecio(),
+  // producto.getEstado());
+  // }
 }

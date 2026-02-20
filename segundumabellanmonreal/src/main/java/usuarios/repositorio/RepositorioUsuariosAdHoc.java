@@ -1,7 +1,8 @@
-package productos.repositorio;
+package usuarios.repositorio;
 
-import productos.modelo.Usuario;
 import repositorio.RepositorioString;
+import usuarios.modelo.Usuario;
+
 import java.util.List;
 import repositorio.RepositorioException;
 

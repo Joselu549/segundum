@@ -1,8 +1,9 @@
-package productos.servicio;
-
-import productos.modelo.Usuario;
+package usuarios.servicio;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import usuarios.modelo.Usuario;
 
 public interface IServicioUsuarios {
   String registrarUsuario(String email, String nombre, String apellidos, String telefono,
@@ -19,4 +20,6 @@ public interface IServicioUsuarios {
   void modificarTelefono(String id, String telefono);
 
   Usuario login(String email, String password);
+
+  List<Usuario> obtenerTodosLosUsuarios();
 }
