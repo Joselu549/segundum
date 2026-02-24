@@ -6,7 +6,6 @@ import java.util.List;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
-import usuarios.dto.UsuarioDTO;
 import usuarios.modelo.Usuario;
 import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
