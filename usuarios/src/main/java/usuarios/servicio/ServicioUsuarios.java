@@ -6,6 +6,7 @@ import java.util.List;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
+import usuarios.dto.UsuarioDTO;
 import usuarios.modelo.Usuario;
 import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
@@ -153,16 +154,30 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     @Override
-    public List<Usuario> obtenerTodosLosUsuarios() {
+    public List<UsuarioDTO> obtenerTodosLosUsuarios() {
         try {
-            return repositorioUsuarios.getAll();
+            List<Usuario> usuarios = repositorioUsuarios.getAll();
+            return usuarios.stream().map(this::transformToDTO).collect(java.util.stream.Collectors.toList());
         } catch (RepositorioException e) {
             throw new RuntimeException("Error al obtener todos los usuarios: " + e.getMessage(), e);
         }
     }
 
-    // private UsuarioDTO transformToDTO(Usuario usuario) {
-    // return new UsuarioDTO(usuario.getId(), usuario.getNombre(),
-    // usuario.getEmail());
-    // }
+    @Override
+    public UsuarioDTO obtenerUsuarioPorId(String id) {
+        try {
+            Usuario usuario = repositorioUsuarios.getById(id);
+            return transformToDTO(usuario);
+        } catch (EntidadNoEncontrada e) {
+            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
+        } catch (RepositorioException e) {
+            throw new RuntimeException("Error al obtener el usuario: " + e.getMessage(), e);
+        }
+    }
+
+    private UsuarioDTO transformToDTO(Usuario usuario) {
+        return new UsuarioDTO(usuario.getEmail(), usuario.getNombre(),
+                usuario.getApellidos(), usuario.getTelefono(), usuario.getFechaNacimiento().toString(),
+                usuario.getPassword());
+    }
 }

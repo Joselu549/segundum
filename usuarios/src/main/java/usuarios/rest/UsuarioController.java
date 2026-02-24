@@ -1,6 +1,7 @@
 package usuarios.rest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,6 +23,35 @@ public class UsuarioController {
 
     @Context
     private UriInfo uriInfo;
+
+    @GET
+    public Response obtenerUsuarios() {
+        try {
+            return Response.ok(servicioUsuarios.obtenerTodosLosUsuarios()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al obtener los usuarios: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response obtenerUsuarioPorId(@PathParam("id") String id) {
+        try {
+            UsuarioDTO usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+            if (usuario == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Usuario no encontrado con id: " + id)
+                        .build();
+            }
+            return Response.ok(usuario).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al obtener el usuario: " + e.getMessage())
+                    .build();
+        }
+    }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
