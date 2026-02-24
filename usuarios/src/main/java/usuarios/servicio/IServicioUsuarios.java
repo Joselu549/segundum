@@ -3,7 +3,6 @@ package usuarios.servicio;
 import java.time.LocalDate;
 import java.util.List;
 
-import usuarios.dto.UsuarioDTO;
 import usuarios.modelo.Usuario;
 
 public interface IServicioUsuarios {
@@ -22,7 +21,7 @@ public interface IServicioUsuarios {
 
     Usuario login(String email, String password);
 
-    List<UsuarioDTO> obtenerTodosLosUsuarios();
+    List<UsuarioResumen> obtenerTodosLosUsuarios();
 
-    UsuarioDTO obtenerUsuarioPorId(String id);
+    Usuario obtenerUsuarioPorId(String id);
 }

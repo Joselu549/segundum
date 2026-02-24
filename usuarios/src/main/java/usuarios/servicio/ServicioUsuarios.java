@@ -154,20 +154,20 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     @Override
-    public List<UsuarioDTO> obtenerTodosLosUsuarios() {
+    public List<UsuarioResumen> obtenerTodosLosUsuarios() {
+        List<Usuario> usuarios;
         try {
-            List<Usuario> usuarios = repositorioUsuarios.getAll();
-            return usuarios.stream().map(this::transformToDTO).collect(java.util.stream.Collectors.toList());
+            usuarios = repositorioUsuarios.getAll();
         } catch (RepositorioException e) {
             throw new RuntimeException("Error al obtener todos los usuarios: " + e.getMessage(), e);
         }
+        return usuarios.stream().map(this::transformToUsuarioResumen).collect(java.util.stream.Collectors.toList());
     }
 
     @Override
-    public UsuarioDTO obtenerUsuarioPorId(String id) {
+    public Usuario obtenerUsuarioPorId(String id) {
         try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            return transformToDTO(usuario);
+            return repositorioUsuarios.getById(id);
         } catch (EntidadNoEncontrada e) {
             throw new RuntimeException("Usuario no encontrado con id: " + id, e);
         } catch (RepositorioException e) {
@@ -175,9 +175,12 @@ public class ServicioUsuarios implements IServicioUsuarios {
         }
     }
 
-    private UsuarioDTO transformToDTO(Usuario usuario) {
-        return new UsuarioDTO(usuario.getEmail(), usuario.getNombre(),
-                usuario.getApellidos(), usuario.getTelefono(), usuario.getFechaNacimiento().toString(),
-                usuario.getPassword());
+    private UsuarioResumen transformToUsuarioResumen(Usuario usuario) {
+        UsuarioResumen resumen = new UsuarioResumen();
+        resumen.setId(usuario.getId());
+        resumen.setEmail(usuario.getEmail());
+        resumen.setNombre(usuario.getNombre());
+        resumen.setApellidos(usuario.getApellidos());
+        return resumen;
     }
 }

@@ -1,5 +1,7 @@
 package usuarios.dto;
 
+import usuarios.modelo.Usuario;
+
 public class UsuarioDTO {
     private String email;
     private String nombre;
@@ -9,6 +11,15 @@ public class UsuarioDTO {
     private String password;
 
     public UsuarioDTO() {
+    }
+
+    public UsuarioDTO(Usuario usuario) {
+        this.email = usuario.getEmail();
+        this.nombre = usuario.getNombre();
+        this.apellidos = usuario.getApellidos();
+        this.telefono = usuario.getTelefono();
+        this.fechaNacimiento = usuario.getFechaNacimiento().toString();
+        this.password = usuario.getPassword();
     }
 
     public UsuarioDTO(String email, String nombre, String apellidos, String telefono,

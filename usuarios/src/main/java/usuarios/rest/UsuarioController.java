@@ -6,16 +6,21 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import servicio.FactoriaServicios;
 import usuarios.dto.UsuarioDTO;
+import usuarios.modelo.Usuario;
+import usuarios.rest.Listado.UsuarioResumenExtendido;
 import usuarios.servicio.IServicioUsuarios;
+import usuarios.servicio.UsuarioResumen;
 
 @Path("users")
 public class UsuarioController {
@@ -25,32 +30,28 @@ public class UsuarioController {
     private UriInfo uriInfo;
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuarios() {
-        try {
-            return Response.ok(servicioUsuarios.obtenerTodosLosUsuarios()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error al obtener los usuarios: " + e.getMessage())
-                    .build();
-        }
+        List<UsuarioResumen> usuarios = servicioUsuarios.obtenerTodosLosUsuarios();
+        List<UsuarioResumenExtendido> usuariosExtendidos = usuarios.stream().map(resumen -> {
+            UsuarioResumenExtendido usuarioExtendido = new UsuarioResumenExtendido();
+            usuarioExtendido.setResumen(resumen);
+            usuarioExtendido.setUrl(uriInfo.getAbsolutePathBuilder().path(resumen.getId()).build().toString());
+            return usuarioExtendido;
+        }).toList();
+
+        Listado listado = new Listado();
+        listado.setUsuarios(usuariosExtendidos);
+        return Response.ok(listado).build();
     }
 
     @GET
     @Path("/{id}")
-    public Response obtenerUsuarioPorId(@PathParam("id") String id) {
-        try {
-            UsuarioDTO usuario = servicioUsuarios.obtenerUsuarioPorId(id);
-            if (usuario == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Usuario no encontrado con id: " + id)
-                        .build();
-            }
-            return Response.ok(usuario).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error al obtener el usuario: " + e.getMessage())
-                    .build();
-        }
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerUsuario(@PathParam("id") String id) throws Exception {
+        Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        return Response.status(Response.Status.OK).entity(usuarioDTO).build();
     }
 
     @POST
