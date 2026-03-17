@@ -1,5 +1,7 @@
 .vscode/
 .idea/
+.mvn/
+mvnw.cmd
 *.class
 *.jar
 *.war
