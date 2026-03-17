@@ -1,5 +1,8 @@
 package usuarios.rest;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,6 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import io.jsonwebtoken.Claims;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,7 +34,11 @@ public class UsuarioController {
     @Context
     private UriInfo uriInfo;
 
+    @Context
+    private HttpServletRequest servletRequest;
+
     @GET
+    @RolesAllowed("USUARIO")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuarios() {
         List<UsuarioResumen> usuarios = servicioUsuarios.obtenerTodosLosUsuarios();
@@ -47,6 +56,7 @@ public class UsuarioController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed("USUARIO")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuario(@PathParam("id") String id) throws Exception {
         Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
@@ -55,6 +65,7 @@ public class UsuarioController {
     }
 
     @POST
+    @PermitAll
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response registrarUsuario(UsuarioDTO usuario) throws Exception {
         try {
@@ -82,9 +93,16 @@ public class UsuarioController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed("USUARIO")
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response modificarUsuario(@PathParam("id") String id, UsuarioDTO usuario) {
         try {
+            Claims claims = (Claims) servletRequest.getAttribute("claims");
+            if (claims == null || claims.getSubject() == null || !id.equals(claims.getSubject())) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("No tienes permiso para modificar este usuario").build();
+            }
+
             if (usuario.getEmail() != null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("Error: el campo 'email' no se puede modificar")
