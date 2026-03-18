@@ -41,7 +41,7 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
-            String idCategoria, boolean envioDisponible, Usuario vendedor) {
+            String idCategoria, boolean envioDisponible, String idVendedor) {
 
         // Validar título
         if (titulo == null || titulo.trim().isEmpty()) {
@@ -77,27 +77,26 @@ public class ServicioProductos implements IServicioProductos {
             throw new IllegalArgumentException("El ID de categoría no puede ser nulo o vacío");
         }
 
+        Usuario usuario = repositorioUsuarios.findById(idVendedor)
+                .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
+
         // Validar vendedor
-        if (vendedor == null || vendedor.getIdUsuario() == null || vendedor.getIdUsuario().trim().isEmpty()) {
+        if (usuario == null || usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
             throw new IllegalArgumentException("El vendedor y su ID no pueden ser nulos o vacíos");
         }
 
         Categoria categoria = repositorioCategorias.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada: " + idCategoria));
 
-        // Buscar el vendedor en la BD
-        Usuario vendedorBD = repositorioUsuarios.findById(vendedor.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + vendedor.getIdUsuario()));
-
         Producto producto = new Producto(titulo, descripcion, precio, estado, LocalDateTime.now(),
-                categoria, 0, envioDisponible, null, vendedorBD);
+                categoria, 0, envioDisponible, null, usuario);
 
         Producto guardado = repositorioProductos.save(producto);
         return guardado.getId();
     }
 
     @Override
-    public LugarRecogida asignarLugarRecogida(Long idProducto, int longitud, int latitud,
+    public LugarRecogida asignarLugarRecogida(Long idProducto, double longitud, double latitud,
             String descripcion) {
 
         // Validar idProducto

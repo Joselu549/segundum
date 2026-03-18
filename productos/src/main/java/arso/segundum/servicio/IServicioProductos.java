@@ -10,9 +10,9 @@ import arso.segundum.modelo.Usuario;
 
 public interface IServicioProductos {
     Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
-            String idCategoria, boolean envioDisponible, Usuario vendedor);
+            String idCategoria, boolean envioDisponible, String idVendedor);
 
-    LugarRecogida asignarLugarRecogida(Long idProducto, int longitud, int latitud,
+    LugarRecogida asignarLugarRecogida(Long idProducto, double longitud, double latitud,
             String descripcion);
 
     void modificarProducto(Long idProducto, Optional<Double> precio, Optional<String> descripcion);
