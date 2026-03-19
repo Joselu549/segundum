@@ -11,7 +11,6 @@ import arso.segundum.modelo.Producto;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
-
     // Productos de una categoría concreta
     @Query("SELECT p FROM Producto p WHERE p.categoria.id = :idCategoria")
     List<Producto> findByCategoria(@Param("idCategoria") String idCategoria);
@@ -25,17 +24,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query("SELECT p FROM Producto p WHERE p.vendedor.idUsuario IS NOT NULL ORDER BY p.fechaPublicacion DESC")
     List<Producto> findProductosEnVenta();
 
-    // Productos destacados, ordenados por visualizaciones
-    @Query("SELECT p FROM Producto p ORDER BY p.visualizaciones DESC")
-    List<Producto> findProductosDestacados();
-
-    // Productos por mes
-    @Query("SELECT p FROM Producto p WHERE FUNCTION('MONTH', p.fechaPublicacion) = :mes ORDER BY p.visualizaciones DESC")
-    List<Producto> findByMes(@Param("mes") int mes);
-
-    // Productos por año
-    @Query("SELECT p FROM Producto p WHERE FUNCTION('YEAR', p.fechaPublicacion) = :anio ORDER BY p.visualizaciones DESC")
-    List<Producto> findByAnio(@Param("anio") int anio);
+    // Productos con envío disponible
+    @Query("SELECT p FROM Producto p WHERE p.envioDisponible IS TRUE ORDER BY p.fechaPublicacion DESC")
+    List<Producto> findProductosConEnvio();
 
     // Productos por mes y año
     @Query("SELECT p FROM Producto p WHERE " +

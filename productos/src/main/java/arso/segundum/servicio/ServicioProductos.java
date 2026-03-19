@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -43,7 +44,28 @@ public class ServicioProductos implements IServicioProductos {
     @Override
     public Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
             String idCategoria, boolean envioDisponible, String idVendedor) {
+        validarParametros(titulo, descripcion, precio, estado, idCategoria);
 
+        Usuario usuario = repositorioUsuarios.findById(idVendedor)
+                .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
+
+        // Validar vendedor
+        if (usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
+            throw new IllegalArgumentException("El vendedor y su ID no pueden ser nulos o vacíos");
+        }
+
+        Categoria categoria = repositorioCategorias.findById(idCategoria)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada: " + idCategoria));
+
+        Producto producto = new Producto(titulo, descripcion, precio, estado, LocalDateTime.now(),
+                categoria, 0, envioDisponible, null, usuario);
+
+        Producto guardado = repositorioProductos.save(producto);
+        return guardado.getId();
+    }
+
+    private void validarParametros(String titulo, String descripcion, double precio, Estado estado,
+                                   String idCategoria) {
         // Validar título
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede ser nulo o vacío");
@@ -77,35 +99,16 @@ public class ServicioProductos implements IServicioProductos {
         if (idCategoria == null || idCategoria.trim().isEmpty()) {
             throw new IllegalArgumentException("El ID de categoría no puede ser nulo o vacío");
         }
-
-        Usuario usuario = repositorioUsuarios.findById(idVendedor)
-                .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
-
-        // Validar vendedor
-        if (usuario == null || usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
-            throw new IllegalArgumentException("El vendedor y su ID no pueden ser nulos o vacíos");
-        }
-
-        Categoria categoria = repositorioCategorias.findById(idCategoria)
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada: " + idCategoria));
-
-        Producto producto = new Producto(titulo, descripcion, precio, estado, LocalDateTime.now(),
-                categoria, 0, envioDisponible, null, usuario);
-
-        Producto guardado = repositorioProductos.save(producto);
-        return guardado.getId();
     }
 
     @Override
     public LugarRecogida asignarLugarRecogida(Long idProducto, double longitud, double latitud,
             String descripcion) {
 
-        // Validar idProducto
         if (idProducto == null) {
             throw new IllegalArgumentException("El ID de producto no puede ser nulo");
         }
 
-        // Validar coordenadas
         if (longitud < -180 || longitud > 180) {
             throw new IllegalArgumentException("La longitud debe estar entre -180 y 180");
         }
@@ -113,7 +116,6 @@ public class ServicioProductos implements IServicioProductos {
             throw new IllegalArgumentException("La latitud debe estar entre -90 y 90");
         }
 
-        // Validar descripción
         if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción del lugar no puede ser nula o vacía");
         }
@@ -133,12 +135,10 @@ public class ServicioProductos implements IServicioProductos {
     public void modificarProducto(Long idProducto, Optional<Double> precio,
             Optional<String> descripcion) {
 
-        // Validar idProducto
         if (idProducto == null) {
             throw new IllegalArgumentException("El ID de producto no puede ser nulo");
         }
 
-        // Validar precio si está presente
         if (precio.isPresent()) {
             if (precio.get() < 0) {
                 throw new IllegalArgumentException("El precio no puede ser negativo");
@@ -148,25 +148,22 @@ public class ServicioProductos implements IServicioProductos {
             }
         }
 
-        // Validar descripción si está presente
         if (descripcion.isPresent()) {
-            if (descripcion.get() == null || descripcion.get().trim().isEmpty()) {
-                throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
+            if (descripcion.get().trim().isEmpty()) {
+                throw new IllegalArgumentException("La descripción no puede ser vacía");
             }
             if (descripcion.get().length() > 2000) {
                 throw new IllegalArgumentException("La descripción no puede superar los 2000 caracteres");
             }
+        } else {
+            throw new IllegalArgumentException("La descripción no puede ser nula");
         }
 
         Producto producto = repositorioProductos.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
 
-        if (precio.isPresent()) {
-            producto.setPrecio(precio.get());
-        }
-        if (descripcion.isPresent()) {
-            producto.setDescripcion(descripcion.get());
-        }
+        precio.ifPresent(producto::setPrecio);
+        descripcion.ifPresent(producto::setDescripcion);
 
         repositorioProductos.save(producto);
     }
@@ -179,7 +176,7 @@ public class ServicioProductos implements IServicioProductos {
         }
 
         Producto producto = repositorioProductos.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + idProducto));
 
         producto.setVisualizaciones(producto.getVisualizaciones() + 1);
         repositorioProductos.save(producto);
