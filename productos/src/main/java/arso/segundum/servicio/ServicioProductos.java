@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -186,29 +187,28 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumenProducto> getHistorialMes(int mes, int anio) {
-
-        if (mes < 1 || mes > 12) {
-            throw new IllegalArgumentException("El mes debe estar entre 1 y 12");
-        }
-        if (anio < 2000 || anio > 2100) {
-            throw new IllegalArgumentException("El año debe estar entre 2000 y 2100");
-        }
-
-        List<Producto> productosMes = repositorioProductos.findByMesAnio(mes, anio);
+    public List<ResumenProducto> getHistorialMes(Integer mes, Integer anio) {
+        validarMesAnio(mes, anio);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        List<ResumenProducto> resumenes = new ArrayList<>();
 
-        productosMes.forEach(p -> resumenes.add(new ResumenProducto(
-                p.getId(),
-                p.getTitulo(),
-                p.getPrecio(),
-                p.getFechaPublicacion().format(formatter),
-                p.getCategoria().getNombre(),
-                p.getVisualizaciones())));
+        return repositorioProductos.findByMesAnio(mes, anio)
+                .stream()
+                .map(p -> new ResumenProducto(
+                        p.getId(),
+                        p.getTitulo(),
+                        p.getPrecio(),
+                        p.getFechaPublicacion().format(formatter),
+                        p.getCategoria().getNombre(),
+                        p.getVisualizaciones()))
+                .collect(Collectors.toList());
+    }
 
-        return resumenes;
+    private void validarMesAnio(Integer mes, Integer anio) {
+        if (mes != null && (mes < 1 || mes > 12))
+            throw new IllegalArgumentException("El mes debe estar entre 1 y 12");
+        if (anio != null && (anio < 2000 || anio > 2100))
+            throw new IllegalArgumentException("El año debe estar entre 2000 y 2100");
     }
 
     @Override

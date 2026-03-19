@@ -2,11 +2,13 @@ package arso.segundum.rest;
 
 import arso.segundum.dto.LugarRecogidaDTO;
 import arso.segundum.dto.ProductoDTO;
-import arso.segundum.modelo.LugarRecogida;
+import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.Producto;
 import arso.segundum.servicio.IServicioProductos;
+import arso.segundum.servicio.ResumenProducto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,8 +28,8 @@ public class ProductoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductoDTO>> getProductos() {
-        List<Producto> productos = this.servicioProductos.buscarProductos(null, null, null, null);
+    public ResponseEntity<List<ProductoDTO>> getProductos(@RequestParam @Nullable String idCategoria, @RequestParam @Nullable String descripcion, @RequestParam @Nullable Estado estado, @RequestParam @Nullable Double precio) {
+        List<Producto> productos = this.servicioProductos.buscarProductos(idCategoria, descripcion, estado, precio);
         List<ProductoDTO> result = productos.stream().map(ProductoDTO::fromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(result);
     }
@@ -36,6 +38,11 @@ public class ProductoController {
     public ProductoDTO getProductosById(@PathVariable Long id) {
         Producto producto = this.servicioProductos.getProducto(id);
         return ProductoDTO.fromEntity(producto);
+    }
+
+    @GetMapping("/historial")
+    public List<ResumenProducto> getHistorialProductos(@RequestParam @Nullable Integer mes, @RequestParam @Nullable Integer anio) {
+       return this.servicioProductos.getHistorialMes(mes, anio);
     }
 
     @PatchMapping("/{id}/visualizations")

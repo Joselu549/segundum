@@ -19,7 +19,7 @@ public interface IServicioProductos {
 
     void addVisualizacionProducto(Long idProducto);
 
-    List<ResumenProducto> getHistorialMes(int mes, int anio);
+    List<ResumenProducto> getHistorialMes(Integer mes, Integer anio);
 
     List<Producto> buscarProductos(String idCategoria, String textoDescripcion,
             Estado estado, Double precioMaximo);

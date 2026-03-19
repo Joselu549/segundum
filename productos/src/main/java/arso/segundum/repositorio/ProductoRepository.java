@@ -29,9 +29,20 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query("SELECT p FROM Producto p ORDER BY p.visualizaciones DESC")
     List<Producto> findProductosDestacados();
 
+    // Productos por mes
+    @Query("SELECT p FROM Producto p WHERE FUNCTION('MONTH', p.fechaPublicacion) = :mes ORDER BY p.visualizaciones DESC")
+    List<Producto> findByMes(@Param("mes") int mes);
+
+    // Productos por año
+    @Query("SELECT p FROM Producto p WHERE FUNCTION('YEAR', p.fechaPublicacion) = :anio ORDER BY p.visualizaciones DESC")
+    List<Producto> findByAnio(@Param("anio") int anio);
+
     // Productos por mes y año
-    @Query("SELECT p FROM Producto p WHERE FUNCTION('MONTH', p.fechaPublicacion) = :mes AND FUNCTION('YEAR', p.fechaPublicacion) = :anio ORDER BY p.visualizaciones DESC")
-    List<Producto> findByMesAnio(@Param("mes") int mes, @Param("anio") int anio);
+    @Query("SELECT p FROM Producto p WHERE " +
+            "(:mes IS NULL OR FUNCTION('MONTH', p.fechaPublicacion) = :mes) AND " +
+            "(:anio IS NULL OR FUNCTION('YEAR', p.fechaPublicacion) = :anio) " +
+            "ORDER BY p.visualizaciones DESC")
+    List<Producto> findByMesAnio(@Param("mes") Integer mes, @Param("anio") Integer anio);
 
     // Productos de un vendedor
     @Query("SELECT p FROM Producto p WHERE p.vendedor.idUsuario = :idVendedor ORDER BY p.fechaPublicacion DESC")

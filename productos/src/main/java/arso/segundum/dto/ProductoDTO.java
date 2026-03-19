@@ -2,21 +2,39 @@ package arso.segundum.dto;
 
 import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.Producto;
-import org.springframework.http.ResponseEntity;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class ProductoDTO {
     private Long id;
+
+    @NotBlank(message = "El título es obligatorio")
     private String titulo;
+
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
-    private double precio;
+
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor que 0")
+    private Double precio;
+
+    @NotNull(message = "El estado es obligatorio")
     private Estado estado;
+
+    @NotNull(message = "El id de categoría es obligatorio")
     private String idCategoria;
+
+    @NotNull(message = "El id de vendedor es obligatorio")
     private String idVendedor;
-    private boolean envioDisponible;
+
+    @NotNull(message = "El envío disponible es obligatorio")
+    private Boolean envioDisponible;
 
     public ProductoDTO(Long id, String titulo, String descripcion,
-                       double precio, Estado estado, String idCategoria,
-                       String idVendedor, boolean envioDisponible) {
+                       Double precio, Estado estado, String idCategoria,
+                       String idVendedor, Boolean envioDisponible) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -57,11 +75,11 @@ public class ProductoDTO {
         this.descripcion = descripcion;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
@@ -89,11 +107,11 @@ public class ProductoDTO {
         this.idVendedor = idVendedor;
     }
 
-    public boolean isEnvioDisponible() {
+    public Boolean isEnvioDisponible() {
         return envioDisponible;
     }
 
-    public void setEnvioDisponible(boolean envioDisponible) {
+    public void setEnvioDisponible(Boolean envioDisponible) {
         this.envioDisponible = envioDisponible;
     }
 }
