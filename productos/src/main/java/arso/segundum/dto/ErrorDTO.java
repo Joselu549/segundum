@@ -1,10 +1,15 @@
 package arso.segundum.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;// DTO de error uniforme
 
+@Schema(description = "DTO para indicar los errores")
 public class ErrorDTO {
 
+    @Schema(description = "Mensaje indicando el error")
     private final String mensaje;
+    @Schema(description = "Lista de errores en caso de ser más de uno")
     private final List<String> detalles;
 
     public ErrorDTO(String mensaje) {

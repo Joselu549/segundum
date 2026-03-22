@@ -3,7 +3,6 @@ package arso.segundum.rest;
 import arso.segundum.dto.LugarRecogidaDTO;
 import arso.segundum.dto.ProductoDTO;
 import arso.segundum.modelo.Estado;
-import arso.segundum.modelo.Producto;
 import arso.segundum.servicio.IServicioProductos;
 import arso.segundum.servicio.ResumenProducto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,9 +29,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/products")
 @Validated
-public class ProductoController {
+public class ProductoController implements ProductosApi {
 
     @Autowired
     private final IServicioProductos servicioProductos;
@@ -41,7 +41,7 @@ public class ProductoController {
         this.servicioProductos = servicioProductos;
     }
 
-    @GetMapping
+    @Override
     public ResponseEntity<List<ProductoDTO>> getProductos(
             @RequestParam(required = false) String idCategoria,
             @RequestParam(required = false) String descripcion,
@@ -55,37 +55,43 @@ public class ProductoController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/pages")
-    public Page<ResumenProducto> getEncuestasPaginado(
+    @Override
+    public PagedModel<EntityModel<ResumenProducto>> getEncuestasPaginado(
             @RequestParam int page,
-            @RequestParam int size) {
+            @RequestParam int size) throws Exception {
         Pageable paginacion =
                 PageRequest.of(page, size, Sort.by("id").ascending());
-        return this.servicioProductos.getListadoPaginado(paginacion);
+
+        Page<ResumenProducto> resultado = this.servicioProductos.getListadoPaginado(paginacion);
+
+        return this.pagedResourcesAssembler.toModel(resultado);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductoDTO> getProductosById(@PathVariable @Positive Long id) {
-        // Si no existe, el servicio lanza EntityNotFoundException → 404 via advice
-        return ResponseEntity.ok(ProductoDTO.fromEntity(servicioProductos.getProducto(id)));
+    @Override
+    public EntityModel<ProductoDTO> getProductosById(@PathVariable @Positive Long id) throws Exception {
+        //TODO: Arreglar que ahora no devuelve el error de no encontrado correctamente
+        ProductoDTO productoDTO = ProductoDTO.fromEntity(servicioProductos.getProducto(id));
+        EntityModel<ProductoDTO> model = EntityModel.of(productoDTO);
+        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductoController.class).getProductosById(id)).withSelfRel());
+        return model;
     }
 
-    @GetMapping("/historial")
+    @Override
     public ResponseEntity<List<ResumenProducto>> getHistorialProductos(
             @RequestParam(required = false) @Min(1) @Max(12) Integer mes,
-            @RequestParam(required = false) @Min(2000) @Max(2100) Integer anio) {
+            @RequestParam(required = false) @Min(2000) @Max(2100) Integer anio) throws Exception {
 
         return ResponseEntity.ok(servicioProductos.getHistorialMes(mes, anio));
     }
 
-    @PatchMapping("/{id}/visualizations")
-    public ResponseEntity<Void> addVisualizaciones(@PathVariable @Positive Long id) {
+    @Override
+    public ResponseEntity<Void> addVisualizaciones(@PathVariable @Positive Long id) throws Exception {
         servicioProductos.addVisualizacionProducto(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) {
+    @Override
+    public ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) throws Exception {
         Long id = servicioProductos.darDeAltaProducto(
                 nuevoProducto.getTitulo(),
                 nuevoProducto.getDescripcion(),
@@ -100,10 +106,10 @@ public class ProductoController {
         return ResponseEntity.created(nuevaURL).build();
     }
 
-    @PostMapping("/{id}/lugares")
+    @Override
     public ResponseEntity<Void> asignarLugarRecogida(
             @PathVariable @Positive Long id,
-            @RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) {
+            @RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception {
 
         servicioProductos.asignarLugarRecogida(
                 id,
