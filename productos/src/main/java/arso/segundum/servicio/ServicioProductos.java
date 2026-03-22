@@ -13,6 +13,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -277,16 +279,16 @@ public class ServicioProductos implements IServicioProductos {
         return estados;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Producto> getProductosVendedor(String idVendedor) {
-
-        if (idVendedor == null || idVendedor.trim().isEmpty()) {
-            throw new IllegalArgumentException("El ID de vendedor no puede ser nulo o vacío");
-        }
-
-        return repositorioProductos.findByIdVendedor(idVendedor);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Producto> getProductosVendedor(String idVendedor) {
+//
+//        if (idVendedor == null || idVendedor.trim().isEmpty()) {
+//            throw new IllegalArgumentException("El ID de vendedor no puede ser nulo o vacío");
+//        }
+//
+//        return repositorioProductos.findByIdVendedor(idVendedor);
+//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -298,5 +300,10 @@ public class ServicioProductos implements IServicioProductos {
 
         return repositorioProductos.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+    }
+
+    @Override
+    public Page<ResumenProducto> getListadoPaginado(Pageable pageable) {
+        return this.repositorioProductos.findAll(pageable).map(producto -> new ResumenProducto(producto.getId(), producto.getTitulo(), producto.getPrecio(), producto.getFechaPublicacion().toString(), producto.getCategoria().getNombre(), producto.getVisualizaciones()));
     }
 }

@@ -7,6 +7,11 @@ import arso.segundum.modelo.Producto;
 import arso.segundum.servicio.IServicioProductos;
 import arso.segundum.servicio.ResumenProducto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +32,10 @@ import java.util.stream.Collectors;
 @Validated
 public class ProductoController {
 
+    @Autowired
     private final IServicioProductos servicioProductos;
+    @Autowired
+    private PagedResourcesAssembler<ResumenProducto> pagedResourcesAssembler;
 
     public ProductoController(IServicioProductos servicioProductos) {
         this.servicioProductos = servicioProductos;
@@ -45,6 +53,15 @@ public class ProductoController {
                 .map(ProductoDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/pages")
+    public Page<ResumenProducto> getEncuestasPaginado(
+            @RequestParam int page,
+            @RequestParam int size) {
+        Pageable paginacion =
+                PageRequest.of(page, size, Sort.by("id").ascending());
+        return this.servicioProductos.getListadoPaginado(paginacion);
     }
 
     @GetMapping("/{id}")

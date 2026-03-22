@@ -7,6 +7,8 @@ import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
 import arso.segundum.modelo.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IServicioProductos {
     Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
@@ -26,5 +28,6 @@ public interface IServicioProductos {
 
     Producto getProducto(Long idProducto) throws IllegalArgumentException;
 
-    List<Producto> getProductosVendedor(String idVendedor) throws IllegalArgumentException;
+    Page<ResumenProducto> getListadoPaginado(Pageable pageable);
+//    List<Producto> getProductosVendedor(String idVendedor) throws IllegalArgumentException;
 }
