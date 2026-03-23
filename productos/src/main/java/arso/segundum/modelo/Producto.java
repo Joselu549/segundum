@@ -143,7 +143,7 @@ public class Producto {
         this.lugarRecogida = lugarRecogida;
     }
 
-    public LugarRecogida setLugarRecogida(String descripcion, int longitud, int latitud) {
+    public LugarRecogida setLugarRecogida(String descripcion, double longitud, double latitud) {
         LugarRecogida lugar = new LugarRecogida(descripcion, longitud, latitud);
         this.lugarRecogida = lugar;
         return lugar;
