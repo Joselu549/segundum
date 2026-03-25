@@ -9,16 +9,26 @@ import java.time.LocalDate;
 public class Compraventa {
     @Id
     private String id;
-    private Producto producto;
-    private Usuario vendedor;
-    private Usuario comprador;
+    private String idProducto;
+    private String titulo;
+    private Double precio;
+    private String recogida;
+    private String idVendedor;
+    private String nombreVendedor;
+    private String idComprador;
+    private String nombreComprador;
     private LocalDate fechaCompraventa;
 
-    public Compraventa(Producto producto, Usuario vendedor, Usuario comprador) {
-        this.producto = producto;
-        this.vendedor = vendedor;
-        this.comprador = comprador;
-        this.fechaCompraventa = LocalDate.now();
+    public Compraventa(String idProducto, String titulo, Double precio, String recogida, String idVendedor, String nombreVendedor, String idComprador, String nombreComprador, LocalDate fechaCompraventa) {
+        this.idProducto = idProducto;
+        this.titulo = titulo;
+        this.precio = precio;
+        this.recogida = recogida;
+        this.idVendedor = idVendedor;
+        this.nombreVendedor = nombreVendedor;
+        this.idComprador = idComprador;
+        this.nombreComprador = nombreComprador;
+        this.fechaCompraventa = fechaCompraventa;
     }
 
     public String getId() {
@@ -29,28 +39,68 @@ public class Compraventa {
         this.id = id;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
-    public Usuario getVendedor() {
-        return vendedor;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setVendedor(Usuario vendedor) {
-        this.vendedor = vendedor;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public Usuario getComprador() {
-        return comprador;
+    public Double getPrecio() {
+        return precio;
     }
 
-    public void setComprador(Usuario comprador) {
-        this.comprador = comprador;
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getRecogida() {
+        return recogida;
+    }
+
+    public void setRecogida(String recogida) {
+        this.recogida = recogida;
+    }
+
+    public String getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(String idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public String getNombreVendedor() {
+        return nombreVendedor;
+    }
+
+    public void setNombreVendedor(String nombreVendedor) {
+        this.nombreVendedor = nombreVendedor;
+    }
+
+    public String getIdComprador() {
+        return idComprador;
+    }
+
+    public void setIdComprador(String idComprador) {
+        this.idComprador = idComprador;
+    }
+
+    public String getNombreComprador() {
+        return nombreComprador;
+    }
+
+    public void setNombreComprador(String nombreComprador) {
+        this.nombreComprador = nombreComprador;
     }
 
     public LocalDate getFechaCompraventa() {
@@ -63,6 +113,6 @@ public class Compraventa {
 
     @Override
     public String toString() {
-        return "Compraventa{" + "id='" + id + '\'' + ", producto=" + producto + ", vendedor=" + vendedor + ", comprador=" + comprador + ", fechaCompraventa=" + fechaCompraventa + '}';
+        return "Compraventa{" + "id='" + id + '\'' + ", idProducto='" + idProducto + '\'' + ", titulo='" + titulo + '\'' + ", precio=" + precio + ", recogida='" + recogida + '\'' + ", idVendedor='" + idVendedor + '\'' + ", nombreVendedor='" + nombreVendedor + '\'' + ", idComprador='" + idComprador + '\'' + ", nombreComprador='" + nombreComprador + '\'' + ", fechaCompraventa=" + fechaCompraventa + '}';
     }
 }

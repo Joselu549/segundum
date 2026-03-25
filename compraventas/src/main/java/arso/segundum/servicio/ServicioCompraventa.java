@@ -1,38 +1,29 @@
 package arso.segundum.servicio;
 
 import arso.segundum.modelo.Compraventa;
-import arso.segundum.modelo.Producto;
-import arso.segundum.modelo.Usuario;
 import arso.segundum.repositorio.RepositorioCompraventa;
-import arso.segundum.repositorio.RepositorioProductos;
-import arso.segundum.repositorio.RepositorioUsuarios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class ServicioCompraventa implements IServicioCompraventa {
     @Autowired
     private RepositorioCompraventa repositorioCompraventa;
-    @Autowired
-    private RepositorioUsuarios repositorioUsuarios;
-    @Autowired
-    private RepositorioProductos repositorioProductos;
 
     @Override
     public void realizarCompraventa(Long idProducto, String idComprador) {
-        Optional<Usuario> comprador = this.repositorioUsuarios.findById(idComprador);
-        if (!comprador.isPresent()) return;
-        Optional<Producto> producto = this.repositorioProductos.findById(idProducto);
-        if (!producto.isPresent()) return;
-        Optional<Usuario> vendedor = this.repositorioUsuarios.findById(producto.get().getIdVendedor());
-        if (!vendedor.isPresent()) return;
-        Compraventa nuevaCompraventa = new Compraventa(producto.get(), vendedor.get(), comprador.get());
-        this.repositorioCompraventa.save(nuevaCompraventa);
+//        Optional<Usuario> comprador = this.repositorioUsuarios.findById(idComprador);
+//        if (!comprador.isPresent()) return;
+//        Optional<Producto> producto = this.repositorioProductos.findById(idProducto);
+//        if (!producto.isPresent()) return;
+//        Optional<Usuario> vendedor = this.repositorioUsuarios.findById(producto.get().getIdVendedor());
+//        if (!vendedor.isPresent()) return;
+//        Compraventa nuevaCompraventa = new Compraventa(producto.get(), vendedor.get(), comprador.get());
+//        this.repositorioCompraventa.save(nuevaCompraventa);
     }
 
     @Override
