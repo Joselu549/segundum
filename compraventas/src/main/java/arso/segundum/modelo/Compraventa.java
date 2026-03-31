@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class Compraventa {
     @Id
     private String id;
-    private String idProducto;
+    private Long idProducto;
     private String titulo;
     private Double precio;
     private String recogida;
@@ -19,7 +19,7 @@ public class Compraventa {
     private String nombreComprador;
     private LocalDate fechaCompraventa;
 
-    public Compraventa(String idProducto, String titulo, Double precio, String recogida, String idVendedor, String nombreVendedor, String idComprador, String nombreComprador, LocalDate fechaCompraventa) {
+    public Compraventa(Long idProducto, String titulo, Double precio, String recogida, String idVendedor, String nombreVendedor, String idComprador, String nombreComprador, LocalDate fechaCompraventa) {
         this.idProducto = idProducto;
         this.titulo = titulo;
         this.precio = precio;
@@ -39,11 +39,11 @@ public class Compraventa {
         this.id = id;
     }
 
-    public String getIdProducto() {
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(String idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 
