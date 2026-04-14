@@ -47,7 +47,7 @@ public interface ProductosApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/pages")
-    PagedModel<EntityModel<ResumenProducto>> getEncuestasPaginado(
+    PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
             @RequestParam int page,
             @RequestParam int size) throws Exception;
 

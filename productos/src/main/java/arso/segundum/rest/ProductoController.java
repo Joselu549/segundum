@@ -56,7 +56,7 @@ public class ProductoController implements ProductosApi {
     }
 
     @Override
-    public PagedModel<EntityModel<ResumenProducto>> getEncuestasPaginado(
+    public PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
             @RequestParam int page,
             @RequestParam int size) throws Exception {
         Pageable paginacion =
