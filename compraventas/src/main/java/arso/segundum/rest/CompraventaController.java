@@ -5,6 +5,7 @@ import arso.segundum.modelo.Compraventa;
 import arso.segundum.servicio.IServicioCompraventa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@Validated
 public class CompraventaController implements CompraventasApi {
 
     @Autowired

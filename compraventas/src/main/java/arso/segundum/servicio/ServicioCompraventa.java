@@ -2,6 +2,8 @@ package arso.segundum.servicio;
 
 import arso.segundum.dto.NombreUsuarioDTO;
 import arso.segundum.dto.ProductoDTO;
+import arso.segundum.exception.ErrorServicioExternoException;
+import arso.segundum.exception.RecursoNoEncontradoException;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.repositorio.RepositorioCompraventa;
 import arso.segundum.retrofit.ProductosClient;
@@ -27,15 +29,18 @@ public class ServicioCompraventa implements IServicioCompraventa {
     @Autowired
     private ProductosClient productosClient;
 
-    private <T> T ejecutarLlamada(Supplier<Call<T>> callSupplier, String mensajeError) {
+    private <T> T ejecutarLlamada(Supplier<Call<T>> callSupplier, String mensajeNoEncontrado) {
         try {
             Response<T> response = callSupplier.get().execute();
             if (response.isSuccessful() && response.body() != null) {
                 return response.body();
             }
-            throw new RuntimeException(mensajeError + " - Código: " + response.code());
+            if (response.code() == 404) {
+                throw new RecursoNoEncontradoException(mensajeNoEncontrado);
+            }
+            throw new ErrorServicioExternoException("Error en servicio externo - Código: " + response.code());
         } catch (IOException e) {
-            throw new RuntimeException("Error de comunicación con el servicio externo", e);
+            throw new ErrorServicioExternoException("Error de comunicación con el servicio externo", e);
         }
     }
 
