@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.converter.jaxb.JaxbConverterFactory;
 
 @Configuration
 public class RetrofitConfig {
@@ -19,7 +18,7 @@ public class RetrofitConfig {
     public UsuariosClient userClient() {
         return new Retrofit.Builder()
                 .baseUrl(usuariosUrl)
-                .addConverterFactory(JaxbConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
                 .build()
                 .create(UsuariosClient.class);
     }

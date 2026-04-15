@@ -1,7 +1,7 @@
 package arso.segundum.servicio;
 
+import arso.segundum.dto.NombreUsuarioDTO;
 import arso.segundum.dto.ProductoDTO;
-import arso.segundum.dto.UsuarioDTO;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.repositorio.RepositorioCompraventa;
 import arso.segundum.retrofit.ProductosClient;
@@ -42,10 +42,13 @@ public class ServicioCompraventa implements IServicioCompraventa {
     @Override
     public void realizarCompraventa(Long idProducto, String idComprador) {
         ProductoDTO producto = obtenerProducto(idProducto);
-        UsuarioDTO comprador = obtenerUsuario(idComprador);
-        UsuarioDTO vendedor = obtenerUsuario(producto.getIdVendedor());
+        NombreUsuarioDTO nombreComprador = obtenerNombreUsuario(idComprador);
+        System.out.println("Nombre comprador: " +  nombreComprador.getFullName());
+        System.out.println("Nombre vendedor: " +  producto.getIdVendedor());
+        NombreUsuarioDTO nombreVendedor = obtenerNombreUsuario(producto.getIdVendedor());
+        System.out.println("Nombre vendedor: " +  nombreVendedor.getFullName());
 
-        Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, comprador, vendedor);
+        Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, nombreComprador.getFullName(), nombreVendedor.getFullName());
 
         repositorioCompraventa.save(compraventa);
     }
@@ -54,20 +57,20 @@ public class ServicioCompraventa implements IServicioCompraventa {
         return ejecutarLlamada(() -> productosClient.getProductoById(idProducto), "Producto no encontrado: " + idProducto);
     }
 
-    private UsuarioDTO obtenerUsuario(String idUsuario) {
+    private NombreUsuarioDTO obtenerNombreUsuario(String idUsuario) {
         return ejecutarLlamada(() -> usuariosClient.getUsuarioById(idUsuario), "Usuario no encontrado: " + idUsuario);
     }
 
-    private Compraventa crearEntidadCompraventa(ProductoDTO producto, String idComprador, UsuarioDTO comprador, UsuarioDTO vendedor) {
+    private Compraventa crearEntidadCompraventa(ProductoDTO producto, String idComprador, String nombreComprador, String nombreVendedor) {
         return new Compraventa(
                 producto.getId(),
                 producto.getTitulo(),
                 producto.getPrecio(),
                 producto.getLugarRecogida(),
                 producto.getIdVendedor(),
-                vendedor.getNombre(),
+                nombreVendedor,
                 idComprador,
-                comprador.getNombre(),
+                nombreComprador,
                 LocalDate.now()
         );
     }

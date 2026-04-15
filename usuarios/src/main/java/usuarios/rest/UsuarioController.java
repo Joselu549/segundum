@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import servicio.FactoriaServicios;
+import usuarios.dto.NombreUsuarioDTO;
 import usuarios.dto.UsuarioDTO;
 import usuarios.modelo.Usuario;
 import usuarios.rest.Listado.UsuarioResumenExtendido;
@@ -44,7 +45,8 @@ public class UsuarioController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerNombreUsuario(@PathParam("id") String id) throws Exception {
         Usuario usuario = this.servicioUsuarios.obtenerUsuarioPorId(id);
-        return Response.ok(obtenerNombreCompleto(usuario)).build();
+        NombreUsuarioDTO nombreUsuarioDTO = new NombreUsuarioDTO(obtenerNombreCompleto(usuario));
+        return Response.ok(nombreUsuarioDTO).build();
     }
 
     private String obtenerNombreCompleto(Usuario usuario) {

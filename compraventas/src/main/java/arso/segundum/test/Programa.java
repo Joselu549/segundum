@@ -12,6 +12,7 @@ public class Programa implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
+        this.servicioCompraventa.realizarCompraventa(1L, "1");
 //        Usuario usuario1 = new Usuario("José Luis", "Abellán Monreal");
 //        usuario1.setId("1");
 //        Usuario usuario2 = new Usuario("María del Mar", "Hernández Yagües");
