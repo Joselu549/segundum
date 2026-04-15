@@ -1,5 +1,8 @@
 package arso.segundum.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductoDTO {
     private Long id;
     private String idVendedor;

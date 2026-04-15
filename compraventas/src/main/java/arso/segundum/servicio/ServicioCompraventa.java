@@ -40,17 +40,14 @@ public class ServicioCompraventa implements IServicioCompraventa {
     }
 
     @Override
-    public void realizarCompraventa(Long idProducto, String idComprador) {
+    public Compraventa realizarCompraventa(Long idProducto, String idComprador) {
         ProductoDTO producto = obtenerProducto(idProducto);
         NombreUsuarioDTO nombreComprador = obtenerNombreUsuario(idComprador);
-        System.out.println("Nombre comprador: " +  nombreComprador.getFullName());
-        System.out.println("Nombre vendedor: " +  producto.getIdVendedor());
         NombreUsuarioDTO nombreVendedor = obtenerNombreUsuario(producto.getIdVendedor());
-        System.out.println("Nombre vendedor: " +  nombreVendedor.getFullName());
 
         Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, nombreComprador.getFullName(), nombreVendedor.getFullName());
 
-        repositorioCompraventa.save(compraventa);
+        return repositorioCompraventa.save(compraventa);
     }
 
     private ProductoDTO obtenerProducto(Long idProducto) {
@@ -86,7 +83,10 @@ public class ServicioCompraventa implements IServicioCompraventa {
     }
 
     @Override
-    public List<Compraventa> recuperarCompraventas(String idComprador, String idVendedor) {
+    public List<Compraventa> recuperarCompraventas(String idComprador, String idVendedor, Long idProducto) {
+        if (idProducto != null) {
+            return this.repositorioCompraventa.findByCompradorIdAndVendedorIdAndIdProducto(idComprador, idVendedor, idProducto);
+        }
         return this.repositorioCompraventa.findByCompradorIdAndVendedorId(idComprador, idVendedor);
     }
 }

@@ -14,4 +14,7 @@ public interface IRepositorioCompraventa {
 
     @Query("{ 'idComprador': ?0, 'idVendedor': ?1 }")
     List<Compraventa> findByCompradorIdAndVendedorId(String idComprador, String idVendedor);
+
+    @Query("{ 'idComprador': ?0, 'idVendedor': ?1, 'idProducto': ?2 }")
+    List<Compraventa> findByCompradorIdAndVendedorIdAndIdProducto(String idComprador, String idVendedor, Long idProducto);
 }
