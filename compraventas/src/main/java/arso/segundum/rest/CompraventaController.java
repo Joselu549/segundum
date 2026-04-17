@@ -4,6 +4,9 @@ import arso.segundum.dto.CompraventaDTO;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.servicio.IServicioCompraventa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 public class CompraventaController implements CompraventasApi {
 
     @Autowired
-    private final IServicioCompraventa servicioCompraventa;
+    private IServicioCompraventa servicioCompraventa;
 
     public CompraventaController(IServicioCompraventa servicioCompraventa) {
         this.servicioCompraventa = servicioCompraventa;
@@ -38,32 +41,84 @@ public class CompraventaController implements CompraventasApi {
     }
 
     @Override
-    public ResponseEntity<List<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario) {
-        List<CompraventaDTO> compras = servicioCompraventa.recuperarComprasUsuario(idUsuario)
+    public CollectionModel<EntityModel<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario) {
+        List<EntityModel<CompraventaDTO>> compras = servicioCompraventa.recuperarComprasUsuario(idUsuario)
                 .stream()
-                .map(CompraventaDTO::fromEntity)
+                .map(compraventa -> {
+                    CompraventaDTO dto = CompraventaDTO.fromEntity(compraventa);
+                    return EntityModel.of(dto,
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarCompraventas(dto.getIdComprador(), dto.getIdVendedor(),
+                                            dto.getIdProducto()))
+                                    .withSelfRel(),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarComprasUsuario(idUsuario))
+                                    .withRel("compras"),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarVentasUsuario(dto.getIdVendedor()))
+                                    .withRel("ventas-vendedor"));
+                })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(compras);
+
+        return CollectionModel.of(compras,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                        .recuperarComprasUsuario(idUsuario))
+                        .withSelfRel());
     }
 
     @Override
-    public ResponseEntity<List<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario) {
-        List<CompraventaDTO> ventas = servicioCompraventa.recuperarVentasUsuario(idUsuario)
+    public CollectionModel<EntityModel<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario) {
+        List<EntityModel<CompraventaDTO>> ventas = servicioCompraventa.recuperarVentasUsuario(idUsuario)
                 .stream()
-                .map(CompraventaDTO::fromEntity)
+                .map(compraventa -> {
+                    CompraventaDTO dto = CompraventaDTO.fromEntity(compraventa);
+                    return EntityModel.of(dto,
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarCompraventas(dto.getIdComprador(), dto.getIdVendedor(),
+                                            dto.getIdProducto()))
+                                    .withSelfRel(),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarVentasUsuario(idUsuario))
+                                    .withRel("ventas"),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarComprasUsuario(dto.getIdComprador()))
+                                    .withRel("compras-comprador"));
+                })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(ventas);
+
+        return CollectionModel.of(ventas,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                        .recuperarVentasUsuario(idUsuario))
+                        .withSelfRel());
     }
 
     @Override
-    public ResponseEntity<List<CompraventaDTO>> recuperarCompraventas(
+    public CollectionModel<EntityModel<CompraventaDTO>> recuperarCompraventas(
             @PathVariable String idComprador,
             @PathVariable String idVendedor,
             @RequestParam(required = false) Long idProducto) {
-        List<CompraventaDTO> compraventas = servicioCompraventa.recuperarCompraventas(idComprador, idVendedor, idProducto)
+        List<EntityModel<CompraventaDTO>> compraventas = servicioCompraventa
+                .recuperarCompraventas(idComprador, idVendedor, idProducto)
                 .stream()
-                .map(CompraventaDTO::fromEntity)
+                .map(compraventa -> {
+                    CompraventaDTO dto = CompraventaDTO.fromEntity(compraventa);
+                    return EntityModel.of(dto,
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarCompraventas(dto.getIdComprador(), dto.getIdVendedor(),
+                                            dto.getIdProducto()))
+                                    .withSelfRel(),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarComprasUsuario(dto.getIdComprador()))
+                                    .withRel("compras-comprador"),
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                                    .recuperarVentasUsuario(dto.getIdVendedor()))
+                                    .withRel("ventas-vendedor"));
+                })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(compraventas);
+
+        return CollectionModel.of(compraventas,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CompraventaController.class)
+                        .recuperarCompraventas(idComprador, idVendedor, idProducto))
+                        .withSelfRel());
     }
 }

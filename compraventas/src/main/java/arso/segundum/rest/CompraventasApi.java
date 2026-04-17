@@ -9,10 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Compraventas", description = "Gestión de compraventas")
 @RequestMapping("/compraventas")
@@ -40,7 +40,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/compras/{idUsuario}")
-    ResponseEntity<List<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario);
+    CollectionModel<EntityModel<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario);
 
     @Operation(summary = "Recuperar ventas de un usuario", description = "Obtiene todas las ventas realizadas por un usuario")
     @ApiResponses({
@@ -49,7 +49,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/ventas/{idUsuario}")
-    ResponseEntity<List<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario);
+    CollectionModel<EntityModel<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario);
 
     @Operation(summary = "Recuperar compraventas entre comprador y vendedor", description = "Obtiene todas las compraventas entre un comprador y un vendedor concretos, con filtro opcional por producto")
     @ApiResponses({
@@ -58,7 +58,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/{idComprador}/{idVendedor}")
-    ResponseEntity<List<CompraventaDTO>> recuperarCompraventas(
+    CollectionModel<EntityModel<CompraventaDTO>> recuperarCompraventas(
             @PathVariable String idComprador,
             @PathVariable String idVendedor,
             @RequestParam(required = false) Long idProducto);
