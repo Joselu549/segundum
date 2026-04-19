@@ -58,7 +58,7 @@ public class UsuarioController {
     @GET
     @RolesAllowed("USUARIO")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuarios() {
+    public Response obtenerUsuarios() throws Exception {
         List<UsuarioResumen> usuarios = servicioUsuarios.obtenerTodosLosUsuarios();
         List<UsuarioResumenExtendido> usuariosExtendidos = usuarios.stream().map(resumen -> {
             UsuarioResumenExtendido usuarioExtendido = new UsuarioResumenExtendido();

@@ -6,7 +6,6 @@ import java.util.Optional;
 import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
-import arso.segundum.modelo.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,5 +30,4 @@ public interface IServicioProductos {
     void marcarComoVendido(Long idProducto);
 
     Page<ResumenProducto> getListadoPaginado(Pageable pageable);
-//    List<Producto> getProductosVendedor(String idVendedor) throws IllegalArgumentException;
 }

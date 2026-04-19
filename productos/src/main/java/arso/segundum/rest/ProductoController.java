@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class ProductoController implements ProductosApi {
 
     @Autowired
-    private final IServicioProductos servicioProductos;
+    private IServicioProductos servicioProductos;
     @Autowired
     private PagedResourcesAssembler<ResumenProducto> pagedResourcesAssembler;
 
@@ -59,8 +59,7 @@ public class ProductoController implements ProductosApi {
     public PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
             @RequestParam int page,
             @RequestParam int size) throws Exception {
-        Pageable paginacion =
-                PageRequest.of(page, size, Sort.by("id").ascending());
+        Pageable paginacion = PageRequest.of(page, size, Sort.by("id").ascending());
 
         Page<ResumenProducto> resultado = this.servicioProductos.getListadoPaginado(paginacion);
 
@@ -69,10 +68,10 @@ public class ProductoController implements ProductosApi {
 
     @Override
     public EntityModel<ProductoDTO> getProductosById(@PathVariable @Positive Long id) throws Exception {
-        //TODO: Arreglar que ahora no devuelve el error de no encontrado correctamente
         ProductoDTO productoDTO = ProductoDTO.fromEntity(servicioProductos.getProducto(id));
         EntityModel<ProductoDTO> model = EntityModel.of(productoDTO);
-        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductoController.class).getProductosById(id)).withSelfRel());
+        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductoController.class).getProductosById(id))
+                .withSelfRel());
         return model;
     }
 

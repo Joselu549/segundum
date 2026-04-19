@@ -9,6 +9,7 @@ import java.util.Map;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import repositorio.RepositorioException;
 import servicio.FactoriaServicios;
 import usuarios.servicio.IServicioUsuarios;
 
@@ -29,8 +30,12 @@ public class Programa {
         } catch (Exception e) {
             System.out.println("Error al registrar el usuario: " + e.getMessage());
         }
-        System.out.println(servicioUsuarios.obtenerTodosLosUsuarios().stream().map(u -> u.getEmail())
-                .reduce((a, b) -> a + "\n" + b).orElse("No hay usuarios"));
+        try {
+            System.out.println(servicioUsuarios.obtenerTodosLosUsuarios().stream().map(u -> u.getEmail())
+                    .reduce((a, b) -> a + "\n" + b).orElse("No hay usuarios"));
+        } catch (RepositorioException e) {
+            System.err.println("Fallo al recuperar todos los usuarios: " + e);
+        }
 
         System.out.println("===========================================");
         System.out.println("PRUEBAS DE SERVICIO DE AUTH - SEGUNDUM");
