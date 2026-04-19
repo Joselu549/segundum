@@ -9,14 +9,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Compraventas", description = "Gestión de compraventas")
 @RequestMapping("/compraventas")
 public interface CompraventasApi {
+
+    @Operation(summary = "Obtener compraventas paginado", description = "Obtiene compraventas de forma paginada")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Página obtenida correctamente"),
+            @ApiResponse(responseCode = "400", description = "Parámetros de paginación inválidos",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+    })
+    @GetMapping("/pages")
+    PagedModel<EntityModel<CompraventaDTO>> getCompraventasPaginado(
+            @RequestParam int page,
+            @RequestParam int size);
 
     @Operation(summary = "Realizar compraventa", description = "Registra la compraventa de un producto por un comprador")
     @ApiResponses({
@@ -40,7 +53,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/compras/{idUsuario}")
-    CollectionModel<EntityModel<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario);
+    ResponseEntity<List<CompraventaDTO>> recuperarComprasUsuario(@PathVariable String idUsuario);
 
     @Operation(summary = "Recuperar ventas de un usuario", description = "Obtiene todas las ventas realizadas por un usuario")
     @ApiResponses({
@@ -49,7 +62,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/ventas/{idUsuario}")
-    CollectionModel<EntityModel<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario);
+    ResponseEntity<List<CompraventaDTO>> recuperarVentasUsuario(@PathVariable String idUsuario);
 
     @Operation(summary = "Recuperar compraventas entre comprador y vendedor", description = "Obtiene todas las compraventas entre un comprador y un vendedor concretos, con filtro opcional por producto")
     @ApiResponses({
@@ -58,7 +71,7 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/{idComprador}/{idVendedor}")
-    CollectionModel<EntityModel<CompraventaDTO>> recuperarCompraventas(
+    ResponseEntity<List<CompraventaDTO>> recuperarCompraventas(
             @PathVariable String idComprador,
             @PathVariable String idVendedor,
             @RequestParam(required = false) Long idProducto);

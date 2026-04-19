@@ -1,5 +1,6 @@
 package arso.segundum.servicio;
 
+import arso.segundum.dto.CompraventaDTO;
 import arso.segundum.dto.NombreUsuarioDTO;
 import arso.segundum.dto.ProductoDTO;
 import arso.segundum.exception.ErrorServicioExternoException;
@@ -9,6 +10,8 @@ import arso.segundum.repositorio.RepositorioCompraventa;
 import arso.segundum.retrofit.ProductosClient;
 import arso.segundum.retrofit.UsuariosClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import retrofit2.Call;
@@ -93,5 +96,11 @@ public class ServicioCompraventa implements IServicioCompraventa {
             return this.repositorioCompraventa.findByCompradorIdAndVendedorIdAndIdProducto(idComprador, idVendedor, idProducto);
         }
         return this.repositorioCompraventa.findByCompradorIdAndVendedorId(idComprador, idVendedor);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CompraventaDTO> getListadoPaginado(Pageable pageable) {
+        return this.repositorioCompraventa.findAll(pageable).map(CompraventaDTO::fromEntity);
     }
 }
