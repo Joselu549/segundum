@@ -19,8 +19,10 @@ import io.jsonwebtoken.Claims;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import servicio.FactoriaServicios;
+import usuarios.dto.NombreUsuarioDTO;
 import usuarios.dto.UsuarioDTO;
 import usuarios.modelo.Usuario;
 import usuarios.rest.Listado.UsuarioResumenExtendido;
@@ -38,6 +40,20 @@ public class UsuarioController {
     private HttpServletRequest servletRequest;
 
     @GET
+    @Path("/nombres/{id}")
+    @PermitAll
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerNombreUsuario(@PathParam("id") String id) throws Exception {
+        Usuario usuario = this.servicioUsuarios.obtenerUsuarioPorId(id);
+        NombreUsuarioDTO nombreUsuarioDTO = new NombreUsuarioDTO(obtenerNombreCompleto(usuario));
+        return Response.ok(nombreUsuarioDTO).build();
+    }
+
+    private String obtenerNombreCompleto(Usuario usuario) {
+        return usuario.getNombre() + " " + usuario.getApellidos();
+    }
+
+    @GET
     @RolesAllowed("USUARIO")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuarios() {
@@ -47,7 +63,7 @@ public class UsuarioController {
             usuarioExtendido.setResumen(resumen);
             usuarioExtendido.setUrl(uriInfo.getAbsolutePathBuilder().path(resumen.getId()).build().toString());
             return usuarioExtendido;
-        }).toList();
+        }).collect(Collectors.toList());
 
         Listado listado = new Listado();
         listado.setUsuarios(usuariosExtendidos);

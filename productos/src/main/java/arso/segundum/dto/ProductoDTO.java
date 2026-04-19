@@ -17,8 +17,7 @@ public class ProductoDTO {
     @NotBlank(message = "El título es obligatorio")
     private String titulo;
 
-    @Schema(description = "Descripción del producto", example = "Ejemplo de batería completa muy compacta")
-    @NotBlank(message = "La descripción es obligatoria")
+    @Schema(description = "Descripción del producto")
     private String descripcion;
 
     @Schema(description = "Precio del producto", example = "20.50", minimum = "0.01")
@@ -26,39 +25,49 @@ public class ProductoDTO {
     @Positive(message = "El precio debe ser mayor que 0")
     private Double precio;
 
-    @Schema(description = "Estado del producto", example = "COMO_NUEVO", type = "Estado")
-    @NotNull(message = "El estado es obligatorio")
+    @Schema(description = "Estado del producto")
     private Estado estado;
 
     @Schema(description = "ID de la categoría del producto")
-    @NotNull(message = "El id de categoría es obligatorio")
     private String idCategoria;
+
+    @Schema(description = "Indica si el vendedor ofrece envío")
+    private boolean envioDisponible;
 
     @Schema(description = "ID del vendedor del producto")
     @NotNull(message = "El id de vendedor es obligatorio")
     private String idVendedor;
 
-    @Schema(description = "Booleano para indicar si el envío está disponible")
-    @NotNull(message = "El envío disponible es obligatorio")
-    private Boolean envioDisponible;
+    @Schema(description = "Lugar de recogida del producto")
+    @NotBlank(message = "El lugar de recogida no debe de estar vacío")
+    private String lugarRecogida;
 
-    public ProductoDTO(Long id, String titulo, String descripcion,
-                       Double precio, Estado estado, String idCategoria,
-                       String idVendedor, Boolean envioDisponible) {
+    public ProductoDTO() {
+    }
+
+    public ProductoDTO(Long id, String titulo, Double precio, String idVendedor, String lugarRecogida) {
         this.id = id;
         this.titulo = titulo;
-        this.descripcion = descripcion;
         this.precio = precio;
-        this.estado = estado;
-        this.idCategoria = idCategoria;
         this.idVendedor = idVendedor;
-        this.envioDisponible = envioDisponible;
+        this.lugarRecogida = lugarRecogida;
     }
 
     public static ProductoDTO fromEntity(Producto producto) {
-        return new ProductoDTO(producto.getId(), producto.getTitulo(), producto.getDescripcion(),
-                producto.getPrecio(), producto.getEstado(), producto.getCategoria().getId(),
-                producto.getVendedor().getIdUsuario(), producto.isEnvioDisponible());
+        ProductoDTO dto = new ProductoDTO();
+        dto.id = producto.getId();
+        dto.titulo = producto.getTitulo();
+        dto.descripcion = producto.getDescripcion();
+        dto.precio = producto.getPrecio();
+        dto.estado = producto.getEstado();
+        dto.idCategoria = producto.getCategoria() != null ? producto.getCategoria().getId() : null;
+        dto.envioDisponible = producto.isEnvioDisponible();
+        dto.idVendedor = producto.getVendedor().getIdUsuario();
+        if (producto.getLugarRecogida() != null) {
+            arso.segundum.modelo.LugarRecogida lr = producto.getLugarRecogida();
+            dto.lugarRecogida = lr.getDescripcion() + " (" + lr.getLatitud() + ", " + lr.getLongitud() + ")";
+        }
+        return dto;
     }
 
     public Long getId() {
@@ -109,6 +118,14 @@ public class ProductoDTO {
         this.idCategoria = idCategoria;
     }
 
+    public boolean isEnvioDisponible() {
+        return envioDisponible;
+    }
+
+    public void setEnvioDisponible(boolean envioDisponible) {
+        this.envioDisponible = envioDisponible;
+    }
+
     public String getIdVendedor() {
         return idVendedor;
     }
@@ -117,11 +134,11 @@ public class ProductoDTO {
         this.idVendedor = idVendedor;
     }
 
-    public Boolean isEnvioDisponible() {
-        return envioDisponible;
+    public String getLugarRecogida() {
+        return lugarRecogida;
     }
 
-    public void setEnvioDisponible(Boolean envioDisponible) {
-        this.envioDisponible = envioDisponible;
+    public void setLugarRecogida(String lugarRecogida) {
+        this.lugarRecogida = lugarRecogida;
     }
 }
