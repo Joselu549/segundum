@@ -15,7 +15,7 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
     @Override
     public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
-            String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException {
+            String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException, RepositorioException {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("El email no puede ser nulo o vacío");
         }
@@ -55,123 +55,73 @@ public class ServicioUsuarios implements IServicioUsuarios {
             throw new IllegalArgumentException("El formato del teléfono no es válido");
         }
 
-        try {
-            // Comprobar que el email no existe previamente
-            List<Usuario> existentes = repositorioUsuarios.getUsuariosPorEmail(email);
-            if (existentes != null && !existentes.isEmpty()) {
-                throw new IllegalArgumentException("El email ya está registrado");
-            }
-
-            Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
-            String id = repositorioUsuarios.add(usuario);
-            return id;
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al registrar el usuario: " + e.getMessage(), e);
+        List<Usuario> existentes = repositorioUsuarios.getUsuariosPorEmail(email);
+        if (existentes != null && !existentes.isEmpty()) {
+            throw new IllegalArgumentException("El email ya está registrado");
         }
+
+        Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
+        return repositorioUsuarios.add(usuario);
     }
 
     @Override
-    public void modificarNombre(String id, String nombre) {
-        try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            usuario.setNombre(nombre);
-            repositorioUsuarios.update(usuario);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al modificar el nombre del usuario: " + e.getMessage(), e);
-        }
+    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setNombre(nombre);
+        repositorioUsuarios.update(usuario);
     }
 
     @Override
-    public void modificarApellidos(String id, String apellidos) {
-        try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            usuario.setApellidos(apellidos);
-            repositorioUsuarios.update(usuario);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al modificar los apellidos del usuario: " + e.getMessage(), e);
-        }
+    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setApellidos(apellidos);
+        repositorioUsuarios.update(usuario);
     }
 
     @Override
-    public void modificarPassword(String id, String password) {
-        try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            usuario.setPassword(password);
-            repositorioUsuarios.update(usuario);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al modificar la contraseña del usuario: " + e.getMessage(), e);
-        }
+    public void modificarPassword(String id, String password) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setPassword(password);
+        repositorioUsuarios.update(usuario);
     }
 
     @Override
-    public void modificarFechaNacimiento(String id, LocalDate fechaNacimiento) {
-        try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            usuario.setFechaNacimiento(fechaNacimiento);
-            repositorioUsuarios.update(usuario);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al modificar la fecha de nacimiento del usuario: " + e.getMessage(), e);
-        }
+    public void modificarFechaNacimiento(String id, LocalDate fechaNacimiento) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setFechaNacimiento(fechaNacimiento);
+        repositorioUsuarios.update(usuario);
     }
 
     @Override
-    public void modificarTelefono(String id, String telefono) {
-        try {
-            Usuario usuario = repositorioUsuarios.getById(id);
-            usuario.setTelefono(telefono);
-            repositorioUsuarios.update(usuario);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al modificar el teléfono del usuario: " + e.getMessage(), e);
-        }
+    public void modificarTelefono(String id, String telefono) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setTelefono(telefono);
+        repositorioUsuarios.update(usuario);
     }
 
     @Override
-    public Usuario login(String email, String password) {
-        try {
-            List<Usuario> usuarios = repositorioUsuarios.getUsuariosPorEmail(email);
-            if (usuarios == null || usuarios.isEmpty()) {
-                throw new IllegalArgumentException("Email o contraseña incorrectos");
-            }
-            Usuario usuario = usuarios.get(0);
-            if (!usuario.getPassword().equals(password)) {
-                throw new IllegalArgumentException("Email o contraseña incorrectos");
-            }
-            return usuario;
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al realizar el login: " + e.getMessage(), e);
+    public Usuario login(String email, String password) throws RepositorioException {
+        List<Usuario> usuarios = repositorioUsuarios.getUsuariosPorEmail(email);
+        if (usuarios == null || usuarios.isEmpty()) {
+            throw new IllegalArgumentException("Email o contraseña incorrectos");
         }
+        Usuario usuario = usuarios.get(0);
+        if (!usuario.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Email o contraseña incorrectos");
+        }
+        return usuario;
     }
 
     @Override
-    public List<UsuarioResumen> obtenerTodosLosUsuarios() {
-        List<Usuario> usuarios;
-        try {
-            usuarios = repositorioUsuarios.getAll();
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al obtener todos los usuarios: " + e.getMessage(), e);
-        }
-        return usuarios.stream().map(this::transformToUsuarioResumen).collect(java.util.stream.Collectors.toList());
+    public List<UsuarioResumen> obtenerTodosLosUsuarios() throws RepositorioException {
+        return repositorioUsuarios.getAll().stream()
+                .map(this::transformToUsuarioResumen)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
-    public Usuario obtenerUsuarioPorId(String id) {
-        try {
-            return repositorioUsuarios.getById(id);
-        } catch (EntidadNoEncontrada e) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id, e);
-        } catch (RepositorioException e) {
-            throw new RuntimeException("Error al obtener el usuario: " + e.getMessage(), e);
-        }
+    public Usuario obtenerUsuarioPorId(String id) throws EntidadNoEncontrada, RepositorioException {
+        return repositorioUsuarios.getById(id);
     }
 
     private UsuarioResumen transformToUsuarioResumen(Usuario usuario) {
