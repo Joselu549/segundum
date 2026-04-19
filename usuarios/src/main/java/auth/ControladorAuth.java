@@ -38,17 +38,18 @@ public class ControladorAuth {
     }
 
     private Map<String, Object> verificarCredenciales(String username, String password) {
-        Usuario usuario = servicioUsuarios.login(username, password);
-        if (usuario == null) {
-            return null;
+        try {
+            Usuario usuario = servicioUsuarios.login(username, password);
+            if (usuario == null) {
+                return null;
+            }
+            HashMap<String, Object> claims = new HashMap<String, Object>();
+            claims.put("sub", usuario.getId());
+            claims.put("email", usuario.getEmail());
+            claims.put("roles", "USUARIO");
+            return claims;
+        } catch (repositorio.RepositorioException e) {
+            throw new RuntimeException("Error al realizar el login", e);
         }
-
-        HashMap<String, Object> claims = new HashMap<String, Object>();
-        // Use user id as subject so we can validate ownership in other endpoints
-        claims.put("sub", usuario.getId());
-        claims.put("email", usuario.getEmail());
-        // All users have the role USUARIO
-        claims.put("roles", "USUARIO");
-        return claims;
     }
 }

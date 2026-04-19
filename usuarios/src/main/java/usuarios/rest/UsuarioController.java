@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import io.jsonwebtoken.Claims;
+import repositorio.EntidadNoEncontrada;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -150,6 +151,10 @@ public class UsuarioController {
                 servicioUsuarios.modificarTelefono(id, usuario.getTelefono());
             }
             return Response.noContent().build();
+        } catch (EntidadNoEncontrada e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Usuario no encontrado: " + id)
+                    .build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Error al modificar el usuario: " + e.getMessage())
