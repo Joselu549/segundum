@@ -29,6 +29,8 @@ public class Usuario implements Identificable {
     private LocalDate fechaNacimiento;
     private String telefono;
     private boolean esAdmin;
+    private int contadorCompras = 0;
+    private int contadorVentas = 0;
 
     public Usuario() {
     }
@@ -106,5 +108,21 @@ public class Usuario implements Identificable {
 
     public void setIsAdmin(boolean esAdmin) {
         this.esAdmin = esAdmin;
+    }
+
+    public int getContadorCompras() {
+        return contadorCompras;
+    }
+
+    public void setContadorCompras(int contadorCompras) {
+        this.contadorCompras = contadorCompras;
+    }
+
+    public int getContadorVentas() {
+        return contadorVentas;
+    }
+
+    public void setContadorVentas(int contadorVentas) {
+        this.contadorVentas = contadorVentas;
     }
 }

@@ -105,4 +105,13 @@ public interface ProductosApi {
     ResponseEntity<Void> asignarLugarRecogida(
             @PathVariable @Positive Long id,
             @RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception;
+
+    @Operation(summary = "Marcar producto como vendido", description = "Marca un producto como vendido")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Producto marcado como vendido"),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+    })
+    @PatchMapping("/{id}/vendido")
+    ResponseEntity<Void> marcarComoVendido(@PathVariable @Positive Long id) throws Exception;
 }

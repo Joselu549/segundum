@@ -2,23 +2,30 @@ package arso.segundum.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductoDTO {
+    @NotNull(message = "El id del producto no puede ser nulo")
+    @Positive(message = "El id del producto debe ser un número positivo")
     private Long id;
+
+    @NotBlank(message = "El id del vendedor no puede estar vacío")
     private String idVendedor;
+
+    @NotBlank(message = "El título del producto no puede estar vacío")
     private String titulo;
+
+    @NotNull(message = "El precio del producto no puede ser nulo")
+    @Positive(message = "El precio del producto debe ser un número positivo")
     private Double precio;
+
     private String lugarRecogida;
+    private boolean vendido;
 
     public ProductoDTO() {
-    }
-
-    public ProductoDTO(Long id, String idVendedor, String titulo, Double precio, String lugarRecogida) {
-        this.id = id;
-        this.idVendedor = idVendedor;
-        this.titulo = titulo;
-        this.precio = precio;
-        this.lugarRecogida = lugarRecogida;
     }
 
     public Long getId() {
@@ -59,5 +66,13 @@ public class ProductoDTO {
 
     public void setLugarRecogida(String lugarRecogida) {
         this.lugarRecogida = lugarRecogida;
+    }
+
+    public boolean isVendido() {
+        return vendido;
+    }
+
+    public void setVendido(boolean vendido) {
+        this.vendido = vendido;
     }
 }

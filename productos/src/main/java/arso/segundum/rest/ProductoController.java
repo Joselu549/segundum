@@ -118,4 +118,10 @@ public class ProductoController implements ProductosApi {
                 lugarRecogidaDTO.getDescripcion());
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<Void> marcarComoVendido(@PathVariable @Positive Long id) throws Exception {
+        servicioProductos.marcarComoVendido(id);
+        return ResponseEntity.noContent().build();
+    }
 }

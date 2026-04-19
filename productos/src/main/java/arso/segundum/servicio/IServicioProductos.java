@@ -28,6 +28,8 @@ public interface IServicioProductos {
 
     Producto getProducto(Long idProducto) throws IllegalArgumentException;
 
+    void marcarComoVendido(Long idProducto);
+
     Page<ResumenProducto> getListadoPaginado(Pageable pageable);
 //    List<Producto> getProductosVendedor(String idVendedor) throws IllegalArgumentException;
 }

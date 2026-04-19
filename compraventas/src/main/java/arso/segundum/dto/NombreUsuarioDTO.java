@@ -1,6 +1,9 @@
 package arso.segundum.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class NombreUsuarioDTO {
+    @NotBlank(message = "El nombre del usuario no puede estar vacío")
     private String fullName;
 
     public NombreUsuarioDTO() {}

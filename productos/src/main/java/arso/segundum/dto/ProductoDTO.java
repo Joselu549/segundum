@@ -42,6 +42,9 @@ public class ProductoDTO {
     @NotBlank(message = "El lugar de recogida no debe de estar vacío")
     private String lugarRecogida;
 
+    @Schema(description = "Indica si el producto ya ha sido vendido")
+    private boolean vendido;
+
     public ProductoDTO() {
     }
 
@@ -67,6 +70,7 @@ public class ProductoDTO {
             arso.segundum.modelo.LugarRecogida lr = producto.getLugarRecogida();
             dto.lugarRecogida = lr.getDescripcion() + " (" + lr.getLatitud() + ", " + lr.getLongitud() + ")";
         }
+        dto.vendido = producto.isVendido();
         return dto;
     }
 
@@ -140,5 +144,13 @@ public class ProductoDTO {
 
     public void setLugarRecogida(String lugarRecogida) {
         this.lugarRecogida = lugarRecogida;
+    }
+
+    public boolean isVendido() {
+        return vendido;
+    }
+
+    public void setVendido(boolean vendido) {
+        this.vendido = vendido;
     }
 }

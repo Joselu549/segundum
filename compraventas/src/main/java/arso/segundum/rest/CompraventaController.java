@@ -1,5 +1,6 @@
 package arso.segundum.rest;
 
+import arso.segundum.dto.AltaCompraventaDTO;
 import arso.segundum.dto.CompraventaDTO;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.servicio.IServicioCompraventa;
@@ -44,9 +45,9 @@ public class CompraventaController implements CompraventasApi {
 
     @Override
     public ResponseEntity<Void> realizarCompraventa(
-            @RequestParam Long idProducto,
-            @RequestParam String idComprador) throws Exception {
-        Compraventa compraventa = servicioCompraventa.realizarCompraventa(idProducto, idComprador);
+            @RequestBody AltaCompraventaDTO altaCompraventaDTO) throws Exception {
+        Compraventa compraventa = servicioCompraventa.realizarCompraventa(altaCompraventaDTO.getIdProducto(),
+                altaCompraventaDTO.getIdComprador());
         URI nuevaURL = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath("/compraventas/{idComprador}/{idVendedor}")
                 .replaceQueryParam("idComprador")

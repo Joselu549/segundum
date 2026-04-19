@@ -40,6 +40,7 @@ public class Producto {
 
     @ManyToOne
     private Usuario vendedor;
+    private boolean vendido = false;
 
     public Producto() {
     }
@@ -151,5 +152,13 @@ public class Producto {
 
     public void setVendedor(Usuario vendedor) {
         this.vendedor = vendedor;
+    }
+
+    public boolean isVendido() {
+        return vendido;
+    }
+
+    public void setVendido(boolean vendido) {
+        this.vendido = vendido;
     }
 }
