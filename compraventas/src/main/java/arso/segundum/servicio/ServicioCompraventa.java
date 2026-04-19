@@ -82,17 +82,22 @@ public class ServicioCompraventa implements IServicioCompraventa {
 
     @Override
     public List<Compraventa> recuperarComprasUsuario(String idUsuario) {
+        obtenerNombreUsuario(idUsuario);
         return this.repositorioCompraventa.findByCompradorId(idUsuario);
     }
 
     @Override
     public List<Compraventa> recuperarVentasUsuario(String idUsuario) {
+        obtenerNombreUsuario(idUsuario);
         return this.repositorioCompraventa.findByVendedorId(idUsuario);
     }
 
     @Override
     public List<Compraventa> recuperarCompraventas(String idComprador, String idVendedor, Long idProducto) {
+        obtenerNombreUsuario(idComprador);
+        obtenerNombreUsuario(idVendedor);
         if (idProducto != null) {
+            obtenerProducto(idProducto);
             return this.repositorioCompraventa.findByCompradorIdAndVendedorIdAndIdProducto(idComprador, idVendedor, idProducto);
         }
         return this.repositorioCompraventa.findByCompradorIdAndVendedorId(idComprador, idVendedor);

@@ -49,7 +49,9 @@ public interface CompraventasApi {
     @Operation(summary = "Recuperar compras de un usuario", description = "Obtiene todas las compras realizadas por un usuario")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Listado de compras obtenido correctamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/compras/{idUsuario}")
@@ -58,7 +60,9 @@ public interface CompraventasApi {
     @Operation(summary = "Recuperar ventas de un usuario", description = "Obtiene todas las ventas realizadas por un usuario")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Listado de ventas obtenido correctamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/ventas/{idUsuario}")
@@ -67,7 +71,9 @@ public interface CompraventasApi {
     @Operation(summary = "Recuperar compraventas entre comprador y vendedor", description = "Obtiene todas las compraventas entre un comprador y un vendedor concretos, con filtro opcional por producto")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Listado de compraventas obtenido correctamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+            @ApiResponse(responseCode = "404", description = "Usuario o producto no encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/{idComprador}/{idVendedor}")
