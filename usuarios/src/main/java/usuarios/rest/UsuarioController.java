@@ -5,6 +5,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -163,6 +164,38 @@ public class UsuarioController {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error al modificar el usuario: " + e.getMessage())
                     .build();
+        }
+    }
+
+    @PATCH
+    @Path("/{id}/compras")
+    @PermitAll
+    public Response incrementarContadorCompras(@PathParam("id") String id) {
+        try {
+            servicioUsuarios.incrementarContadorCompras(id);
+            return Response.noContent().build();
+        } catch (EntidadNoEncontrada e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Usuario no encontrado: " + id).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al incrementar contador de compras").build();
+        }
+    }
+
+    @PATCH
+    @Path("/{id}/ventas")
+    @PermitAll
+    public Response incrementarContadorVentas(@PathParam("id") String id) {
+        try {
+            servicioUsuarios.incrementarContadorVentas(id);
+            return Response.noContent().build();
+        } catch (EntidadNoEncontrada e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Usuario no encontrado: " + id).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al incrementar contador de ventas").build();
         }
     }
 }

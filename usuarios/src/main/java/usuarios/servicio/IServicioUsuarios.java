@@ -26,4 +26,8 @@ public interface IServicioUsuarios {
     List<UsuarioResumen> obtenerTodosLosUsuarios() throws RepositorioException;
 
     Usuario obtenerUsuarioPorId(String id) throws EntidadNoEncontrada, RepositorioException;
+
+    void incrementarContadorCompras(String id) throws EntidadNoEncontrada, RepositorioException;
+
+    void incrementarContadorVentas(String id) throws EntidadNoEncontrada, RepositorioException;
 }

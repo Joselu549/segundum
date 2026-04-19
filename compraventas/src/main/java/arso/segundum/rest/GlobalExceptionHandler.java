@@ -2,6 +2,7 @@ package arso.segundum.rest;
 
 import arso.segundum.dto.ErrorDTO;
 import arso.segundum.exception.ErrorServicioExternoException;
+import arso.segundum.exception.ProductoNoDisponibleException;
 import arso.segundum.exception.RecursoNoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<ErrorDTO> handleNotFound(RecursoNoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ProductoNoDisponibleException.class)
+    public ResponseEntity<ErrorDTO> handleProductoNoDisponible(ProductoNoDisponibleException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDTO(ex.getMessage()));
     }
 
     @ExceptionHandler(ErrorServicioExternoException.class)

@@ -38,6 +38,8 @@ public interface CompraventasApi {
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "404", description = "Producto o usuario no encontrado",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "409", description = "El producto ya ha sido vendido",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })

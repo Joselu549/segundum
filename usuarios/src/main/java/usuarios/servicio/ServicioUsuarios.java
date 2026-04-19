@@ -124,6 +124,20 @@ public class ServicioUsuarios implements IServicioUsuarios {
         return repositorioUsuarios.getById(id);
     }
 
+    @Override
+    public void incrementarContadorCompras(String id) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setContadorCompras(usuario.getContadorCompras() + 1);
+        repositorioUsuarios.update(usuario);
+    }
+
+    @Override
+    public void incrementarContadorVentas(String id) throws EntidadNoEncontrada, RepositorioException {
+        Usuario usuario = repositorioUsuarios.getById(id);
+        usuario.setContadorVentas(usuario.getContadorVentas() + 1);
+        repositorioUsuarios.update(usuario);
+    }
+
     private UsuarioResumen transformToUsuarioResumen(Usuario usuario) {
         UsuarioResumen resumen = new UsuarioResumen();
         resumen.setId(usuario.getId());

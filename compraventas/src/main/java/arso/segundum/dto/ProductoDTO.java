@@ -9,16 +9,9 @@ public class ProductoDTO {
     private String titulo;
     private Double precio;
     private String lugarRecogida;
+    private boolean vendido;
 
     public ProductoDTO() {
-    }
-
-    public ProductoDTO(Long id, String idVendedor, String titulo, Double precio, String lugarRecogida) {
-        this.id = id;
-        this.idVendedor = idVendedor;
-        this.titulo = titulo;
-        this.precio = precio;
-        this.lugarRecogida = lugarRecogida;
     }
 
     public Long getId() {
@@ -59,5 +52,13 @@ public class ProductoDTO {
 
     public void setLugarRecogida(String lugarRecogida) {
         this.lugarRecogida = lugarRecogida;
+    }
+
+    public boolean isVendido() {
+        return vendido;
+    }
+
+    public void setVendido(boolean vendido) {
+        this.vendido = vendido;
     }
 }

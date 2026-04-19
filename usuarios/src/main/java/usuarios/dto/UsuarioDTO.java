@@ -10,6 +10,8 @@ public class UsuarioDTO {
     private String telefono;
     private String fechaNacimiento;
     private String password;
+    private int contadorCompras;
+    private int contadorVentas;
 
     public UsuarioDTO() {
     }
@@ -22,6 +24,8 @@ public class UsuarioDTO {
         this.telefono = usuario.getTelefono();
         this.fechaNacimiento = usuario.getFechaNacimiento().toString();
         this.password = usuario.getPassword();
+        this.contadorCompras = usuario.getContadorCompras();
+        this.contadorVentas = usuario.getContadorVentas();
     }
 
     public String getId() { return id; }
@@ -48,5 +52,13 @@ public class UsuarioDTO {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getContadorCompras() {
+        return contadorCompras;
+    }
+
+    public int getContadorVentas() {
+        return contadorVentas;
     }
 }

@@ -303,6 +303,17 @@ public class ServicioProductos implements IServicioProductos {
     }
 
     @Override
+    public void marcarComoVendido(Long idProducto) {
+        if (idProducto == null) {
+            throw new IllegalArgumentException("El ID de producto no puede ser nulo");
+        }
+        Producto producto = repositorioProductos.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+        producto.setVendido(true);
+        repositorioProductos.save(producto);
+    }
+
+    @Override
     public Page<ResumenProducto> getListadoPaginado(Pageable pageable) {
         return this.repositorioProductos.findAll(pageable).map(producto -> new ResumenProducto(producto.getId(), producto.getTitulo(), producto.getPrecio(), producto.getFechaPublicacion().toString(), producto.getCategoria().getNombre(), producto.getVisualizaciones()));
     }

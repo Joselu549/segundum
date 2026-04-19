@@ -4,6 +4,7 @@ import arso.segundum.dto.CompraventaDTO;
 import arso.segundum.dto.NombreUsuarioDTO;
 import arso.segundum.dto.ProductoDTO;
 import arso.segundum.exception.ErrorServicioExternoException;
+import arso.segundum.exception.ProductoNoDisponibleException;
 import arso.segundum.exception.RecursoNoEncontradoException;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.repositorio.RepositorioCompraventa;
@@ -47,15 +48,43 @@ public class ServicioCompraventa implements IServicioCompraventa {
         }
     }
 
+    private void ejecutarLlamadaVoid(Supplier<Call<Void>> callSupplier, String mensajeNoEncontrado) {
+        try {
+            Response<Void> response = callSupplier.get().execute();
+            if (response.isSuccessful()) {
+                return;
+            }
+            if (response.code() == 404) {
+                throw new RecursoNoEncontradoException(mensajeNoEncontrado);
+            }
+            throw new ErrorServicioExternoException("Error en servicio externo - Código: " + response.code());
+        } catch (IOException e) {
+            throw new ErrorServicioExternoException("Error de comunicación con el servicio externo", e);
+        }
+    }
+
     @Override
     public Compraventa realizarCompraventa(Long idProducto, String idComprador) {
         ProductoDTO producto = obtenerProducto(idProducto);
+
+        if (producto.isVendido()) {
+            throw new ProductoNoDisponibleException("El producto " + idProducto + " ya ha sido vendido");
+        }
+
         NombreUsuarioDTO nombreComprador = obtenerNombreUsuario(idComprador);
         NombreUsuarioDTO nombreVendedor = obtenerNombreUsuario(producto.getIdVendedor());
 
         Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, nombreComprador.getFullName(), nombreVendedor.getFullName());
+        Compraventa guardada = repositorioCompraventa.save(compraventa);
 
-        return repositorioCompraventa.save(compraventa);
+        ejecutarLlamadaVoid(() -> productosClient.marcarComoVendido(idProducto),
+                "Producto no encontrado al marcar como vendido: " + idProducto);
+        ejecutarLlamadaVoid(() -> usuariosClient.incrementarContadorCompras(idComprador),
+                "Comprador no encontrado al incrementar contador: " + idComprador);
+        ejecutarLlamadaVoid(() -> usuariosClient.incrementarContadorVentas(producto.getIdVendedor()),
+                "Vendedor no encontrado al incrementar contador: " + producto.getIdVendedor());
+
+        return guardada;
     }
 
     private ProductoDTO obtenerProducto(Long idProducto) {
