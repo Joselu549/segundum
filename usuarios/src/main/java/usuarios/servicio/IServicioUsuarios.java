@@ -13,9 +13,9 @@ public interface IServicioUsuarios {
             String direccion, LocalDate fechaNacimiento, String password)
             throws IllegalArgumentException, RepositorioException, IOException;
 
-    void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException;
+    void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException, IOException;
 
-    void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException;
+    void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException, IOException;
 
     void modificarPassword(String id, String password) throws EntidadNoEncontrada, RepositorioException;
 

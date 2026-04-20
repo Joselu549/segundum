@@ -9,6 +9,7 @@ import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
 import servicio.FactoriaServicios;
 import usuarios.eventos.EventoUsuarioCreado;
+import usuarios.eventos.EventoUsuarioModificado;
 import usuarios.modelo.Usuario;
 import usuarios.puertos.PublicadorEventos;
 import usuarios.repositorio.RepositorioUsuariosAdHoc;
@@ -68,23 +69,25 @@ public class ServicioUsuarios implements IServicioUsuarios {
 
         Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
         String id = repositorioUsuarios.add(usuario);
-        EventoUsuarioCreado evento = new EventoUsuarioCreado(email, nombre);
+        EventoUsuarioCreado evento = new EventoUsuarioCreado(id, email, nombre, apellidos);
         this.publicador.publicarEvento(evento);
         return id;
     }
 
     @Override
-    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException {
+    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setNombre(nombre);
         repositorioUsuarios.update(usuario);
+        publicador.publicarEvento(new EventoUsuarioModificado(id, nombre, usuario.getApellidos()));
     }
 
     @Override
-    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException {
+    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setApellidos(apellidos);
         repositorioUsuarios.update(usuario);
+        publicador.publicarEvento(new EventoUsuarioModificado(id, usuario.getNombre(), apellidos));
     }
 
     @Override

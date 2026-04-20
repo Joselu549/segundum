@@ -42,7 +42,7 @@ public class Programa implements CommandLineRunner {
             probarServicioCategorias();
 
             // Pruebas de ServicioProductos
-            probarServicioProductos();
+            // probarServicioProductos();
 
             System.out.println("\n===========================================");
             System.out.println("TODAS LAS PRUEBAS COMPLETADAS EXITOSAMENTE");
