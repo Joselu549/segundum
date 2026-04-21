@@ -84,14 +84,25 @@ public interface ProductosApi {
     @PatchMapping("/{id}/visualizations")
     ResponseEntity<Void> addVisualizaciones(@PathVariable @Positive Long id) throws Exception;
 
-    @Operation(summary = "Da de alta un producto", description = "Da de alta un producto dadas unas propiedades")
+    @Operation(summary = "Da de alta un producto", description = "Da de alta un producto dadas unas propiedades. El idLugarRecogida debe corresponder a un lugar ya existente.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Producto creado correctamente"),
             @ApiResponse(responseCode = "400", description = "Datos del producto inválidos",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Lugar de recogida no encontrado",
                     content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PostMapping
     ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) throws Exception;
+
+    @Operation(summary = "Crea un lugar de recogida", description = "Crea un lugar de recogida y devuelve su ubicación")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Lugar de recogida creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos del lugar inválidos",
+                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+    })
+    @PostMapping("/lugares-recogida")
+    ResponseEntity<Void> crearLugarRecogida(@RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception;
 
     @Operation(summary = "Asigna un lugar de recogida", description = "Asigna un lugar de recogida a un producto")
     @ApiResponses({

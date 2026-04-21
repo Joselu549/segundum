@@ -5,7 +5,6 @@ import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -40,9 +39,11 @@ public class ProductoDTO {
     @NotNull(message = "El id de vendedor es obligatorio")
     private String idVendedor;
 
-    @Schema(description = "Lugar de recogida del producto")
-    @NotNull(message = "El lugar de recogida no debe de estar vacío")
-    @Valid
+    @Schema(description = "ID del lugar de recogida (debe existir previamente)")
+    @NotNull(message = "El id del lugar de recogida es obligatorio")
+    private Long idLugarRecogida;
+
+    @Schema(description = "Lugar de recogida del producto", accessMode = Schema.AccessMode.READ_ONLY)
     private LugarRecogidaDTO lugarRecogida;
 
     @Schema(description = "Indica si el producto ya ha sido vendido")
@@ -71,6 +72,7 @@ public class ProductoDTO {
         dto.idVendedor = producto.getVendedor().getIdUsuario();
         LugarRecogida lr = producto.getLugarRecogida();
         if (lr != null) {
+            dto.idLugarRecogida = lr.getId();
             dto.lugarRecogida = new LugarRecogidaDTO(lr.getLongitud(), lr.getLatitud(), lr.getDescripcion());
         }
         dto.vendido = producto.isVendido();
@@ -139,6 +141,14 @@ public class ProductoDTO {
 
     public void setIdVendedor(String idVendedor) {
         this.idVendedor = idVendedor;
+    }
+
+    public Long getIdLugarRecogida() {
+        return idLugarRecogida;
+    }
+
+    public void setIdLugarRecogida(Long idLugarRecogida) {
+        this.idLugarRecogida = idLugarRecogida;
     }
 
     public LugarRecogidaDTO getLugarRecogida() {

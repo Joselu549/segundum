@@ -91,7 +91,6 @@ public class ProductoController implements ProductosApi {
 
     @Override
     public ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) throws Exception {
-        LugarRecogidaDTO lugar = nuevoProducto.getLugarRecogida();
         Long id = servicioProductos.darDeAltaProducto(
                 nuevoProducto.getTitulo(),
                 nuevoProducto.getDescripcion(),
@@ -100,9 +99,19 @@ public class ProductoController implements ProductosApi {
                 nuevoProducto.getIdCategoria(),
                 nuevoProducto.isEnvioDisponible(),
                 nuevoProducto.getIdVendedor(),
-                lugar.getLongitud(),
-                lugar.getLatitud(),
-                lugar.getDescripcion());
+                nuevoProducto.getIdLugarRecogida());
+
+        URI nuevaURL = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(id).toUri();
+        return ResponseEntity.created(nuevaURL).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> crearLugarRecogida(@RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception {
+        Long id = servicioProductos.crearLugarRecogida(
+                lugarRecogidaDTO.getLongitud(),
+                lugarRecogidaDTO.getLatitud(),
+                lugarRecogidaDTO.getDescripcion());
 
         URI nuevaURL = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(id).toUri();

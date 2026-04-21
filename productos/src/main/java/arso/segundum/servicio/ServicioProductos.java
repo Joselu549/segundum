@@ -24,6 +24,7 @@ import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
 import arso.segundum.modelo.Usuario;
 import arso.segundum.repositorio.CategoriaRepository;
+import arso.segundum.repositorio.LugarRecogidaRepository;
 import arso.segundum.repositorio.ProductoRepository;
 import arso.segundum.repositorio.UsuarioRepository;
 
@@ -40,15 +41,24 @@ public class ServicioProductos implements IServicioProductos {
     @Autowired
     private UsuarioRepository repositorioUsuarios;
 
+    @Autowired
+    private LugarRecogidaRepository repositorioLugaresRecogida;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
             String idCategoria, boolean envioDisponible, String idVendedor,
-            double longitud, double latitud, String descripcionLugar) {
+            Long idLugarRecogida) {
         validarParametros(titulo, descripcion, precio, estado, idCategoria);
-        validarLugarRecogida(longitud, latitud, descripcionLugar);
+
+        if (idLugarRecogida == null) {
+            throw new IllegalArgumentException("El ID del lugar de recogida es obligatorio");
+        }
+        LugarRecogida lugar = repositorioLugaresRecogida.findById(idLugarRecogida)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Lugar de recogida no encontrado con id: " + idLugarRecogida));
 
         Usuario usuario = repositorioUsuarios.findById(idVendedor)
                 .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
@@ -61,13 +71,24 @@ public class ServicioProductos implements IServicioProductos {
         Categoria categoria = repositorioCategorias.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada: " + idCategoria));
 
-        LugarRecogida lugar = new LugarRecogida(descripcionLugar, longitud, latitud);
-
         Producto producto = new Producto(titulo, descripcion, precio, estado, LocalDateTime.now(),
                 categoria, 0, envioDisponible, lugar, usuario);
 
         Producto guardado = repositorioProductos.save(producto);
         return guardado.getId();
+    }
+
+    @Override
+    public Long crearLugarRecogida(double longitud, double latitud, String descripcion) {
+        validarLugarRecogida(longitud, latitud, descripcion);
+        LugarRecogida lugar = new LugarRecogida(descripcion, longitud, latitud);
+        return repositorioLugaresRecogida.save(lugar).getId();
+    }
+
+    private LugarRecogida obtenerOCrearLugarRecogida(double longitud, double latitud, String descripcion) {
+        return repositorioLugaresRecogida
+                .findByLongitudAndLatitudAndDescripcion(longitud, latitud, descripcion)
+                .orElseGet(() -> new LugarRecogida(descripcion, longitud, latitud));
     }
 
     private void validarLugarRecogida(double longitud, double latitud, String descripcionLugar) {
@@ -147,7 +168,8 @@ public class ServicioProductos implements IServicioProductos {
         Producto producto = repositorioProductos.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
 
-        LugarRecogida lugar = producto.setLugarRecogida(descripcion, longitud, latitud);
+        LugarRecogida lugar = obtenerOCrearLugarRecogida(longitud, latitud, descripcion);
+        producto.setLugarRecogida(lugar);
         repositorioProductos.save(producto);
         return lugar;
     }
