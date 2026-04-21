@@ -6,6 +6,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Schema(description = "DTO para el lugar de recogida")
 public class LugarRecogidaDTO {
@@ -24,6 +25,7 @@ public class LugarRecogidaDTO {
 
     @Schema(description = "Descripción añadida del lugar de recogida")
     @NotBlank(message = "La descripción del lugar es obligatoria")
+    @Size(max = 500, message = "La descripción del lugar no puede superar los 500 caracteres")
     private String descripcion;
 
     public LugarRecogidaDTO() {

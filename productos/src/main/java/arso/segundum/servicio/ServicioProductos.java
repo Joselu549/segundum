@@ -61,7 +61,7 @@ public class ServicioProductos implements IServicioProductos {
                         "Lugar de recogida no encontrado con id: " + idLugarRecogida));
 
         Usuario usuario = repositorioUsuarios.findById(idVendedor)
-                .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
+                .orElseThrow(() -> new EntityNotFoundException("Vendedor no encontrado: " + idVendedor));
 
         // Validar vendedor
         if (usuario.getIdUsuario() == null || usuario.getIdUsuario().trim().isEmpty()) {
@@ -166,7 +166,7 @@ public class ServicioProductos implements IServicioProductos {
         }
 
         Producto producto = repositorioProductos.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + idProducto));
 
         LugarRecogida lugar = obtenerOCrearLugarRecogida(longitud, latitud, descripcion);
         producto.setLugarRecogida(lugar);
@@ -203,7 +203,7 @@ public class ServicioProductos implements IServicioProductos {
         }
 
         Producto producto = repositorioProductos.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + idProducto));
 
         precio.ifPresent(producto::setPrecio);
         descripcion.ifPresent(producto::setDescripcion);
@@ -340,7 +340,7 @@ public class ServicioProductos implements IServicioProductos {
         }
 
         return repositorioProductos.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + idProducto));
     }
 
     @Override
@@ -349,7 +349,7 @@ public class ServicioProductos implements IServicioProductos {
             throw new IllegalArgumentException("El ID de producto no puede ser nulo");
         }
         Producto producto = repositorioProductos.findById(idProducto)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + idProducto));
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + idProducto));
         producto.setVendido(true);
         repositorioProductos.save(producto);
     }

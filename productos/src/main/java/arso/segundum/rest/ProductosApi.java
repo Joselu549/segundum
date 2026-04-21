@@ -48,8 +48,8 @@ public interface ProductosApi {
     })
     @GetMapping("/pages")
     PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
-            @RequestParam int page,
-            @RequestParam int size) throws Exception;
+            @RequestParam @PositiveOrZero int page,
+            @RequestParam @Positive @Max(100) int size) throws Exception;
 
     @Operation(summary = "Obtener producto por id", description = "Obtiene un producto por id")
     @ApiResponses({

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Schema(description = "DTO de la entidad Producto")
 public class ProductoDTO {
@@ -16,9 +17,12 @@ public class ProductoDTO {
 
     @Schema(description = "Título del producto", example = "Batería completa")
     @NotBlank(message = "El título es obligatorio")
+    @Size(max = 200, message = "El título no puede superar los 200 caracteres")
     private String titulo;
 
     @Schema(description = "Descripción del producto")
+    @NotBlank(message = "La descripción es obligatoria")
+    @Size(max = 2000, message = "La descripción no puede superar los 2000 caracteres")
     private String descripcion;
 
     @Schema(description = "Precio del producto", example = "20.50", minimum = "0.01")
@@ -27,20 +31,23 @@ public class ProductoDTO {
     private Double precio;
 
     @Schema(description = "Estado del producto")
+    @NotNull(message = "El estado es obligatorio")
     private Estado estado;
 
     @Schema(description = "ID de la categoría del producto")
+    @NotBlank(message = "El id de la categoría es obligatorio")
     private String idCategoria;
 
     @Schema(description = "Indica si el vendedor ofrece envío")
     private boolean envioDisponible;
 
     @Schema(description = "ID del vendedor del producto")
-    @NotNull(message = "El id de vendedor es obligatorio")
+    @NotBlank(message = "El id de vendedor es obligatorio")
     private String idVendedor;
 
     @Schema(description = "ID del lugar de recogida (debe existir previamente)")
     @NotNull(message = "El id del lugar de recogida es obligatorio")
+    @Positive(message = "El id del lugar de recogida debe ser un número positivo")
     private Long idLugarRecogida;
 
     @Schema(description = "Lugar de recogida del producto", accessMode = Schema.AccessMode.READ_ONLY)

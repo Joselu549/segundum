@@ -3,6 +3,7 @@ package arso.segundum.rest;
 import arso.segundum.dto.LugarRecogidaDTO;
 import arso.segundum.dto.ProductoDTO;
 import arso.segundum.modelo.Estado;
+import arso.segundum.modelo.Producto;
 import arso.segundum.servicio.IServicioProductos;
 import arso.segundum.servicio.ResumenProducto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,8 @@ public class ProductoController implements ProductosApi {
 
     @Override
     public PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
-            @RequestParam int page,
-            @RequestParam int size) throws Exception {
+            @RequestParam @PositiveOrZero int page,
+            @RequestParam @Positive @Max(100) int size) throws Exception {
         Pageable paginacion = PageRequest.of(page, size, Sort.by("id").ascending());
 
         Page<ResumenProducto> resultado = this.servicioProductos.getListadoPaginado(paginacion);
@@ -107,7 +108,8 @@ public class ProductoController implements ProductosApi {
     }
 
     @Override
-    public ResponseEntity<Void> crearLugarRecogida(@RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception {
+    public ResponseEntity<Void> crearLugarRecogida(@RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO)
+            throws Exception {
         Long id = servicioProductos.crearLugarRecogida(
                 lugarRecogidaDTO.getLongitud(),
                 lugarRecogidaDTO.getLatitud(),
@@ -122,7 +124,6 @@ public class ProductoController implements ProductosApi {
     public ResponseEntity<Void> asignarLugarRecogida(
             @PathVariable @Positive Long id,
             @RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception {
-
         servicioProductos.asignarLugarRecogida(
                 id,
                 lugarRecogidaDTO.getLongitud(),
