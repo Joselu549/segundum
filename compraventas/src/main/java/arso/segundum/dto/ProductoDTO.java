@@ -22,7 +22,7 @@ public class ProductoDTO {
     @Positive(message = "El precio del producto debe ser un número positivo")
     private Double precio;
 
-    private String lugarRecogida;
+    private LugarRecogidaDTO lugarRecogida;
     private boolean vendido;
 
     public ProductoDTO() {
@@ -60,11 +60,11 @@ public class ProductoDTO {
         this.precio = precio;
     }
 
-    public String getLugarRecogida() {
+    public LugarRecogidaDTO getLugarRecogida() {
         return lugarRecogida;
     }
 
-    public void setLugarRecogida(String lugarRecogida) {
+    public void setLugarRecogida(LugarRecogidaDTO lugarRecogida) {
         this.lugarRecogida = lugarRecogida;
     }
 

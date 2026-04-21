@@ -45,8 +45,10 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
-            String idCategoria, boolean envioDisponible, String idVendedor) {
+            String idCategoria, boolean envioDisponible, String idVendedor,
+            double longitud, double latitud, String descripcionLugar) {
         validarParametros(titulo, descripcion, precio, estado, idCategoria);
+        validarLugarRecogida(longitud, latitud, descripcionLugar);
 
         Usuario usuario = repositorioUsuarios.findById(idVendedor)
                 .orElseThrow(() -> new RuntimeException("Vendedor no encontrado: " + idVendedor));
@@ -59,11 +61,28 @@ public class ServicioProductos implements IServicioProductos {
         Categoria categoria = repositorioCategorias.findById(idCategoria)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada: " + idCategoria));
 
+        LugarRecogida lugar = new LugarRecogida(descripcionLugar, longitud, latitud);
+
         Producto producto = new Producto(titulo, descripcion, precio, estado, LocalDateTime.now(),
-                categoria, 0, envioDisponible, null, usuario);
+                categoria, 0, envioDisponible, lugar, usuario);
 
         Producto guardado = repositorioProductos.save(producto);
         return guardado.getId();
+    }
+
+    private void validarLugarRecogida(double longitud, double latitud, String descripcionLugar) {
+        if (longitud < -180 || longitud > 180) {
+            throw new IllegalArgumentException("La longitud debe estar entre -180 y 180");
+        }
+        if (latitud < -90 || latitud > 90) {
+            throw new IllegalArgumentException("La latitud debe estar entre -90 y 90");
+        }
+        if (descripcionLugar == null || descripcionLugar.trim().isEmpty()) {
+            throw new IllegalArgumentException("La descripción del lugar no puede ser nula o vacía");
+        }
+        if (descripcionLugar.length() > 500) {
+            throw new IllegalArgumentException("La descripción del lugar no puede superar los 500 caracteres");
+        }
     }
 
     private void validarParametros(String titulo, String descripcion, double precio, Estado estado,

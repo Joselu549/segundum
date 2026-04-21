@@ -1,9 +1,11 @@
 package arso.segundum.dto;
 
 import arso.segundum.modelo.Estado;
+import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -39,8 +41,9 @@ public class ProductoDTO {
     private String idVendedor;
 
     @Schema(description = "Lugar de recogida del producto")
-    @NotBlank(message = "El lugar de recogida no debe de estar vacío")
-    private String lugarRecogida;
+    @NotNull(message = "El lugar de recogida no debe de estar vacío")
+    @Valid
+    private LugarRecogidaDTO lugarRecogida;
 
     @Schema(description = "Indica si el producto ya ha sido vendido")
     private boolean vendido;
@@ -48,7 +51,7 @@ public class ProductoDTO {
     public ProductoDTO() {
     }
 
-    public ProductoDTO(Long id, String titulo, Double precio, String idVendedor, String lugarRecogida) {
+    public ProductoDTO(Long id, String titulo, Double precio, String idVendedor, LugarRecogidaDTO lugarRecogida) {
         this.id = id;
         this.titulo = titulo;
         this.precio = precio;
@@ -66,9 +69,9 @@ public class ProductoDTO {
         dto.idCategoria = producto.getCategoria() != null ? producto.getCategoria().getId() : null;
         dto.envioDisponible = producto.isEnvioDisponible();
         dto.idVendedor = producto.getVendedor().getIdUsuario();
-        if (producto.getLugarRecogida() != null) {
-            arso.segundum.modelo.LugarRecogida lr = producto.getLugarRecogida();
-            dto.lugarRecogida = lr.getDescripcion() + " (" + lr.getLatitud() + ", " + lr.getLongitud() + ")";
+        LugarRecogida lr = producto.getLugarRecogida();
+        if (lr != null) {
+            dto.lugarRecogida = new LugarRecogidaDTO(lr.getLongitud(), lr.getLatitud(), lr.getDescripcion());
         }
         dto.vendido = producto.isVendido();
         return dto;
@@ -138,11 +141,11 @@ public class ProductoDTO {
         this.idVendedor = idVendedor;
     }
 
-    public String getLugarRecogida() {
+    public LugarRecogidaDTO getLugarRecogida() {
         return lugarRecogida;
     }
 
-    public void setLugarRecogida(String lugarRecogida) {
+    public void setLugarRecogida(LugarRecogidaDTO lugarRecogida) {
         this.lugarRecogida = lugarRecogida;
     }
 

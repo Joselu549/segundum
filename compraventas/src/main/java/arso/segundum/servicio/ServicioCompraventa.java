@@ -1,6 +1,7 @@
 package arso.segundum.servicio;
 
 import arso.segundum.dto.CompraventaDTO;
+import arso.segundum.dto.LugarRecogidaDTO;
 import arso.segundum.dto.NombreUsuarioDTO;
 import arso.segundum.dto.ProductoDTO;
 import arso.segundum.exception.ErrorServicioExternoException;
@@ -120,13 +121,20 @@ public class ServicioCompraventa implements IServicioCompraventa {
                 producto.getId(),
                 producto.getTitulo(),
                 producto.getPrecio(),
-                producto.getLugarRecogida(),
+                formatearLugarRecogida(producto.getLugarRecogida()),
                 producto.getIdVendedor(),
                 nombreVendedor,
                 idComprador,
                 nombreComprador,
                 LocalDate.now()
         );
+    }
+
+    private String formatearLugarRecogida(LugarRecogidaDTO lugar) {
+        if (lugar == null) {
+            return null;
+        }
+        return lugar.getDescripcion() + " (" + lugar.getLatitud() + ", " + lugar.getLongitud() + ")";
     }
 
     @Override

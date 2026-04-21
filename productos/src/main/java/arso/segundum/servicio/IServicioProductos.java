@@ -11,7 +11,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface IServicioProductos {
     Long darDeAltaProducto(String titulo, String descripcion, double precio, Estado estado,
-            String idCategoria, boolean envioDisponible, String idVendedor);
+            String idCategoria, boolean envioDisponible, String idVendedor,
+            double longitud, double latitud, String descripcionLugar);
 
     LugarRecogida asignarLugarRecogida(Long idProducto, double longitud, double latitud,
             String descripcion);
