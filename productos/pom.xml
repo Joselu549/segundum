@@ -60,31 +60,33 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        <!-- Lombok (opcional) -->
-        <!-- <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency> -->
         <!-- JAXB para carga de categorías desde XML -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <!-- JAXB -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <!-- HATEOAS -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
+        <!-- OpenAPI -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.5.10</version>
+		</dependency>
+        <!-- RabbitMQ -->
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 	</dependencies>
 

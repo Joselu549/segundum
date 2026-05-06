@@ -2,11 +2,7 @@ package arso.segundum.modelo;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Producto {
@@ -35,7 +30,7 @@ public class Producto {
     private Categoria categoria;
     private int visualizaciones;
     private boolean envioDisponible;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private LugarRecogida lugarRecogida;
 
     @ManyToOne

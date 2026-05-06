@@ -1,5 +1,4 @@
 version: "3.7"
-
 services:
   mongo:
     image: mongo:8
@@ -23,5 +22,18 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
     depends_on:
       - mongo
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Puerto AMQP (mensajería)
+      - "15672:15672" # Puerto de la consola de gestión
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
 volumes:
   mongo_data:
+  rabbitmq_data:

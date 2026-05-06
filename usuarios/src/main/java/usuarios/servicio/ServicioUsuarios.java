@@ -1,21 +1,28 @@
 package usuarios.servicio;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
+import servicio.FactoriaServicios;
+import usuarios.eventos.EventoUsuarioCreado;
+import usuarios.eventos.EventoUsuarioModificado;
 import usuarios.modelo.Usuario;
+import usuarios.puertos.PublicadorEventos;
 import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
     private RepositorioUsuariosAdHoc repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
+    private PublicadorEventos publicador = FactoriaServicios.getServicio(PublicadorEventos.class);
 
     @Override
     public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
-            String direccion, LocalDate fechaNacimiento, String password) throws IllegalArgumentException, RepositorioException {
+            String direccion, LocalDate fechaNacimiento, String password)
+            throws IllegalArgumentException, RepositorioException, IOException {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("El email no puede ser nulo o vacío");
         }
@@ -61,21 +68,26 @@ public class ServicioUsuarios implements IServicioUsuarios {
         }
 
         Usuario usuario = new Usuario(email, nombre, apellidos, password, fechaNacimiento, telefono, false);
-        return repositorioUsuarios.add(usuario);
+        String id = repositorioUsuarios.add(usuario);
+        EventoUsuarioCreado evento = new EventoUsuarioCreado(id, email, nombre, apellidos);
+        this.publicador.publicarEvento(evento);
+        return id;
     }
 
     @Override
-    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException {
+    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setNombre(nombre);
         repositorioUsuarios.update(usuario);
+        publicador.publicarEvento(new EventoUsuarioModificado(id, nombre, usuario.getApellidos()));
     }
 
     @Override
-    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException {
+    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setApellidos(apellidos);
         repositorioUsuarios.update(usuario);
+        publicador.publicarEvento(new EventoUsuarioModificado(id, usuario.getNombre(), apellidos));
     }
 
     @Override
@@ -86,7 +98,8 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     @Override
-    public void modificarFechaNacimiento(String id, LocalDate fechaNacimiento) throws EntidadNoEncontrada, RepositorioException {
+    public void modificarFechaNacimiento(String id, LocalDate fechaNacimiento)
+            throws EntidadNoEncontrada, RepositorioException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setFechaNacimiento(fechaNacimiento);
         repositorioUsuarios.update(usuario);

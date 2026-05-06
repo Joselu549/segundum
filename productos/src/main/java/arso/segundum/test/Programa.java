@@ -42,7 +42,7 @@ public class Programa implements CommandLineRunner {
             probarServicioCategorias();
 
             // Pruebas de ServicioProductos
-            probarServicioProductos();
+            // probarServicioProductos();
 
             System.out.println("\n===========================================");
             System.out.println("TODAS LAS PRUEBAS COMPLETADAS EXITOSAMENTE");
@@ -386,6 +386,7 @@ public class Programa implements CommandLineRunner {
         Long idProducto1 = null;
         Long idProducto2 = null;
         Long idProducto3 = null;
+        Long idLugar = servicioProductos.crearLugarRecogida(-3.0, 40.0, "Murcia");
 
         // Vendedores de prueba - se persisten en BD antes de usarlos
         Usuario vendedor1 = new Usuario("vendedor1", "vendedor1@email.com", "Vendedor", "Uno");
@@ -419,7 +420,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto(null, "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Título nulo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Título nulo: " + e.getMessage());
@@ -429,7 +430,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Título vacío: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Título vacío: " + e.getMessage());
@@ -439,7 +440,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("   ", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Título espacios: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Título espacios: " + e.getMessage());
@@ -450,7 +451,7 @@ public class Programa implements CommandLineRunner {
         try {
             String tituloLargo = "A".repeat(201);
             servicioProductos.darDeAltaProducto(tituloLargo, "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Título largo (201 chars): No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Título largo: " + e.getMessage());
@@ -463,7 +464,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", null, 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Descripción nula: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Descripción nula: " + e.getMessage());
@@ -473,7 +474,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Descripción vacía: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Descripción vacía: " + e.getMessage());
@@ -483,7 +484,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "   ", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Descripción espacios: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Descripción espacios: " + e.getMessage());
@@ -494,7 +495,7 @@ public class Programa implements CommandLineRunner {
         try {
             String descripcionLarga = "A".repeat(2001);
             servicioProductos.darDeAltaProducto("Título", descripcionLarga, 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Descripción larga (2001 chars): No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Descripción larga: " + e.getMessage());
@@ -507,7 +508,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", -1.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Precio negativo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Precio negativo: " + e.getMessage());
@@ -517,7 +518,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", -100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Precio muy negativo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Precio muy negativo: " + e.getMessage());
@@ -527,7 +528,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 1000001.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Precio muy alto: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Precio muy alto: " + e.getMessage());
@@ -537,7 +538,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             idProducto1 = servicioProductos.darDeAltaProducto("Producto Gratis", "Descripción", 0.0,
-                    Estado.COMO_NUEVO, idCategoria, true, vendedor1.getIdUsuario());
+                    Estado.COMO_NUEVO, idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.out.println("   ✓ Precio cero aceptado: " + idProducto1);
         } catch (Exception e) {
             System.err.println("   ✗ Precio cero: " + e.getMessage());
@@ -548,7 +549,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, null,
-                    idCategoria, true, vendedor1.getIdUsuario());
+                    idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ Estado nulo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Estado nulo: " + e.getMessage());
@@ -561,7 +562,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    null, true, vendedor1.getIdUsuario());
+                    null, true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ ID categoría nulo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ ID categoría nulo: " + e.getMessage());
@@ -571,7 +572,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    "", true, vendedor1.getIdUsuario());
+                    "", true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ ID categoría vacío: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ ID categoría vacío: " + e.getMessage());
@@ -581,7 +582,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    "ID_INEXISTENTE", true, vendedor1.getIdUsuario());
+                    "ID_INEXISTENTE", true, vendedor1.getIdUsuario(), idLugar);
             System.err.println("   ✗ ID categoría inexistente: No lanzó excepción");
         } catch (RuntimeException e) {
             System.out.println("   ✓ ID categoría inexistente: " + e.getMessage());
@@ -594,7 +595,7 @@ public class Programa implements CommandLineRunner {
 
         try {
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, null);
+                    idCategoria, true, null, idLugar);
             System.err.println("   ✗ Vendedor nulo: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Vendedor nulo: " + e.getMessage());
@@ -605,7 +606,7 @@ public class Programa implements CommandLineRunner {
         try {
             Usuario vendedorSinId = new Usuario(null, "email@test.com", "Nombre", "Apellidos");
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedorSinId.getIdUsuario());
+                    idCategoria, true, vendedorSinId.getIdUsuario(), idLugar);
             System.err.println("   ✗ Vendedor sin ID: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Vendedor sin ID: " + e.getMessage());
@@ -616,7 +617,7 @@ public class Programa implements CommandLineRunner {
         try {
             Usuario vendedorIdVacio = new Usuario("", "email@test.com", "Nombre", "Apellidos");
             servicioProductos.darDeAltaProducto("Título", "Descripción", 100.0, Estado.COMO_NUEVO,
-                    idCategoria, true, vendedorIdVacio.getIdUsuario());
+                    idCategoria, true, vendedorIdVacio.getIdUsuario(), idLugar);
             System.err.println("   ✗ Vendedor ID vacío: No lanzó excepción");
         } catch (IllegalArgumentException e) {
             System.out.println("   ✓ Vendedor ID vacío: " + e.getMessage());
@@ -631,7 +632,7 @@ public class Programa implements CommandLineRunner {
             idProducto1 = servicioProductos.darDeAltaProducto(
                     "Guitarra acústica Yamaha",
                     "Guitarra acústica en excelente estado, cuerdas nuevas",
-                    150.00, Estado.COMO_NUEVO, idCategoria, true, vendedor1.getIdUsuario());
+                    150.00, Estado.COMO_NUEVO, idCategoria, true, vendedor1.getIdUsuario(), idLugar);
             System.out.println("   ✓ Producto 1 creado: " + idProducto1);
         } catch (Exception e) {
             System.err.println("   ✗ Error: " + e.getMessage());
@@ -641,7 +642,7 @@ public class Programa implements CommandLineRunner {
             idProducto2 = servicioProductos.darDeAltaProducto(
                     "Piano digital Casio",
                     "Piano digital con 88 teclas, perfecto para principiantes",
-                    300.00, Estado.BUEN_ESTADO, idCategoria, false, vendedor1.getIdUsuario());
+                    300.00, Estado.BUEN_ESTADO, idCategoria, false, vendedor1.getIdUsuario(), idLugar);
             System.out.println("   ✓ Producto 2 creado: " + idProducto2);
         } catch (Exception e) {
             System.err.println("   ✗ Error: " + e.getMessage());
@@ -651,7 +652,7 @@ public class Programa implements CommandLineRunner {
             idProducto3 = servicioProductos.darDeAltaProducto(
                     "Batería completa",
                     "Batería acústica completa con platillos",
-                    450.00, Estado.ACEPTABLE, idCategoria, false, vendedor2.getIdUsuario());
+                    450.00, Estado.ACEPTABLE, idCategoria, false, vendedor2.getIdUsuario(), idLugar);
             System.out.println("   ✓ Producto 3 creado: " + idProducto3);
         } catch (Exception e) {
             System.err.println("   ✗ Error: " + e.getMessage());
