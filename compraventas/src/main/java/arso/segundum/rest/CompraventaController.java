@@ -1,8 +1,8 @@
 package arso.segundum.rest;
 
-import arso.segundum.dto.AltaCompraventaDTO;
-import arso.segundum.dto.CompraventaDTO;
 import arso.segundum.modelo.Compraventa;
+import arso.segundum.rest.dto.AltaCompraventaDTO;
+import arso.segundum.rest.dto.CompraventaDTO;
 import arso.segundum.servicio.IServicioCompraventa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

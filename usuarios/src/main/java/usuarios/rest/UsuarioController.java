@@ -24,10 +24,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import servicio.FactoriaServicios;
-import usuarios.dto.NombreUsuarioDTO;
-import usuarios.dto.UsuarioDTO;
+import usuarios.modelo.Listado;
 import usuarios.modelo.Usuario;
-import usuarios.rest.Listado.UsuarioResumenExtendido;
+import usuarios.modelo.Listado.UsuarioResumenExtendido;
+import usuarios.rest.dto.NombreUsuarioDTO;
+import usuarios.rest.dto.UsuarioDTO;
 import usuarios.servicio.IServicioUsuarios;
 import usuarios.servicio.UsuarioResumen;
 

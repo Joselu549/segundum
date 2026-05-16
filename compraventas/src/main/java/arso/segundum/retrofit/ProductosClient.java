@@ -1,6 +1,6 @@
 package arso.segundum.retrofit;
 
-import arso.segundum.dto.ProductoDTO;
+import arso.segundum.rest.dto.ProductoDTO;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;

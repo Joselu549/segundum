@@ -1,14 +1,14 @@
 package arso.segundum.servicio;
 
-import arso.segundum.dto.CompraventaDTO;
-import arso.segundum.dto.LugarRecogidaDTO;
-import arso.segundum.dto.NombreUsuarioDTO;
-import arso.segundum.dto.ProductoDTO;
-import arso.segundum.exception.ErrorServicioExternoException;
-import arso.segundum.exception.ProductoNoDisponibleException;
-import arso.segundum.exception.RecursoNoEncontradoException;
 import arso.segundum.modelo.Compraventa;
 import arso.segundum.repositorio.RepositorioCompraventa;
+import arso.segundum.rest.dto.CompraventaDTO;
+import arso.segundum.rest.dto.LugarRecogidaDTO;
+import arso.segundum.rest.dto.NombreUsuarioDTO;
+import arso.segundum.rest.dto.ProductoDTO;
+import arso.segundum.rest.exception.ErrorServicioExternoException;
+import arso.segundum.rest.exception.ProductoNoDisponibleException;
+import arso.segundum.rest.exception.RecursoNoEncontradoException;
 import arso.segundum.retrofit.ProductosClient;
 import arso.segundum.retrofit.UsuariosClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +91,8 @@ public class ServicioCompraventa implements IServicioCompraventa {
         NombreUsuarioDTO nombreComprador = obtenerNombreUsuario(idComprador);
         NombreUsuarioDTO nombreVendedor = obtenerNombreUsuario(producto.getIdVendedor());
 
-        Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, nombreComprador.getFullName(), nombreVendedor.getFullName());
+        Compraventa compraventa = crearEntidadCompraventa(producto, idComprador, nombreComprador.getFullName(),
+                nombreVendedor.getFullName());
         Compraventa guardada = repositorioCompraventa.save(compraventa);
 
         ejecutarLlamadaVoid(() -> productosClient.marcarComoVendido(idProducto),
@@ -105,18 +106,21 @@ public class ServicioCompraventa implements IServicioCompraventa {
     }
 
     private ProductoDTO obtenerProducto(Long idProducto) {
-        ProductoDTO producto = ejecutarLlamada(() -> productosClient.getProductoById(idProducto), "Producto no encontrado: " + idProducto);
+        ProductoDTO producto = ejecutarLlamada(() -> productosClient.getProductoById(idProducto),
+                "Producto no encontrado: " + idProducto);
         validarRespuesta(producto, "servicio de productos");
         return producto;
     }
 
     private NombreUsuarioDTO obtenerNombreUsuario(String idUsuario) {
-        NombreUsuarioDTO usuario = ejecutarLlamada(() -> usuariosClient.getUsuarioById(idUsuario), "Usuario no encontrado: " + idUsuario);
+        NombreUsuarioDTO usuario = ejecutarLlamada(() -> usuariosClient.getUsuarioById(idUsuario),
+                "Usuario no encontrado: " + idUsuario);
         validarRespuesta(usuario, "servicio de usuarios");
         return usuario;
     }
 
-    private Compraventa crearEntidadCompraventa(ProductoDTO producto, String idComprador, String nombreComprador, String nombreVendedor) {
+    private Compraventa crearEntidadCompraventa(ProductoDTO producto, String idComprador, String nombreComprador,
+            String nombreVendedor) {
         return new Compraventa(
                 producto.getId(),
                 producto.getTitulo(),
@@ -126,8 +130,7 @@ public class ServicioCompraventa implements IServicioCompraventa {
                 nombreVendedor,
                 idComprador,
                 nombreComprador,
-                LocalDate.now()
-        );
+                LocalDate.now());
     }
 
     private String formatearLugarRecogida(LugarRecogidaDTO lugar) {
@@ -155,7 +158,8 @@ public class ServicioCompraventa implements IServicioCompraventa {
         obtenerNombreUsuario(idVendedor);
         if (idProducto != null) {
             obtenerProducto(idProducto);
-            return this.repositorioCompraventa.findByCompradorIdAndVendedorIdAndIdProducto(idComprador, idVendedor, idProducto);
+            return this.repositorioCompraventa.findByCompradorIdAndVendedorIdAndIdProducto(idComprador, idVendedor,
+                    idProducto);
         }
         return this.repositorioCompraventa.findByCompradorIdAndVendedorId(idComprador, idVendedor);
     }
