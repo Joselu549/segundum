@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import arso.segundum.rest.dto.AltaCompraventaDTO;
@@ -31,6 +32,7 @@ public interface CompraventasApi {
             @ApiResponse(responseCode = "200", description = "Página obtenida correctamente"),
             @ApiResponse(responseCode = "400", description = "Parámetros de paginación inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('USUARIO')")
     @GetMapping("/pages")
     PagedModel<EntityModel<CompraventaDTO>> getCompraventasPaginado(
             @RequestParam @PositiveOrZero int page,
@@ -48,6 +50,7 @@ public interface CompraventasApi {
     // ResponseEntity<Void> realizarCompraventa(
     // @RequestParam @Positive Long idProducto,
     // @RequestParam String idComprador) throws Exception;
+    @PreAuthorize("hasRole('USUARIO')")
     @PostMapping
     ResponseEntity<Void> realizarCompraventa(
             @RequestBody @Valid AltaCompraventaDTO altaCompraventaDTO) throws Exception;
@@ -58,6 +61,7 @@ public interface CompraventasApi {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('USUARIO')")
     @GetMapping("/compras/{idUsuario}")
     ResponseEntity<List<CompraventaDTO>> recuperarComprasUsuario(@PathVariable @NotBlank String idUsuario);
 
@@ -67,6 +71,7 @@ public interface CompraventasApi {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('USUARIO')")
     @GetMapping("/ventas/{idUsuario}")
     ResponseEntity<List<CompraventaDTO>> recuperarVentasUsuario(@PathVariable @NotBlank String idUsuario);
 
@@ -76,6 +81,7 @@ public interface CompraventasApi {
             @ApiResponse(responseCode = "404", description = "Usuario o producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "502", description = "Error de comunicación con servicio externo", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{idComprador}/{idVendedor}")
     ResponseEntity<List<CompraventaDTO>> recuperarCompraventas(
             @PathVariable @NotBlank String idComprador,
