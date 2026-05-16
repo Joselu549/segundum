@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -83,6 +84,7 @@ public interface ProductosApi {
             @ApiResponse(responseCode = "400", description = "Datos del producto inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "404", description = "Lugar de recogida no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('USUARIO')")
     @PostMapping
     ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) throws Exception;
 
@@ -100,6 +102,7 @@ public interface ProductosApi {
             @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
+    @PreAuthorize("hasRole('USUARIO')")
     @PostMapping("/{id}/lugares")
     ResponseEntity<Void> asignarLugarRecogida(
             @PathVariable @Positive Long id,
