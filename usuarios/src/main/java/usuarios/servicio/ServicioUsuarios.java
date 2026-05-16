@@ -11,13 +11,13 @@ import servicio.FactoriaServicios;
 import usuarios.eventos.EventoUsuarioCreado;
 import usuarios.eventos.EventoUsuarioModificado;
 import usuarios.modelo.Usuario;
-import usuarios.puertos.PublicadorEventos;
+import usuarios.puertos.IPublicadorEventos;
 import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
 public class ServicioUsuarios implements IServicioUsuarios {
 
     private RepositorioUsuariosAdHoc repositorioUsuarios = FactoriaRepositorios.getRepositorio(Usuario.class);
-    private PublicadorEventos publicador = FactoriaServicios.getServicio(PublicadorEventos.class);
+    private IPublicadorEventos publicador = FactoriaServicios.getServicio(IPublicadorEventos.class);
 
     @Override
     public String registrarUsuario(String email, String nombre, String apellidos, String telefono,
@@ -75,7 +75,8 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     @Override
-    public void modificarNombre(String id, String nombre) throws EntidadNoEncontrada, RepositorioException, IOException {
+    public void modificarNombre(String id, String nombre)
+            throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setNombre(nombre);
         repositorioUsuarios.update(usuario);
@@ -83,7 +84,8 @@ public class ServicioUsuarios implements IServicioUsuarios {
     }
 
     @Override
-    public void modificarApellidos(String id, String apellidos) throws EntidadNoEncontrada, RepositorioException, IOException {
+    public void modificarApellidos(String id, String apellidos)
+            throws EntidadNoEncontrada, RepositorioException, IOException {
         Usuario usuario = repositorioUsuarios.getById(id);
         usuario.setApellidos(apellidos);
         repositorioUsuarios.update(usuario);

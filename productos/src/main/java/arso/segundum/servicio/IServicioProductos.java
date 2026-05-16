@@ -6,6 +6,8 @@ import java.util.Optional;
 import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
+import arso.segundum.modelo.ResumenProducto;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

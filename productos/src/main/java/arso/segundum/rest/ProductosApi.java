@@ -1,10 +1,10 @@
 package arso.segundum.rest;
 
-import arso.segundum.dto.ErrorDTO;
-import arso.segundum.dto.LugarRecogidaDTO;
-import arso.segundum.dto.ProductoDTO;
 import arso.segundum.modelo.Estado;
-import arso.segundum.servicio.ResumenProducto;
+import arso.segundum.modelo.ResumenProducto;
+import arso.segundum.rest.dto.ErrorDTO;
+import arso.segundum.rest.dto.LugarRecogidaDTO;
+import arso.segundum.rest.dto.ProductoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,8 +30,7 @@ public interface ProductosApi {
     @Operation(summary = "Obtener productos", description = "Obtiene todos los productos filtrando por propiedades")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Parámetros inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping
     ResponseEntity<List<ProductoDTO>> getProductos(
@@ -43,8 +42,7 @@ public interface ProductosApi {
     @Operation(summary = "Obtener productos paginado", description = "Obtiene productos de forma paginada")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Página obtenida correctamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros de paginación inválidos",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Parámetros de paginación inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/pages")
     PagedModel<EntityModel<ResumenProducto>> getProductosPaginado(
@@ -54,10 +52,8 @@ public interface ProductosApi {
     @Operation(summary = "Obtener producto por id", description = "Obtiene un producto por id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Producto encontrado"),
-            @ApiResponse(responseCode = "400", description = "ID inválido",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "ID inválido", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/{id}")
     EntityModel<ProductoDTO> getProductosById(@PathVariable @Positive Long id) throws Exception;
@@ -65,8 +61,7 @@ public interface ProductosApi {
     @Operation(summary = "Obtener historial", description = "Obtiene el historial de todos los productos")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Historial obtenido correctamente"),
-            @ApiResponse(responseCode = "400", description = "Mes o año fuera de rango",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Mes o año fuera de rango", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @GetMapping("/historial")
     ResponseEntity<List<ResumenProducto>> getHistorialProductos(
@@ -76,10 +71,8 @@ public interface ProductosApi {
     @Operation(summary = "Añade una visualización", description = "Añade una visualización a un producto dado un ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Visualización añadida correctamente"),
-            @ApiResponse(responseCode = "400", description = "ID inválido",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "ID inválido", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PatchMapping("/{id}/visualizations")
     ResponseEntity<Void> addVisualizaciones(@PathVariable @Positive Long id) throws Exception;
@@ -87,10 +80,8 @@ public interface ProductosApi {
     @Operation(summary = "Da de alta un producto", description = "Da de alta un producto dadas unas propiedades. El idLugarRecogida debe corresponder a un lugar ya existente.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Producto creado correctamente"),
-            @ApiResponse(responseCode = "400", description = "Datos del producto inválidos",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Lugar de recogida no encontrado",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Datos del producto inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Lugar de recogida no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PostMapping
     ResponseEntity<Void> darDeAltaProducto(@RequestBody @Valid ProductoDTO nuevoProducto) throws Exception;
@@ -98,8 +89,7 @@ public interface ProductosApi {
     @Operation(summary = "Crea un lugar de recogida", description = "Crea un lugar de recogida y devuelve su ubicación")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Lugar de recogida creado correctamente"),
-            @ApiResponse(responseCode = "400", description = "Datos del lugar inválidos",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Datos del lugar inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PostMapping("/lugares-recogida")
     ResponseEntity<Void> crearLugarRecogida(@RequestBody @Valid LugarRecogidaDTO lugarRecogidaDTO) throws Exception;
@@ -107,10 +97,8 @@ public interface ProductosApi {
     @Operation(summary = "Asigna un lugar de recogida", description = "Asigna un lugar de recogida a un producto")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Lugar de recogida asignado correctamente"),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PostMapping("/{id}/lugares")
     ResponseEntity<Void> asignarLugarRecogida(
@@ -120,8 +108,7 @@ public interface ProductosApi {
     @Operation(summary = "Marcar producto como vendido", description = "Marca un producto como vendido")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Producto marcado como vendido"),
-            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
-                    content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
     })
     @PatchMapping("/{id}/vendido")
     ResponseEntity<Void> marcarComoVendido(@PathVariable @Positive Long id) throws Exception;

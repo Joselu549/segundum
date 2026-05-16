@@ -22,6 +22,7 @@ import arso.segundum.modelo.Categoria;
 import arso.segundum.modelo.Estado;
 import arso.segundum.modelo.LugarRecogida;
 import arso.segundum.modelo.Producto;
+import arso.segundum.modelo.ResumenProducto;
 import arso.segundum.modelo.Usuario;
 import arso.segundum.repositorio.CategoriaRepository;
 import arso.segundum.repositorio.LugarRecogidaRepository;
@@ -107,7 +108,7 @@ public class ServicioProductos implements IServicioProductos {
     }
 
     private void validarParametros(String titulo, String descripcion, double precio, Estado estado,
-                                   String idCategoria) {
+            String idCategoria) {
         // Validar título
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede ser nulo o vacío");
@@ -320,16 +321,17 @@ public class ServicioProductos implements IServicioProductos {
         return estados;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Producto> getProductosVendedor(String idVendedor) {
-//
-//        if (idVendedor == null || idVendedor.trim().isEmpty()) {
-//            throw new IllegalArgumentException("El ID de vendedor no puede ser nulo o vacío");
-//        }
-//
-//        return repositorioProductos.findByIdVendedor(idVendedor);
-//    }
+    // @Override
+    // @Transactional(readOnly = true)
+    // public List<Producto> getProductosVendedor(String idVendedor) {
+    //
+    // if (idVendedor == null || idVendedor.trim().isEmpty()) {
+    // throw new IllegalArgumentException("El ID de vendedor no puede ser nulo o
+    // vacío");
+    // }
+    //
+    // return repositorioProductos.findByIdVendedor(idVendedor);
+    // }
 
     @Override
     @Transactional(readOnly = true)
@@ -356,6 +358,9 @@ public class ServicioProductos implements IServicioProductos {
 
     @Override
     public Page<ResumenProducto> getListadoPaginado(Pageable pageable) {
-        return this.repositorioProductos.findAll(pageable).map(producto -> new ResumenProducto(producto.getId(), producto.getTitulo(), producto.getPrecio(), producto.getFechaPublicacion().toString(), producto.getCategoria().getNombre(), producto.getVisualizaciones()));
+        return this.repositorioProductos.findAll(pageable)
+                .map(producto -> new ResumenProducto(producto.getId(), producto.getTitulo(), producto.getPrecio(),
+                        producto.getFechaPublicacion().toString(), producto.getCategoria().getNombre(),
+                        producto.getVisualizaciones()));
     }
 }

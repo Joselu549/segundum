@@ -1,8 +1,5 @@
 package arso.segundum.rest;
 
-import arso.segundum.dto.AltaCompraventaDTO;
-import arso.segundum.dto.CompraventaDTO;
-import arso.segundum.dto.ErrorDTO;
 import io.swagger.v3.oas.annotations.Operation;
 
 import javax.validation.Valid;
@@ -18,6 +15,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import arso.segundum.rest.dto.AltaCompraventaDTO;
+import arso.segundum.rest.dto.CompraventaDTO;
+import arso.segundum.rest.dto.ErrorDTO;
 
 import java.util.List;
 

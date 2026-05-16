@@ -1,11 +1,11 @@
 package arso.segundum.rest;
 
-import arso.segundum.dto.LugarRecogidaDTO;
-import arso.segundum.dto.ProductoDTO;
 import arso.segundum.modelo.Estado;
-import arso.segundum.modelo.Producto;
+import arso.segundum.modelo.ResumenProducto;
+import arso.segundum.rest.dto.LugarRecogidaDTO;
+import arso.segundum.rest.dto.ProductoDTO;
 import arso.segundum.servicio.IServicioProductos;
-import arso.segundum.servicio.ResumenProducto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
