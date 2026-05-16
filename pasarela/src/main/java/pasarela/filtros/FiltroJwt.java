@@ -35,8 +35,7 @@ public class FiltroJwt extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext ctx = RequestContext.getCurrentContext();
         String uri = ctx.getRequest().getRequestURI();
-        // /auth/login es gestionado por Spring MVC directamente, pero por seguridad lo excluimos
-        return !uri.endsWith("/auth/login");
+        return !uri.startsWith("/auth/") && !uri.startsWith("/oauth2/") && !uri.startsWith("/login/oauth2/");
     }
 
     @Override
