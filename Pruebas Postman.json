@@ -1,0 +1,1106 @@
+{
+	"info": {
+		"_postman_id": "a22c8600-196a-4695-bf63-321c2bb350a0",
+		"name": "SegundUM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44161206",
+		"_collection_link": "https://lively-capsule-2891432.postman.co/workspace/Jos%C3%A9-Luis's-Workspace~906c26b8-d10d-4794-81a4-6a5b1d8e6603/collection/44161206-a22c8600-196a-4695-bf63-321c2bb350a0?action=share&source=collection_link&creator=44161206"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Alta usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"joseluis.abellanm@um.es\",\n    \"nombre\": \"José Luis\",\n    \"apellidos\": \"Abellán Monreal\",\n    \"telefono\": \"618699281\",\n    \"fechaNacimiento\": \"2003-04-09\",\n    \"password\": \"ContraUMU1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{usuariosPort}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{usuariosPort}}",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNTEiLCJyb2xlcyI6IlVTVUFSSU8iLCJleHAiOjE3NzY4MDQzOTgsImVtYWlsIjoibW1hci5oZGV6MTNAZ29vZ2xlLmNvbSJ9.kSr-ahzD8glU8tmk6jtlM5F0X8GnaN7FEpK-etWQZlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Otro Nombre\",\n    \"apellidos\": \"De Prueba\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{usuariosPort}}/users/{{idUsuario}}",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{usuariosPort}}",
+							"path": [
+								"users",
+								"{{idUsuario}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar todos los usuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNTEiLCJyb2xlcyI6IlVTVUFSSU8iLCJleHAiOjE3NzgwOTY2NTQsImVtYWlsIjoibW1hci5oZGV6MTNAZ29vZ2xlLmNvbSJ9.qpoP_4ZEuoTWjFZ14qmxzb13oJxzG1btp5br3lVvx9E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}:{{usuariosPort}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{usuariosPort}}",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar usuario",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2ZW5kZWRvcjEiLCJyb2xlcyI6IlVTVUFSSU8iLCJleHAiOjE3NzY1ODY1NDcsImVtYWlsIjoiaG9sYUB1bS5lcyJ9.TW2hB0d29SeLnf6YnlKLs138JEcv79YVKtO8FN6JGxM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hola@um.es\",\n    \"nombre\": \"Postman\",\n    \"apellidos\": \"Post\",\n    \"telefono\": \"123456789\",\n    \"fechaNacimiento\": \"2000-05-21\",\n    \"password\": \"secreto1234\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}:{{usuariosPort}}/users/{{idUsuario}}",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{usuariosPort}}",
+							"path": [
+								"users",
+								"{{idUsuario}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener nombre completo usuario",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"hola@um.es\",\n    \"nombre\": \"Postman\",\n    \"apellidos\": \"Post\",\n    \"telefono\": \"123456789\",\n    \"fechaNacimiento\": \"2000-05-21\",\n    \"password\": \"secreto1234\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}:{{usuariosPort}}/users/nombres/1",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{usuariosPort}}",
+							"path": [
+								"users",
+								"nombres",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Obtener productos filtrados",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products?precio=130",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "idCategoria",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "descripcion",
+									"value": "Bateria con",
+									"disabled": true
+								},
+								{
+									"key": "estado",
+									"value": "COMO_NUEVO",
+									"disabled": true
+								},
+								{
+									"key": "precio",
+									"value": "130"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar productos paginado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/pages?page=0&size=10",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								"pages"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "precio",
+									"value": "130",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Añadir visualización",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/{{idProducto}}/visualizations",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								"{{idProducto}}",
+								"visualizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Asignar lugar recogida",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"longitud\": \"19\",\r\n    \"latitud\": \"1\",\r\n    \"descripcion\": \"Descripción de prueba para lugar de recogida\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/{{idProducto}}/lugares",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								"{{idProducto}}",
+								"lugares"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar historial",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/historial/?mes=2&anio=2026",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								"historial",
+								""
+							],
+							"query": [
+								{
+									"key": "mes",
+									"value": "2"
+								},
+								{
+									"key": "anio",
+									"value": "2026"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar de alta producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"Prueba API\",\r\n    \"descripcion\": \"Ejemplo de producto creado con API\",\r\n    \"estado\": \"NUEVO\",\r\n    \"idCategoria\": \"101\",\r\n    \"precio\": \"60.59\",\r\n    \"idVendedor\": \"52\",\r\n    \"idLugarRecogida\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear lugar recogida",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"longitud\": \"19.56789\",\r\n    \"latitud\": \"8.7654321\",\r\n    \"descripcion\": \"Descripción de prueba para lugar de recogida\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{productosPort}}/products/lugares-recogida",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{productosPort}}",
+							"path": [
+								"products",
+								"lugares-recogida"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compraventas",
+			"item": [
+				{
+					"name": "Obtener compraventas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKb3NlbHU1NDkiLCJyb2xlcyI6IkFETUlOIiwiZXhwIjoxNzc4OTMyODU5LCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.yKuQaCoaPfZZMvMZKns8pRmEDqFdflWgcBQEFHYvSBM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{compraventasPort}}/compraventas/{{idComprador}}/{{idVendedor}}",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{compraventasPort}}",
+							"path": [
+								"compraventas",
+								"{{idComprador}}",
+								"{{idVendedor}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar de alta compraventa",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idProducto\": \"1\",\r\n    \"idComprador\": \"51\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}:{{compraventasPort}}/compraventas/",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{compraventasPort}}",
+							"path": [
+								"compraventas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener compras usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQ1NzQxLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.EZVhMm4s8fLKyQZ6md0z6UJ007CVNPt7O2X2VWYCqzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{compraventasPort}}/compraventas/compras/{{idVendedor}}",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{compraventasPort}}",
+							"path": [
+								"compraventas",
+								"compras",
+								"{{idVendedor}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener ventas usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQ1NzQxLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.EZVhMm4s8fLKyQZ6md0z6UJ007CVNPt7O2X2VWYCqzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{compraventasPort}}/compraventas/ventas/{{idVendedor}}",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{compraventasPort}}",
+							"path": [
+								"compraventas",
+								"ventas",
+								"{{idVendedor}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener compraventas paginado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQ1NzQxLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.EZVhMm4s8fLKyQZ6md0z6UJ007CVNPt7O2X2VWYCqzI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}:{{compraventasPort}}/compraventas/pages?page=0&size=10",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{compraventasPort}}",
+							"path": [
+								"compraventas",
+								"pages"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pasarela",
+			"item": [
+				{
+					"name": "Usuarios",
+					"item": [
+						{
+							"name": "Dar de alta usuario",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"joseluis.abellanm@um.es\",\n    \"nombre\": \"José Luis\",\n    \"apellidos\": \"Abellán Monreal\",\n    \"telefono\": \"618699281\",\n    \"fechaNacimiento\": \"2003-04-09\",\n    \"password\": \"ContraUMU1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/usuarios",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\": \"Otro Nombre\",\n    \"apellidos\": \"De Prueba\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/usuarios/{{idUsuario}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"usuarios",
+										"{{idUsuario}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener todos los usuarios",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/usuarios",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/usuarios/{{idUsuario}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"usuarios",
+										"{{idUsuario}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener nombre completo usuario",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/usuarios/nombres/{{idUsuario}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"usuarios",
+										"nombres",
+										"{{idUsuario}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Productos",
+					"item": [
+						{
+							"name": "Obtener productos filtrados",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/producto/{{idProducto}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"producto",
+										"{{idProducto}}"
+									],
+									"query": [
+										{
+											"key": "idCategoria",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "descripcion",
+											"value": "Prueba",
+											"disabled": true
+										},
+										{
+											"key": "estado",
+											"value": "COMO_NUEVO",
+											"disabled": true
+										},
+										{
+											"key": "precio",
+											"value": "23",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener producto",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/productos/{{idProducto}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"productos",
+										"{{idProducto}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Añadir visualización",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/productos/{{idProducto}}/visualizations",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"productos",
+										"{{idProducto}}",
+										"visualizations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Asignar lugar recogida",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"longitud\": \"19\",\n    \"latitud\": \"1\",\n    \"descripcion\": \"Descripción de prueba para lugar de recogida\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/productos/{{idProducto}}/lugares",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"productos",
+										"{{idProducto}}",
+										"lugares"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Recuperar historial",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/products/historial/?mes=2",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"products",
+										"historial",
+										""
+									],
+									"query": [
+										{
+											"key": "mes",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dar de alta producto",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"titulo\": \"Prueba API\",\r\n    \"descripcion\": \"Ejemplo de producto creado con API\",\r\n    \"estado\": \"NUEVO\",\r\n    \"idCategoria\": \"101\",\r\n    \"precio\": \"60.59\",\r\n    \"idVendedor\": \"52\",\r\n    \"idLugarRecogida\": \"1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/productos/",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"productos",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear lugar recogida",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZXMiOiJVU1VBUklPIiwiZXhwIjoxNzc5MDQyODAyLCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.1kQZ3MUg7my-8YDC3pFELbOtuMC74OvZcpuIJZUIojg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"longitud\": \"19.56789\",\r\n    \"latitud\": \"8.7654321\",\r\n    \"descripcion\": \"Descripción de prueba para lugar de recogida\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/productos/lugares-recogida",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"productos",
+										"lugares-recogida"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Compraventas",
+					"item": [
+						{
+							"name": "Obtener compraventas",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKb3NlbHU1NDkiLCJyb2xlcyI6IkFETUlOIiwiZXhwIjoxNzc4OTMyODU5LCJlbWFpbCI6Impvc2VsdWlzYWJlbGxhbm1vbnJlYWxAZ21haWwuY29tIn0.yKuQaCoaPfZZMvMZKns8pRmEDqFdflWgcBQEFHYvSBM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}:{{pasarelaPort}}/compraventas/{{idComprador}}/{{idVendedor}}",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{pasarelaPort}}",
+									"path": [
+										"compraventas",
+										"{{idComprador}}",
+										"{{idVendedor}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login pasarela",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "joseluisabellanmonreal@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "secreto1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}:{{pasarelaPort}}/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"port": "{{pasarelaPort}}",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "idUsuario",
+			"value": ""
+		},
+		{
+			"key": "idVendedor",
+			"value": ""
+		},
+		{
+			"key": "idComprador",
+			"value": ""
+		},
+		{
+			"key": "compraventasPort",
+			"value": ""
+		},
+		{
+			"key": "usuariosPort",
+			"value": ""
+		},
+		{
+			"key": "productosPort",
+			"value": ""
+		},
+		{
+			"key": "pasarelaPort",
+			"value": ""
+		},
+		{
+			"key": "idProducto",
+			"value": ""
+		}
+	]
+}
