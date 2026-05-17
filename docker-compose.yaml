@@ -1,0 +1,143 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  usuarios:
+    build: ./usuarios
+    restart: unless-stopped
+    ports:
+      - "61071:8080"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: usuarios
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      RABBITMQ_URI: amqp://user:password@rabbitmq:5672
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  productos:
+    build: ./productos
+    restart: unless-stopped
+    ports:
+      - "61072:61072"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productos?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_RABBITMQ_ADDRESSES: amqp://user:password@rabbitmq:5672
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  compraventas:
+    build: ./compraventas
+    restart: unless-stopped
+    ports:
+      - "61070:61070"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongo:27017/compraventas?authSource=admin
+      SPRING_RABBITMQ_ADDRESSES: amqp://user:password@rabbitmq:5672
+      MICROSERVICIOS_USUARIOS_URL: http://usuarios:8080/
+      MICROSERVICIOS_PRODUCTOS_URL: http://productos:61072/
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      usuarios:
+        condition: service_started
+      productos:
+        condition: service_started
+
+  pasarela:
+    build: ./pasarela
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      ZUUL_ROUTES_USUARIOS_URL: http://usuarios:8080/users
+      ZUUL_ROUTES_PRODUCTOS_URL: http://productos:61072/products
+      ZUUL_ROUTES_COMPRAVENTAS_URL: http://compraventas:61070/compraventas
+      USUARIOS_URL: http://usuarios:8080
+    depends_on:
+      usuarios:
+        condition: service_started
+      productos:
+        condition: service_started
+      compraventas:
+        condition: service_started
+
+volumes:
+  mongo_data:
+  rabbitmq_data:
+  mysql_data:

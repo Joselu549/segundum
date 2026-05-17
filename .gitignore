@@ -1,5 +1,10 @@
 .vscode/
+.idea/
+.mvn/
+mvnw
+mvnw.cmd
 *.class
 *.jar
 *.war
 **/target/**
+out/

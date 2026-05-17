@@ -17,81 +17,52 @@
     <dep.slf4j.version>1.7.30</dep.slf4j.version>
   </properties>
 
-
   <dependencies>
+    <!-- JAX-RS Jersey -->
     <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.faces</artifactId>
-      <version>2.3.9</version>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <version>2.41</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>2.41</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-jaxb</artifactId>
+      <version>2.41</version>
     </dependency>
     <dependency>
-      <groupId>javax.enterprise</groupId>
-      <artifactId>cdi-api</artifactId>
-      <version>2.0</version>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-gson</artifactId>
+      <version>2.41</version>
     </dependency>
-    <dependency>
-      <groupId>org.jboss.weld.servlet</groupId>
-      <artifactId>weld-servlet-shaded</artifactId>
-      <version>3.1.9.Final</version>          
-    </dependency>
-  <!-- jetty -->
-    <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-servlets</artifactId>
-        <version>10.0.18</version>
-    </dependency>
-    <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-server</artifactId>
-        <version>10.0.18</version>
-    </dependency>
-  <!-- Primefaces -->
-    <dependency>
-      <groupId>org.primefaces</groupId>
-      <artifactId>primefaces</artifactId>
-      <version>15.0.0</version>
-    </dependency>
-  <!-- JSF -->
-    <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.faces</artifactId>
-      <version>2.3.9</version>
-    </dependency>
-    <dependency>
-        <groupId>javax.enterprise</groupId>
-        <artifactId>cdi-api</artifactId>
-        <version>2.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.jboss.weld.servlet</groupId>
-        <artifactId>weld-servlet-shaded</artifactId>
-        <version>3.1.9.Final</version>          
-    </dependency>
-  <!-- MySQL -->
+    <!-- MySQL -->
     <dependency>
       <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>8.0.28</version>
     </dependency>
-
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>eclipselink</artifactId>
       <version>2.7.15</version>
     </dependency>
-
     <dependency>  
       <groupId>javax.persistence</groupId>  
       <artifactId>javax.persistence-api</artifactId> 
       <version>2.2</version> 
     </dependency>
-  <!-- JAXB -->
+    <!-- JAXB -->
     <dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
@@ -118,8 +89,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-
+  
   <dependencyManagement>
     <dependencies>
       <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->

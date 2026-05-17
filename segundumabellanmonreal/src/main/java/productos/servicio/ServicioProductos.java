@@ -6,18 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import productos.dto.ProductoDTO;
 import productos.modelo.Categoria;
 import productos.modelo.Estado;
 import productos.modelo.LugarRecogida;
 import productos.modelo.Producto;
-import productos.modelo.Usuario;
 import productos.repositorio.RepositorioCategoriasAdHoc;
 import productos.repositorio.RepositorioProductosAdHoc;
-import productos.repositorio.RepositorioUsuariosAdHoc;
 import repositorio.EntidadNoEncontrada;
 import repositorio.FactoriaRepositorios;
 import repositorio.RepositorioException;
+import usuarios.modelo.Usuario;
+import usuarios.repositorio.RepositorioUsuariosAdHoc;
 
 public class ServicioProductos implements IServicioProductos {
 
@@ -250,7 +249,7 @@ public class ServicioProductos implements IServicioProductos {
   }
 
   @Override
-  public List<ProductoDTO> getProductosVendedor(String idVendedor) {
+  public List<Producto> getProductosVendedor(String idVendedor) {
 
     // Validar idVendedor
     if (idVendedor == null || idVendedor.trim().isEmpty()) {
@@ -258,21 +257,14 @@ public class ServicioProductos implements IServicioProductos {
     }
 
     try {
-      List<Producto> productos = repositorioProductos.getProductosVendedor(idVendedor);
-      List<ProductoDTO> productosDTO = new ArrayList<>();
-
-      for (Producto producto : productos) {
-        productosDTO.add(transformToDTO(producto));
-      }
-
-      return productosDTO;
+      return repositorioProductos.getProductosVendedor(idVendedor);
 
     } catch (RepositorioException e) {
       throw new RuntimeException("Error al obtener productos del vendedor: " + e.getMessage(), e);
     }
   }
 
-  public ProductoDTO getProducto(String idProducto) {
+  public Producto getProducto(String idProducto) {
 
     // Validar idProducto
     if (idProducto == null || idProducto.trim().isEmpty()) {
@@ -280,8 +272,7 @@ public class ServicioProductos implements IServicioProductos {
     }
 
     try {
-      Producto producto = repositorioProductos.getById(idProducto);
-      return transformToDTO(producto);
+      return repositorioProductos.getById(idProducto);
 
     } catch (EntidadNoEncontrada e) {
       throw new RuntimeException("Producto no encontrado con id: " + idProducto, e);
@@ -290,12 +281,12 @@ public class ServicioProductos implements IServicioProductos {
     }
   }
 
-  private ProductoDTO transformToDTO(Producto producto) {
-    return new ProductoDTO(
-        producto.getId(),
-        producto.getTitulo(),
-        producto.getDescripcion(),
-        producto.getPrecio(),
-        producto.getEstado());
-  }
+  // private ProductoDTO transformToDTO(Producto producto) {
+  // return new ProductoDTO(
+  // producto.getId(),
+  // producto.getTitulo(),
+  // producto.getDescripcion(),
+  // producto.getPrecio(),
+  // producto.getEstado());
+  // }
 }
