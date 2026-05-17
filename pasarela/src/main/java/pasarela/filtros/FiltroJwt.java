@@ -45,7 +45,6 @@ public class FiltroJwt extends ZuulFilter {
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null || !authorization.startsWith(BEARER_PREFIX)) {
-            rechazar(ctx, "Token no presente o formato incorrecto");
             return null;
         }
 
