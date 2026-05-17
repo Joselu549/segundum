@@ -9,7 +9,7 @@ FROM eclipse-temurin:11-jre-jammy
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
-ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/productos?useSSL=false&allowPublicKeyRetrieval=true \
+ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/productos \
     SPRING_DATASOURCE_USERNAME=root \
     SPRING_DATASOURCE_PASSWORD=root \
     SPRING_RABBITMQ_ADDRESSES=amqp://user:password@rabbitmq:5672

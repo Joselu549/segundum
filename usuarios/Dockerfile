@@ -9,11 +9,11 @@ RUN mvn package -DskipTests -B -q
 FROM tomcat:9.0-jdk11-temurin-jammy
 RUN rm -rf /usr/local/tomcat/webapps/*
 COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# COPY entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
 
 ENV RABBITMQ_URI=amqp://user:password@rabbitmq:5672
 
-EXPOSE 8080
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["catalina.sh", "run"]
+# EXPOSE 8080
+# ENTRYPOINT ["/entrypoint.sh"]
+# CMD ["catalina.sh", "run"]
