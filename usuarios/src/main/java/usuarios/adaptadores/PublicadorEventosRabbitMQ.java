@@ -17,7 +17,7 @@ public class PublicadorEventosRabbitMQ implements IPublicadorEventos {
     public void publicarEvento(Evento evento) throws IOException {
 
         try {
-            String uri = "amqp://user:password@localhost:5672";
+            String uri = System.getenv().getOrDefault("RABBITMQ_URI", "amqp://user:password@localhost:5672");
 
             ConnectionFactory factory = new ConnectionFactory();
             factory.setUri(uri);
