@@ -129,6 +129,9 @@ services:
       ZUUL_ROUTES_PRODUCTOS_URL: http://productos:61072/products
       ZUUL_ROUTES_COMPRAVENTAS_URL: http://compraventas:61070/compraventas
       USUARIOS_URL: http://usuarios:8080
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID: Ov23liIivcqJXZ7DRcEM
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET: 4f375eeb6535e1b76631324994577b0a1507a860
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_REDIRECT_URI: https://solid-orbit-r4gqqw6965gpc54j-8090.app.github.dev/login/oauth2/code/github
     depends_on:
       usuarios:
         condition: service_started
